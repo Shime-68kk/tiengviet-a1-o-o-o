@@ -2,7 +2,10 @@
 <html lang="vi" class="scroll-smooth">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, viewport-fit=cover" />
+  <meta name="theme-color" content="#FFFDF9" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="default" />
   <title>Khám Phá Bộ Ba Nguyên Âm O — Ô — Ơ | Microlearning A1 Tiếng Việt</title>
   <link rel="icon" type="image/x-icon" href="./favicon.ico" />
   
@@ -79,12 +82,42 @@
       background: radial-gradient(circle at 80% 15%, rgba(254, 240, 138, 0.35) 0%, rgba(253, 230, 138, 0.12) 40%, transparent 70%);
     }
 
-    /* 3D WebGL Canvas Container */
+    /* 3D WebGL Canvas Container - Responsive Height & Mobile Touch-Action */
     #three-canvas-container {
       position: relative;
       width: 100%;
-      height: 460px;
+      height: 320px;
       cursor: pointer;
+      touch-action: pan-y;
+    }
+    @media (min-width: 640px) {
+      #three-canvas-container {
+        height: 400px;
+      }
+    }
+    @media (min-width: 1024px) {
+      #three-canvas-container {
+        height: 460px;
+      }
+    }
+
+    /* Dedicated Mobile-First Optimization Styles */
+    @media (max-width: 768px) {
+      body {
+        padding-bottom: calc(10.5rem + env(safe-area-inset-bottom));
+      }
+      .rubric-pill {
+        min-height: 44px;
+        display: inline-flex;
+        align-items: center;
+      }
+      .no-scrollbar::-webkit-scrollbar {
+        display: none;
+      }
+      .no-scrollbar {
+        -ms-overflow-style: none;
+        scrollbar-width: none;
+      }
     }
 
     /* Section Scroll Margin to prevent sticky navbar overlap */
@@ -189,43 +222,39 @@
             <span class="w-3 h-3 rounded-full bg-rose-500"></span>
             <span class="w-3 h-3 rounded-full bg-emerald-500"></span>
             <span class="w-3 h-3 rounded-full bg-amber-500"></span>
-            <span class="text-sm font-bold text-slate-800 ml-2">Phòng Trưng Bày 3D Tương Tác (Three.js WebGL)</span>
+            <span class="text-sm font-bold text-slate-800 ml-2">Không Gian 3D Tương Tác: O — Ô — Ơ</span>
           </div>
           <span class="text-xs font-bold px-3 py-1 rounded-full bg-amber-100 text-amber-800 self-start sm:self-auto">
-            👉 Nhấn trực tiếp vào từng chữ cái để nghe phát âm & xem hiệu ứng nhún nhảy!
+            Nhấn vào từng chữ cái để nghe phát âm chuẩn và xem cử động khẩu hình!
           </span>
         </div>
 
         <div id="three-canvas-container" class="w-full rounded-2xl bg-gradient-to-b from-sky-50/40 via-white to-amber-50/30 relative shadow-inner overflow-hidden">
-          <!-- Subtle hint badge overlay -->
-          <div class="absolute top-3 left-3 z-10 px-3 py-1 rounded-lg bg-white/80 backdrop-blur-sm border border-slate-200 text-[11px] font-semibold text-slate-600">
-            Sân khấu 3D Đứng Vững • Không Xoay Vòng
-          </div>
         </div>
 
-        <!-- 3 Interactive Pronunciation Quick Buttons with Clear Labels -->
-        <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 mt-4">
-          <button id="btn-quick-o" onclick="playAudio('s2_nhung_o_sound'); triggerMascotBounce('O')" class="flex items-center justify-center gap-3 py-3.5 px-4 rounded-2xl bg-rose-50 hover:bg-rose-100 border-2 border-rose-200 hover:border-rose-400 text-rose-800 font-bold transition-all shadow-sm hover:scale-[1.02] active:scale-95">
-            <span class="w-8 h-8 rounded-full bg-rose-600 text-white flex items-center justify-center text-sm font-bold shadow-sm">O</span>
-            <div class="text-left">
-              <span class="block text-sm">Âm O (Môi mở tròn)</span>
-              <span class="block text-[11px] font-normal text-rose-600">Nhấn để nghe giọng đọc</span>
+        <!-- 3 Interactive Pronunciation Quick Buttons (Responsive Mobile & Desktop) -->
+        <div class="grid grid-cols-3 gap-2 sm:gap-3 mt-4">
+          <button id="btn-quick-o" onclick="playAudio('s2_nhung_o_sound'); triggerMascotBounce('O')" class="flex flex-col sm:flex-row items-center justify-center gap-1 sm:gap-3 py-2.5 sm:py-3.5 px-2 sm:px-4 rounded-2xl bg-rose-50 hover:bg-rose-100 border-2 border-rose-200 hover:border-rose-400 text-rose-800 font-bold transition-all shadow-sm hover:scale-[1.02] active:scale-95 text-center sm:text-left">
+            <span class="w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-rose-600 text-white flex items-center justify-center text-xs sm:text-sm font-bold shadow-sm flex-shrink-0">O</span>
+            <div>
+              <span class="block text-xs sm:text-sm font-bold">Âm O</span>
+              <span class="hidden sm:block text-[11px] font-normal text-rose-600">Môi mở tròn</span>
             </div>
           </button>
 
-          <button id="btn-quick-oe" onclick="playAudio('s2_nhung_oe_sound'); triggerMascotBounce('OE')" class="flex items-center justify-center gap-3 py-3.5 px-4 rounded-2xl bg-emerald-50 hover:bg-emerald-100 border-2 border-emerald-200 hover:border-emerald-400 text-emerald-800 font-bold transition-all shadow-sm hover:scale-[1.02] active:scale-95">
-            <span class="w-8 h-8 rounded-full bg-emerald-600 text-white flex items-center justify-center text-sm font-bold shadow-sm">Ô</span>
-            <div class="text-left">
-              <span class="block text-sm">Âm Ô (Môi chúm nhô ra)</span>
-              <span class="block text-[11px] font-normal text-emerald-600">Nhấn để nghe giọng đọc</span>
+          <button id="btn-quick-oe" onclick="playAudio('s2_nhung_oe_sound'); triggerMascotBounce('OE')" class="flex flex-col sm:flex-row items-center justify-center gap-1 sm:gap-3 py-2.5 sm:py-3.5 px-2 sm:px-4 rounded-2xl bg-emerald-50 hover:bg-emerald-100 border-2 border-emerald-200 hover:border-emerald-400 text-emerald-800 font-bold transition-all shadow-sm hover:scale-[1.02] active:scale-95 text-center sm:text-left">
+            <span class="w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-emerald-600 text-white flex items-center justify-center text-xs sm:text-sm font-bold shadow-sm flex-shrink-0">Ô</span>
+            <div>
+              <span class="block text-xs sm:text-sm font-bold">Âm Ô</span>
+              <span class="hidden sm:block text-[11px] font-normal text-emerald-600">Môi chúm nhô</span>
             </div>
           </button>
 
-          <button id="btn-quick-ow" onclick="playAudio('s2_nhung_ow_sound'); triggerMascotBounce('OW')" class="flex items-center justify-center gap-3 py-3.5 px-4 rounded-2xl bg-amber-50 hover:bg-amber-100 border-2 border-amber-200 hover:border-amber-400 text-amber-800 font-bold transition-all shadow-sm hover:scale-[1.02] active:scale-95">
-            <span class="w-8 h-8 rounded-full bg-amber-600 text-white flex items-center justify-center text-sm font-bold shadow-sm">Ơ</span>
-            <div class="text-left">
-              <span class="block text-sm">Âm Ơ (Môi dẹt ngang)</span>
-              <span class="block text-[11px] font-normal text-amber-600">Nhấn để nghe giọng đọc</span>
+          <button id="btn-quick-ow" onclick="playAudio('s2_nhung_ow_sound'); triggerMascotBounce('OW')" class="flex flex-col sm:flex-row items-center justify-center gap-1 sm:gap-3 py-2.5 sm:py-3.5 px-2 sm:px-4 rounded-2xl bg-amber-50 hover:bg-amber-100 border-2 border-amber-200 hover:border-amber-400 text-amber-800 font-bold transition-all shadow-sm hover:scale-[1.02] active:scale-95 text-center sm:text-left">
+            <span class="w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-amber-600 text-white flex items-center justify-center text-xs sm:text-sm font-bold shadow-sm flex-shrink-0">Ơ</span>
+            <div>
+              <span class="block text-xs sm:text-sm font-bold">Âm Ơ</span>
+              <span class="hidden sm:block text-[11px] font-normal text-amber-600">Môi dẹt ngang</span>
             </div>
           </button>
         </div>
@@ -297,18 +326,18 @@
         <p class="text-sm text-slate-500 mt-1">Phụ trách: <strong>Dương Thị Nhung</strong> • Thời lượng kịch bản: 0:35 - 1:25</p>
       </div>
 
-      <!-- 4 Scene Tabs -->
-      <div class="flex flex-wrap items-center justify-center gap-2 mb-8">
-        <button onclick="switchNhungTab(1)" id="nhung-btn-1" class="px-5 py-2.5 rounded-xl font-bold text-sm bg-sky-600 text-white shadow-md transition-all active:scale-95">
+      <!-- 4 Scene Tabs (Mobile Scrollable) -->
+      <div class="flex items-center justify-start sm:justify-center gap-2 mb-8 overflow-x-auto no-scrollbar px-2 py-1">
+        <button onclick="switchNhungTab(1)" id="nhung-btn-1" class="flex-shrink-0 whitespace-nowrap px-4 sm:px-5 py-2.5 rounded-xl font-bold text-xs sm:text-sm bg-sky-600 text-white shadow-md transition-all active:scale-95">
           Cảnh 1: Chữ O Ban Đầu
         </button>
-        <button onclick="switchNhungTab(2)" id="nhung-btn-2" class="px-5 py-2.5 rounded-xl font-bold text-sm bg-white text-slate-700 hover:bg-slate-100 border border-slate-200 transition-all active:scale-95">
+        <button onclick="switchNhungTab(2)" id="nhung-btn-2" class="flex-shrink-0 whitespace-nowrap px-4 sm:px-5 py-2.5 rounded-xl font-bold text-xs sm:text-sm bg-white text-slate-700 hover:bg-slate-100 border border-slate-200 transition-all active:scale-95">
           Cảnh 2: Mũ Rơi Thành Ô
         </button>
-        <button onclick="switchNhungTab(3)" id="nhung-btn-3" class="px-5 py-2.5 rounded-xl font-bold text-sm bg-white text-slate-700 hover:bg-slate-100 border border-slate-200 transition-all active:scale-95">
+        <button onclick="switchNhungTab(3)" id="nhung-btn-3" class="flex-shrink-0 whitespace-nowrap px-4 sm:px-5 py-2.5 rounded-xl font-bold text-xs sm:text-sm bg-white text-slate-700 hover:bg-slate-100 border border-slate-200 transition-all active:scale-95">
           Cảnh 3: Râu Mọc Tạo Ơ
         </button>
-        <button onclick="switchNhungTab(4)" id="nhung-btn-4" class="px-5 py-2.5 rounded-xl font-bold text-sm bg-white text-slate-700 hover:bg-slate-100 border border-slate-200 transition-all active:scale-95">
+        <button onclick="switchNhungTab(4)" id="nhung-btn-4" class="flex-shrink-0 whitespace-nowrap px-4 sm:px-5 py-2.5 rounded-xl font-bold text-xs sm:text-sm bg-white text-slate-700 hover:bg-slate-100 border border-slate-200 transition-all active:scale-95">
           Cảnh 4: Máy Quét So Sánh
         </button>
       </div>
@@ -413,7 +442,7 @@
           </button>
           <button id="btn-full-shadowing" onclick="startFullShadowing()" class="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-sm shadow-md shadow-emerald-600/20 transition-all hover:scale-105 active:scale-95">
             <svg class="w-4 h-4 fill-current" viewBox="0 0 24 24"><path d="M12 4V1L8 5l4 4V6c3.31 0 6 2.69 6 6 0 1.01-.25 1.97-.7 2.8l1.46 1.46C19.54 15.03 20 13.57 20 12c0-4.42-3.58-8-8-8zm0 14c-3.31 0-6-2.69-6-6 0-1.01.25-1.97.7-2.8L5.24 7.74C4.46 8.97 4 10.43 4 12c0 4.42 3.58 8 8 8v3l4-4-4-4v3z"/></svg>
-            <span>🔁 Luyện Trọn Bộ 3 Từ (Full Flow)</span>
+            <span>🔁 Luyện Trọn Bộ 3 Từ Liên Tiếp</span>
           </button>
         </div>
       </div>
@@ -441,6 +470,22 @@
             <span class="text-slate-500">Bật mic, nói to mô phỏng chính xác</span>
           </div>
         </div>
+      </div>
+
+      <!-- DEDICATED MOBILE VOWEL SELECTOR BAR (MOBILE ONLY) -->
+      <div class="md:hidden flex items-center justify-between p-1.5 rounded-2xl bg-white border border-slate-200 shadow-sm mb-6 gap-1.5">
+        <button id="m-tab-o" onclick="selectMobileVowel('O')" class="flex-1 py-2.5 px-2 rounded-xl font-bold text-xs flex items-center justify-center gap-1.5 transition-all bg-rose-50 text-rose-800 border border-rose-200 shadow-sm active:scale-95">
+          <span class="w-6 h-6 rounded-full bg-rose-600 text-white flex items-center justify-center text-xs font-bold">O</span>
+          <span>BÒ</span>
+        </button>
+        <button id="m-tab-oe" onclick="selectMobileVowel('OE')" class="flex-1 py-2.5 px-2 rounded-xl font-bold text-xs flex items-center justify-center gap-1.5 transition-all bg-slate-50 text-slate-700 border border-transparent hover:bg-slate-100 active:scale-95">
+          <span class="w-6 h-6 rounded-full bg-emerald-600 text-white flex items-center justify-center text-xs font-bold">Ô</span>
+          <span>CÔ</span>
+        </button>
+        <button id="m-tab-ow" onclick="selectMobileVowel('OW')" class="flex-1 py-2.5 px-2 rounded-xl font-bold text-xs flex items-center justify-center gap-1.5 transition-all bg-slate-50 text-slate-700 border border-transparent hover:bg-slate-100 active:scale-95">
+          <span class="w-6 h-6 rounded-full bg-amber-600 text-white flex items-center justify-center text-xs font-bold">Ơ</span>
+          <span>BƠ</span>
+        </button>
       </div>
 
       <!-- 3 Practice Drill Interactive Cards -->
@@ -535,10 +580,10 @@
             <div class="flex items-center gap-2">
               <span class="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-ping"></span>
               <span class="text-xs font-bold uppercase tracking-wider text-emerald-800 bg-emerald-100 px-3 py-1 rounded-full">
-                Phòng Thu Đối Chiếu Song Song (Dual-Voice Studio)
+                Phòng Luyện Phát Âm Đối Chiếu
               </span>
             </div>
-            <span class="text-xs font-medium text-slate-500">So sánh giọng bản xứ vs giọng của bạn</span>
+            <span class="text-xs font-medium text-slate-500">Đối chiếu âm bản xứ và giọng đọc của bạn</span>
           </div>
 
           <!-- Playback Buttons -->
@@ -560,7 +605,7 @@
           <!-- Self-Check Rubric -->
           <div class="p-4 rounded-2xl bg-slate-50 border border-slate-200">
             <div class="text-xs font-bold text-slate-700 mb-2 flex items-center justify-between">
-              <span>Bảng Tự Đánh Giá Khẩu Hình (Self-Check Rubric):</span>
+              <span>Bảng Tự Đánh Giá Khẩu Hình Chuẩn:</span>
               <span id="rubric-badge" class="hidden text-[11px] font-bold text-emerald-700 bg-emerald-100 px-2 py-0.5 rounded-md">⭐ Đạt Chuẩn Khẩu Hình!</span>
             </div>
             <div id="rubric-items-container" class="flex flex-wrap gap-2 text-xs">
@@ -669,7 +714,7 @@
           Sản Phẩm Video Hoàn Chỉnh (Full HD 1080p)
         </div>
         <h2 class="text-3xl sm:text-4xl font-bold text-white tracking-tight">Trình Phát Video Microlearning Chính Thức</h2>
-        <p class="text-sm text-slate-400 mt-2">Đã xuất bản với chuẩn màu tươi sáng, bộ font SVN-Gilroy và âm thanh chất lượng phòng thu.</p>
+        <p class="text-sm text-slate-400 mt-2">Video bài giảng trực quan phân biệt O — Ô — Ơ, kết hợp hình ảnh, khẩu hình và âm thanh chuẩn bản xứ.</p>
       </div>
 
       <div class="rounded-3xl overflow-hidden shadow-2xl border border-slate-700 bg-black aspect-video relative mb-8">
@@ -781,22 +826,46 @@
     </div>
   </section>
 
-  <!-- STICKY BOTTOM AUDIO NARRATION CONTROLLER -->
-  <div id="sticky-audio-bar" class="fixed bottom-4 left-4 right-4 max-w-4xl mx-auto z-50 p-3 sm:p-4 rounded-2xl glass-card border-slate-300/80 shadow-2xl flex items-center gap-4">
-    <button id="global-play-btn" onclick="toggleGlobalAudio()" class="w-12 h-12 rounded-xl bg-sky-600 hover:bg-sky-700 text-white flex items-center justify-center flex-shrink-0 shadow-md shadow-sky-600/30 transition-transform active:scale-95">
-      <svg id="play-icon" class="w-6 h-6 fill-current" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
-      <svg id="pause-icon" class="w-6 h-6 fill-current hidden" viewBox="0 0 24 24"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>
+  <!-- DEDICATED MOBILE FLOATING BOTTOM LEARNING DOCK (MOBILE ONLY) -->
+  <div id="mobile-nav-dock" class="md:hidden fixed bottom-[76px] left-3 right-3 z-40 p-1 rounded-2xl bg-white/95 backdrop-blur-md border border-slate-200/90 shadow-xl flex items-center justify-around text-[10px] font-bold text-slate-600 transition-all">
+    <a href="#three-section" class="flex flex-col items-center py-1 px-2.5 rounded-xl hover:text-rose-600 active:scale-95 transition-all text-center">
+      <span class="text-sm">🎨</span>
+      <span class="leading-tight">3D Vần</span>
+    </a>
+    <a href="#scene-nhung" class="flex flex-col items-center py-1 px-2.5 rounded-xl hover:text-emerald-600 active:scale-95 transition-all text-center">
+      <span class="text-sm">👄</span>
+      <span class="leading-tight">Khẩu Hình</span>
+    </a>
+    <a href="#scene-y" class="flex flex-col items-center py-1 px-2.5 rounded-xl text-sky-600 bg-sky-50 active:scale-95 transition-all text-center">
+      <span class="text-sm">🎙️</span>
+      <span class="leading-tight">Luyện Đọc</span>
+    </a>
+    <a href="#scene-thuy" class="flex flex-col items-center py-1 px-2.5 rounded-xl hover:text-amber-600 active:scale-95 transition-all text-center">
+      <span class="text-sm">🏆</span>
+      <span class="leading-tight">Mini Quiz</span>
+    </a>
+    <a href="#video-master" class="flex flex-col items-center py-1 px-2.5 rounded-xl hover:text-indigo-600 active:scale-95 transition-all text-center">
+      <span class="text-sm">🎬</span>
+      <span class="leading-tight">Video</span>
+    </a>
+  </div>
+
+  <!-- STICKY BOTTOM AUDIO NARRATION CONTROLLER (RESPONSIVE MOBILE & DESKTOP) -->
+  <div id="sticky-audio-bar" class="fixed bottom-2 sm:bottom-4 left-2.5 sm:left-4 right-2.5 sm:right-4 max-w-4xl mx-auto z-50 p-2.5 sm:p-4 rounded-2xl glass-card border-slate-300/80 shadow-2xl flex items-center gap-3 sm:gap-4">
+    <button id="global-play-btn" onclick="toggleGlobalAudio()" class="w-10 h-10 sm:w-12 sm:h-12 rounded-xl bg-sky-600 hover:bg-sky-700 text-white flex items-center justify-center flex-shrink-0 shadow-md shadow-sky-600/30 transition-transform active:scale-95">
+      <svg id="play-icon" class="w-5 h-5 sm:w-6 sm:h-6 fill-current" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+      <svg id="pause-icon" class="w-5 h-5 sm:w-6 sm:h-6 fill-current hidden" viewBox="0 0 24 24"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>
     </button>
 
     <div class="flex-grow min-w-0">
       <div class="flex items-center justify-between text-xs mb-1">
-        <span id="audio-track-title" class="font-bold text-slate-800 truncate">Sẵn sàng phát thuyết minh bài giảng</span>
-        <span id="audio-time-label" class="text-slate-500 font-mono text-[11px] ml-2 flex-shrink-0">0:00 / 2:18</span>
+        <span id="audio-track-title" class="font-bold text-slate-800 truncate text-[11px] sm:text-xs">Sẵn sàng phát bài giảng</span>
+        <span id="audio-time-label" class="text-slate-500 font-mono text-[10px] sm:text-[11px] ml-2 flex-shrink-0">0:00 / 2:18</span>
       </div>
       <div class="w-full h-2 bg-slate-200 rounded-full overflow-hidden cursor-pointer" onclick="seekGlobalAudio(event)">
         <div id="global-audio-progress" class="h-full bg-sky-600 w-0 transition-all duration-150"></div>
       </div>
-      <div id="audio-sub-text" class="text-[11px] text-slate-500 truncate mt-1">
+      <div id="audio-sub-text" class="text-[10px] sm:text-[11px] text-slate-500 truncate mt-1">
         Nhấn phát để nghe toàn bộ bài giảng đồng bộ từ Phần 1 đến Phần 4
       </div>
     </div>
@@ -807,8 +876,8 @@
       <span class="w-1.5 bg-amber-500 rounded-full eq-bar-3"></span>
     </div>
 
-    <button id="btn-toggle-audio-collapse" onclick="toggleAudioBarCollapse()" title="Thu gọn / Mở rộng" class="w-8 h-8 rounded-xl hover:bg-slate-200/80 text-slate-500 flex items-center justify-center flex-shrink-0 transition-all active:scale-90">
-      <svg id="collapse-arrow" class="w-5 h-5 fill-current transition-transform duration-300" viewBox="0 0 24 24"><path d="M7.41 8.59L12 13.17l4.59-4.58L18 10l-6 6-6-6 1.41-1.41z"/></svg>
+    <button id="btn-toggle-audio-collapse" onclick="toggleAudioBarCollapse()" title="Thu gọn / Mở rộng" class="w-7 h-7 sm:w-8 sm:h-8 rounded-xl hover:bg-slate-200/80 text-slate-500 flex items-center justify-center flex-shrink-0 transition-all active:scale-90">
+      <svg id="collapse-arrow" class="w-4 h-4 sm:w-5 sm:h-5 fill-current transition-transform duration-300" viewBox="0 0 24 24"><path d="M7.41 8.59L12 13.17l4.59-4.58L18 10l-6 6-6-6 1.41-1.41z"/></svg>
     </button>
   </div>
 
@@ -1089,11 +1158,15 @@
       globalAudio.addEventListener('ended', onTeacherEnd, { once: true });
     };
 
-    // Reset drill cards highlight rings
+    // Reset drill cards highlight rings & mobile tabs
     function resetDrillCardsHighlight() {
       ['card-drill-o', 'card-drill-oe', 'card-drill-ow'].forEach(id => {
         const el = document.getElementById(id);
         if (el) el.classList.remove('ring-4', 'ring-rose-400', 'ring-emerald-400', 'ring-amber-400', 'shadow-2xl', 'scale-[1.02]');
+      });
+      ['m-tab-o', 'm-tab-oe', 'm-tab-ow'].forEach(id => {
+        const el = document.getElementById(id);
+        if (el) el.className = "flex-1 py-2.5 px-2 rounded-xl font-bold text-xs flex items-center justify-center gap-1.5 transition-all bg-slate-50 text-slate-700 border border-transparent hover:bg-slate-100 active:scale-95";
       });
     }
 
@@ -1308,14 +1381,36 @@
       if (letter === 'O') {
         const el = document.getElementById('card-drill-o');
         if (el) el.classList.add('ring-4', 'ring-rose-400', 'shadow-2xl', 'scale-[1.02]');
+        const mTab = document.getElementById('m-tab-o');
+        if (mTab) mTab.className = "flex-1 py-2.5 px-2 rounded-xl font-bold text-xs flex items-center justify-center gap-1.5 transition-all bg-rose-50 text-rose-800 border border-rose-200 shadow-sm active:scale-95";
       } else if (letter === 'Ô') {
         const el = document.getElementById('card-drill-oe');
         if (el) el.classList.add('ring-4', 'ring-emerald-400', 'shadow-2xl', 'scale-[1.02]');
+        const mTab = document.getElementById('m-tab-oe');
+        if (mTab) mTab.className = "flex-1 py-2.5 px-2 rounded-xl font-bold text-xs flex items-center justify-center gap-1.5 transition-all bg-emerald-50 text-emerald-800 border border-emerald-200 shadow-sm active:scale-95";
       } else if (letter === 'Ơ') {
         const el = document.getElementById('card-drill-ow');
         if (el) el.classList.add('ring-4', 'ring-amber-400', 'shadow-2xl', 'scale-[1.02]');
+        const mTab = document.getElementById('m-tab-ow');
+        if (mTab) mTab.className = "flex-1 py-2.5 px-2 rounded-xl font-bold text-xs flex items-center justify-center gap-1.5 transition-all bg-amber-50 text-amber-800 border border-amber-200 shadow-sm active:scale-95";
       }
     }
+
+    // Dedicated Mobile Vowel Selection Handler
+    window.selectMobileVowel = function(letter) {
+      if (letter === 'O') {
+        triggerDrill('O', 'BÒ', 's3_y_pair_o');
+      } else if (letter === 'OE') {
+        triggerDrill('Ô', 'CÔ', 's3_y_pair_oe');
+      } else if (letter === 'OW') {
+        triggerDrill('Ơ', 'BƠ', 's3_y_pair_ow');
+      }
+      // Gently scroll to drill box on small screens
+      const drillBox = document.getElementById('drill-box');
+      if (drillBox && window.innerWidth < 768) {
+        drillBox.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      }
+    };
 
     window.triggerDrill = function(letter, word, audioId, onCompleteCb) {
       // Step 0: Abort any previous drill session cleanly
@@ -1832,13 +1927,23 @@
       }
     });
 
-    // Resize
-    window.addEventListener('resize', () => {
+    // Responsive Camera & Renderer Resize for Mobile & Desktop
+    function updateCameraForViewport() {
       if (!container) return;
+      const width = container.clientWidth;
+      if (width < 480) {
+        camera.position.z = 12.8; // pull back on mobile phones so O, Ô, Ơ are fully visible
+      } else if (width < 768) {
+        camera.position.z = 10.8;
+      } else {
+        camera.position.z = 9.2;
+      }
       camera.aspect = container.clientWidth / container.clientHeight;
       camera.updateProjectionMatrix();
       renderer.setSize(container.clientWidth, container.clientHeight);
-    });
+    }
+    updateCameraForViewport();
+    window.addEventListener('resize', updateCameraForViewport);
   </script>
 
   <!-- GSAP ENHANCED SCROLL ANIMATIONS -->
@@ -1867,6 +1972,14 @@
             });
           }
         });
+        // Mobile Touch AudioContext Unlock (iOS Safari / Android Chrome)
+        const unlockMobileAudio = () => {
+          if (window.audioCtx && window.audioCtx.state === 'suspended') {
+            window.audioCtx.resume();
+          }
+        };
+        document.addEventListener('touchstart', unlockMobileAudio, { passive: true, once: true });
+        document.addEventListener('touchend', unlockMobileAudio, { passive: true, once: true });
       }
     });
   </script>
