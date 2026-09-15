@@ -1,0 +1,27 @@
+# Python virtual environment
+.venv/
+__pycache__/
+*.pyc
+
+# Temporary render frames and video segments (heavy cache)
+*_temp/
+frames/
+frames_v2/
+frames_v3/
+brief_frames/
+temp_segments/
+pipe_test.mp4
+test_diagram.png
+
+# Old topic artifacts (D vs Đ)
+video_microlearning_D_Đ.mp4
+audio/
+assets/hero.mp4
+
+# Testing artifacts & caches
+node_modules/
+test_results.json
+.DS_Store
+screenshot_*.png
+web_screenshot.png
+test_card_o.png

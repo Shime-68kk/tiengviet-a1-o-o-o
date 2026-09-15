@@ -1,0 +1,1875 @@
+<!DOCTYPE html>
+<html lang="vi" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Khám Phá Bộ Ba Nguyên Âm O — Ô — Ơ | Microlearning A1 Tiếng Việt</title>
+  <link rel="icon" type="image/x-icon" href="./favicon.ico" />
+  
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  
+  <!-- GSAP & Plugins from Local Vendor -->
+  <script src="./vendor/gsap/gsap.min.js"></script>
+  <script src="./vendor/gsap/ScrollTrigger.min.js"></script>
+  <script src="./vendor/gsap/TextPlugin.min.js"></script>
+
+  <!-- Import Map for Three.js -->
+  <script type="importmap">
+  {
+    "imports": {
+      "three": "./vendor/three/three.module.js"
+    }
+  }
+  </script>
+
+  <style>
+    /* SVN-Gilroy Typography */
+    @font-face {
+      font-family: 'SVN-Gilroy';
+      src: url('./vendor/fonts/SVN-Gilroy Bold.otf') format('opentype');
+      font-weight: 700;
+      font-style: normal;
+    }
+    @font-face {
+      font-family: 'SVN-Gilroy';
+      src: url('./vendor/fonts/SVN-Gilroy SemiBold.otf') format('opentype');
+      font-weight: 600;
+      font-style: normal;
+    }
+    @font-face {
+      font-family: 'SVN-Gilroy';
+      src: url('./vendor/fonts/SVN-Gilroy Medium.otf') format('opentype');
+      font-weight: 500;
+      font-style: normal;
+    }
+    @font-face {
+      font-family: 'SVN-Gilroy';
+      src: url('./vendor/fonts/SVN-Gilroy Regular.otf') format('opentype');
+      font-weight: 400;
+      font-style: normal;
+    }
+
+    body {
+      font-family: 'SVN-Gilroy', system-ui, -apple-system, sans-serif;
+      background-color: #FFFDF9;
+      color: #0F172A;
+      overflow-x: clip;
+      margin: 0;
+      padding: 0;
+    }
+
+    .glass-card {
+      background: rgba(255, 255, 255, 0.94);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border: 1px solid rgba(226, 232, 240, 0.9);
+      box-shadow: 0 10px 30px -5px rgba(0, 0, 0, 0.04), 0 4px 6px -2px rgba(0, 0, 0, 0.02);
+    }
+    .glass-card-hover {
+      transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .glass-card-hover:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 20px 35px -5px rgba(0, 0, 0, 0.08), 0 8px 12px -3px rgba(0, 0, 0, 0.04);
+      border-color: rgba(186, 230, 253, 0.9);
+    }
+
+    .sun-glow {
+      background: radial-gradient(circle at 80% 15%, rgba(254, 240, 138, 0.35) 0%, rgba(253, 230, 138, 0.12) 40%, transparent 70%);
+    }
+
+    /* 3D WebGL Canvas Container */
+    #three-canvas-container {
+      position: relative;
+      width: 100%;
+      height: 460px;
+      cursor: pointer;
+    }
+
+    /* Section Scroll Margin to prevent sticky navbar overlap */
+    section, div[id] {
+      scroll-margin-top: 5.5rem;
+    }
+
+    /* Custom Scrollbar */
+    ::-webkit-scrollbar { width: 8px; }
+    ::-webkit-scrollbar-track { background: #F8FAFC; }
+    ::-webkit-scrollbar-thumb { background: #CBD5E1; border-radius: 4px; }
+    ::-webkit-scrollbar-thumb:hover { background: #94A3B8; }
+
+    /* Audio Equalizer */
+    @keyframes eqBar {
+      0%, 100% { height: 4px; }
+      50% { height: 18px; }
+    }
+    .eq-bar-1 { animation: eqBar 0.8s ease-in-out infinite; }
+    .eq-bar-2 { animation: eqBar 0.6s ease-in-out infinite 0.2s; }
+    .eq-bar-3 { animation: eqBar 0.9s ease-in-out infinite 0.4s; }
+
+    /* Active button indicator */
+    .btn-active-ripple {
+      animation: pulseBtn 1.5s infinite;
+    }
+    @keyframes pulseBtn {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.03); }
+    }
+  </style>
+</head>
+<body class="relative antialiased selection:bg-amber-200 selection:text-amber-900 pb-32">
+
+  <!-- TOP STICKY NAVIGATION BAR -->
+  <header id="main-nav" class="sticky top-0 z-50 w-full transition-all duration-300 bg-white/90 backdrop-blur-md border-b border-slate-200/80 px-4 sm:px-8 py-3">
+    <div class="max-w-7xl mx-auto flex items-center justify-between">
+      <a href="#hero" class="flex items-center gap-3 group">
+        <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-amber-500 to-rose-500 flex items-center justify-center text-white font-bold text-xl shadow-md shadow-amber-500/20 group-hover:scale-105 transition-transform">
+          O
+        </div>
+        <div>
+          <span class="text-xs font-bold uppercase tracking-wider text-amber-600 block leading-none">Microlearning Tiếng Việt A1</span>
+          <span class="text-base font-bold text-slate-900 tracking-tight">Nguyên Âm O — Ô — Ơ</span>
+        </div>
+      </a>
+
+      <nav class="hidden md:flex items-center gap-1 text-sm font-medium text-slate-600">
+        <a href="#three-section" class="px-3 py-1.5 rounded-lg hover:text-sky-600 hover:bg-slate-100 transition-colors">Nhân Vật 3D</a>
+        <a href="#scene-lim" class="px-3 py-1.5 rounded-lg hover:text-sky-600 hover:bg-slate-100 transition-colors">I. Khởi Động</a>
+        <a href="#scene-nhung" class="px-3 py-1.5 rounded-lg hover:text-sky-600 hover:bg-slate-100 transition-colors">II. Phát Âm & Viết</a>
+        <a href="#scene-y" class="px-3 py-1.5 rounded-lg hover:text-sky-600 hover:bg-slate-100 transition-colors">III. Luyện Tập</a>
+        <a href="#scene-thuy" class="px-3 py-1.5 rounded-lg hover:text-sky-600 hover:bg-slate-100 transition-colors">IV. Thử Thách Quiz</a>
+        <a href="#scene-team" class="px-3 py-1.5 rounded-lg hover:text-sky-600 hover:bg-slate-100 transition-colors">Hồ Sơ Nhóm</a>
+      </nav>
+
+      <div class="flex items-center gap-3">
+        <a href="#video-master" class="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-sky-600 hover:bg-sky-700 text-white font-semibold text-sm shadow-md shadow-sky-600/25 transition-all hover:scale-105">
+          <svg class="w-4 h-4 fill-current" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+          <span>Xem Video 1080p</span>
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <!-- HERO SECTION -->
+  <section id="hero" class="relative pt-16 sm:pt-20 pb-12 px-4 sm:px-8 overflow-hidden sun-glow">
+    <div class="max-w-7xl mx-auto">
+      
+      <div class="text-center max-w-4xl mx-auto mb-10">
+        <h1 class="font-bold text-slate-900 tracking-tight">
+          <span class="block text-3xl sm:text-5xl lg:text-6xl font-extrabold text-slate-900 mb-3 tracking-tight leading-snug">
+            Khám Phá Bộ Ba Nguyên Âm
+          </span>
+          <span class="block text-5xl sm:text-7xl lg:text-8xl font-black text-transparent bg-clip-text bg-gradient-to-r from-rose-600 via-emerald-600 to-amber-600 tracking-wider leading-none py-2 mb-4 drop-shadow-sm">
+            O — Ô — Ơ
+          </span>
+        </h1>
+        <p class="text-base sm:text-lg text-slate-600 max-w-2xl mx-auto leading-relaxed mt-3">
+          Bài giảng vi mô sinh động dành cho người học nước ngoài bắt đầu học tiếng Việt (Trình độ A1). Phân biệt hình thể mặt chữ, kỹ thuật cấu âm và phương pháp lặp lại Shadowing trực quan.
+        </p>
+      </div>
+
+      <!-- Folk Rhyme Editorial Banner -->
+      <div class="max-w-4xl mx-auto mb-10 p-6 sm:p-8 rounded-3xl glass-card border-amber-200/80 bg-gradient-to-r from-amber-50/70 via-white/80 to-sky-50/70 shadow-lg text-center relative">
+        <div class="text-xs font-bold tracking-widest text-amber-700 uppercase mb-2">Câu Thơ Dân Gian Ghi Nhớ Mặt Chữ</div>
+        <div class="text-2xl sm:text-4xl font-bold text-slate-800 mb-2 leading-relaxed">
+          “<span class="text-rose-600">O</span> tròn như quả trứng gà,”
+        </div>
+        <div class="text-2xl sm:text-4xl font-bold text-slate-800 leading-relaxed">
+          “<span class="text-emerald-600">Ô</span> thì đội mũ — <span class="text-amber-600">Ơ</span> thì thêm râu.”
+        </div>
+        <div class="mt-4 inline-block px-4 py-1.5 rounded-full bg-emerald-100 text-emerald-800 text-xs font-semibold">
+          Mục tiêu: Phát âm chuẩn & Viết đúng tuyệt đối trong 2 phút 18 giây
+        </div>
+      </div>
+
+      <!-- THREE.JS 3D MASCOTS STAGE (FIXED STABLE & VIBRANT) -->
+      <div id="three-section" class="max-w-5xl mx-auto rounded-3xl overflow-hidden glass-card p-4 sm:p-6 mb-12 relative shadow-xl">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-3 px-2">
+          <div class="flex items-center gap-2">
+            <span class="w-3 h-3 rounded-full bg-rose-500"></span>
+            <span class="w-3 h-3 rounded-full bg-emerald-500"></span>
+            <span class="w-3 h-3 rounded-full bg-amber-500"></span>
+            <span class="text-sm font-bold text-slate-800 ml-2">Phòng Trưng Bày 3D Tương Tác (Three.js WebGL)</span>
+          </div>
+          <span class="text-xs font-bold px-3 py-1 rounded-full bg-amber-100 text-amber-800 self-start sm:self-auto">
+            👉 Nhấn trực tiếp vào từng chữ cái để nghe phát âm & xem hiệu ứng nhún nhảy!
+          </span>
+        </div>
+
+        <div id="three-canvas-container" class="w-full rounded-2xl bg-gradient-to-b from-sky-50/40 via-white to-amber-50/30 relative shadow-inner overflow-hidden">
+          <!-- Subtle hint badge overlay -->
+          <div class="absolute top-3 left-3 z-10 px-3 py-1 rounded-lg bg-white/80 backdrop-blur-sm border border-slate-200 text-[11px] font-semibold text-slate-600">
+            Sân khấu 3D Đứng Vững • Không Xoay Vòng
+          </div>
+        </div>
+
+        <!-- 3 Interactive Pronunciation Quick Buttons with Clear Labels -->
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 mt-4">
+          <button id="btn-quick-o" onclick="playAudio('s2_nhung_o_sound'); triggerMascotBounce('O')" class="flex items-center justify-center gap-3 py-3.5 px-4 rounded-2xl bg-rose-50 hover:bg-rose-100 border-2 border-rose-200 hover:border-rose-400 text-rose-800 font-bold transition-all shadow-sm hover:scale-[1.02] active:scale-95">
+            <span class="w-8 h-8 rounded-full bg-rose-600 text-white flex items-center justify-center text-sm font-bold shadow-sm">O</span>
+            <div class="text-left">
+              <span class="block text-sm">Âm O (Môi mở tròn)</span>
+              <span class="block text-[11px] font-normal text-rose-600">Nhấn để nghe giọng đọc</span>
+            </div>
+          </button>
+
+          <button id="btn-quick-oe" onclick="playAudio('s2_nhung_oe_sound'); triggerMascotBounce('OE')" class="flex items-center justify-center gap-3 py-3.5 px-4 rounded-2xl bg-emerald-50 hover:bg-emerald-100 border-2 border-emerald-200 hover:border-emerald-400 text-emerald-800 font-bold transition-all shadow-sm hover:scale-[1.02] active:scale-95">
+            <span class="w-8 h-8 rounded-full bg-emerald-600 text-white flex items-center justify-center text-sm font-bold shadow-sm">Ô</span>
+            <div class="text-left">
+              <span class="block text-sm">Âm Ô (Môi chúm nhô ra)</span>
+              <span class="block text-[11px] font-normal text-emerald-600">Nhấn để nghe giọng đọc</span>
+            </div>
+          </button>
+
+          <button id="btn-quick-ow" onclick="playAudio('s2_nhung_ow_sound'); triggerMascotBounce('OW')" class="flex items-center justify-center gap-3 py-3.5 px-4 rounded-2xl bg-amber-50 hover:bg-amber-100 border-2 border-amber-200 hover:border-amber-400 text-amber-800 font-bold transition-all shadow-sm hover:scale-[1.02] active:scale-95">
+            <span class="w-8 h-8 rounded-full bg-amber-600 text-white flex items-center justify-center text-sm font-bold shadow-sm">Ơ</span>
+            <div class="text-left">
+              <span class="block text-sm">Âm Ơ (Môi dẹt ngang)</span>
+              <span class="block text-[11px] font-normal text-amber-600">Nhấn để nghe giọng đọc</span>
+            </div>
+          </button>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- PHẦN 1: KHỞI ĐỘNG (THÍ THUỲ LIM) -->
+  <section id="scene-lim" class="py-16 px-4 sm:px-8 bg-slate-50/60 border-y border-slate-200/80">
+    <div class="max-w-7xl mx-auto">
+      
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-8">
+        <div>
+          <div class="inline-flex items-center gap-2 px-3 py-1 rounded-lg bg-sky-100 text-sky-800 text-xs font-bold uppercase mb-2">
+            Phần I: Khởi Động & Giới Thiệu
+          </div>
+          <h2 class="text-3xl font-bold text-slate-900">Không Gian Lớp Học & Mục Tiêu Bài Học</h2>
+          <p class="text-sm text-slate-500 mt-1">Phụ trách: <strong>Thí Thuỳ Lim</strong> • Thời lượng kịch bản: 0:00 - 0:35</p>
+        </div>
+        
+        <button id="btn-audio-lim" onclick="playAudio('s1_lim_intro')" class="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-sky-600 hover:bg-sky-700 text-white font-semibold text-sm shadow-md shadow-sky-600/20 transition-all hover:scale-105 active:scale-95">
+          <svg class="w-4 h-4 fill-current" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+          <span>Nghe Thuyết Minh Khởi Động</span>
+        </button>
+      </div>
+
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+        <div class="lg:col-span-7 rounded-2xl overflow-hidden glass-card shadow-md">
+          <img src="./frames_o/s1_lim_intro.png" alt="Phần 1: Khởi động Lim" class="w-full h-auto object-cover" />
+        </div>
+
+        <div class="lg:col-span-5 flex flex-col gap-4">
+          <div class="p-5 rounded-2xl bg-white border border-slate-200/90 shadow-sm">
+            <h3 class="font-bold text-slate-900 text-base mb-1">1. Nhắc nhớ ca dao trực quan</h3>
+            <p class="text-sm text-slate-600">
+              Sử dụng hình tượng quen thuộc: Quả trứng gà tròn biểu trưng cho O; Chiếc mũ nón biểu trưng cho Ô; Chiếc râu móc cong biểu trưng cho Ơ.
+            </p>
+          </div>
+
+          <div class="p-5 rounded-2xl bg-white border border-slate-200/90 shadow-sm">
+            <h3 class="font-bold text-slate-900 text-base mb-1">2. Tránh nhầm lẫn thị giác cho người học A1</h3>
+            <p class="text-sm text-slate-600">
+              Người học phương Tây thường nhầm mũ và râu là dấu thanh (tone marks). Video làm rõ ngay: Đây là các chữ cái nguyên âm độc lập.
+            </p>
+          </div>
+
+          <div class="p-5 rounded-2xl bg-white border border-slate-200/90 shadow-sm">
+            <h3 class="font-bold text-slate-900 text-base mb-1">3. Mục tiêu kiểm chứng</h3>
+            <p class="text-sm text-slate-600">
+              Đảm bảo 100% người học nhận diện đúng mặt chữ và khẩu hình ngay trong lần học đầu tiên.
+            </p>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- PHẦN 2: PHÁT ÂM VÀ CÁCH VIẾT (DƯƠNG THỊ NHUNG) -->
+  <section id="scene-nhung" class="py-16 px-4 sm:px-8">
+    <div class="max-w-7xl mx-auto">
+      
+      <div class="text-center max-w-3xl mx-auto mb-10">
+        <div class="inline-flex items-center gap-2 px-3 py-1 rounded-lg bg-emerald-100 text-emerald-800 text-xs font-bold uppercase mb-2">
+          Phần II: Phát Âm & Cách Viết
+        </div>
+        <h2 class="text-3xl sm:text-4xl font-bold text-slate-900">Quy Tắc Cấu Âm & Hoạt Cảnh Biến Đổi Mặt Chữ</h2>
+        <p class="text-sm text-slate-500 mt-1">Phụ trách: <strong>Dương Thị Nhung</strong> • Thời lượng kịch bản: 0:35 - 1:25</p>
+      </div>
+
+      <!-- 4 Scene Tabs -->
+      <div class="flex flex-wrap items-center justify-center gap-2 mb-8">
+        <button onclick="switchNhungTab(1)" id="nhung-btn-1" class="px-5 py-2.5 rounded-xl font-bold text-sm bg-sky-600 text-white shadow-md transition-all active:scale-95">
+          Cảnh 1: Chữ O Ban Đầu
+        </button>
+        <button onclick="switchNhungTab(2)" id="nhung-btn-2" class="px-5 py-2.5 rounded-xl font-bold text-sm bg-white text-slate-700 hover:bg-slate-100 border border-slate-200 transition-all active:scale-95">
+          Cảnh 2: Mũ Rơi Thành Ô
+        </button>
+        <button onclick="switchNhungTab(3)" id="nhung-btn-3" class="px-5 py-2.5 rounded-xl font-bold text-sm bg-white text-slate-700 hover:bg-slate-100 border border-slate-200 transition-all active:scale-95">
+          Cảnh 3: Râu Mọc Tạo Ơ
+        </button>
+        <button onclick="switchNhungTab(4)" id="nhung-btn-4" class="px-5 py-2.5 rounded-xl font-bold text-sm bg-white text-slate-700 hover:bg-slate-100 border border-slate-200 transition-all active:scale-95">
+          Cảnh 4: Máy Quét So Sánh
+        </button>
+      </div>
+
+      <!-- Tab Content Area -->
+      <div class="max-w-6xl mx-auto">
+        <!-- Tab 1: O -->
+        <div id="nhung-tab-1" class="grid grid-cols-1 lg:grid-cols-2 gap-8 items-center">
+          <div class="rounded-2xl overflow-hidden glass-card shadow-md">
+            <img src="./frames_o/s2_nhung_o_2.png" alt="Chữ O" class="w-full h-auto object-cover" />
+          </div>
+          <div class="space-y-4">
+            <div class="inline-block px-3 py-1 rounded-md bg-rose-100 text-rose-800 font-bold text-xs">NGUYÊN ÂM O GỐC</div>
+            <h3 class="text-2xl font-bold text-slate-900">Môi Mở To • Tròn Môi Tối Đa</h3>
+            <p class="text-slate-600 leading-relaxed text-sm">
+              Chữ O là một nét cong khép kín tròn đều. Về mặt ngữ âm: Là nguyên âm hàng sau, độ mở rộng nhất (Open-mid), cuống lưỡi hạ thấp, luồng hơi thoát rộng rãi tự do.
+            </p>
+            <div class="p-4 rounded-xl bg-rose-50 border border-rose-200 text-rose-900 text-sm">
+              <strong>Mẹo học viên A1:</strong> Tưởng tượng miệng đang ngậm một quả bóng bàn nhỏ hoặc thốt lên "Ồ!", môi giữ tròn đều.
+            </div>
+            <div class="flex gap-3">
+              <button onclick="playAudio('s2_nhung_o_desc')" class="px-4 py-2.5 rounded-xl bg-slate-900 text-white text-xs font-bold hover:bg-slate-800 transition-transform active:scale-95">Nghe Giảng Chữ O</button>
+              <button onclick="playAudio('s2_nhung_o_sound')" class="px-4 py-2.5 rounded-xl bg-rose-600 text-white text-xs font-bold hover:bg-rose-700 transition-transform active:scale-95">Nghe Phát Âm Mẫu: O</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Tab 2: Ô -->
+        <div id="nhung-tab-2" class="hidden grid-cols-1 lg:grid-cols-2 gap-8 items-center">
+          <div class="rounded-2xl overflow-hidden glass-card shadow-md">
+            <img src="./frames_o/s2_nhung_oe_2.png" alt="Chữ Ô" class="w-full h-auto object-cover" />
+          </div>
+          <div class="space-y-4">
+            <div class="inline-block px-3 py-1 rounded-md bg-emerald-100 text-emerald-800 font-bold text-xs">NGUYÊN ÂM Ô — CHIẾC MŨ</div>
+            <h3 class="text-2xl font-bold text-slate-900">Môi Chúm Tròn • Nhô Ra Phía Trước</h3>
+            <p class="text-slate-600 leading-relaxed text-sm">
+              Một chiếc mũ nón rơi xuống đầu O tạo thành Ô. Về mặt ngữ âm: Độ mở môi thu hẹp hơn O (Close-mid), hai khóe môi chúm lại tròn hơn và đưa nhô về phía trước.
+            </p>
+            <div class="p-4 rounded-xl bg-emerald-50 border border-emerald-200 text-emerald-900 text-sm">
+              <strong>Mẹo học viên A1:</strong> Tạo khẩu hình như khi chuẩn bị huýt sáo nhẹ, phát ra âm thanh ấm và tròn.
+            </div>
+            <div class="flex gap-3">
+              <button onclick="playAudio('s2_nhung_oe_desc')" class="px-4 py-2.5 rounded-xl bg-slate-900 text-white text-xs font-bold hover:bg-slate-800 transition-transform active:scale-95">Nghe Giảng Chữ Ô</button>
+              <button onclick="playAudio('s2_nhung_oe_sound')" class="px-4 py-2.5 rounded-xl bg-emerald-600 text-white text-xs font-bold hover:bg-emerald-700 transition-transform active:scale-95">Nghe Phát Âm Mẫu: Ô</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Tab 3: Ơ -->
+        <div id="nhung-tab-3" class="hidden grid-cols-1 lg:grid-cols-2 gap-8 items-center">
+          <div class="rounded-2xl overflow-hidden glass-card shadow-md">
+            <img src="./frames_o/s2_nhung_ow_2.png" alt="Chữ Ơ" class="w-full h-auto object-cover" />
+          </div>
+          <div class="space-y-4">
+            <div class="inline-block px-3 py-1 rounded-md bg-amber-100 text-amber-800 font-bold text-xs">NGUYÊN ÂM Ơ — CHIẾC RÂU</div>
+            <h3 class="text-2xl font-bold text-slate-900">Môi Dẹt Ngang • Tuyệt Đối Không Tròn Môi</h3>
+            <p class="text-slate-600 leading-relaxed text-sm">
+              Chữ O mọc thêm chiếc râu móc bên phải biến thành Ơ. Về ngữ âm: Cùng vị trí lưỡi với Ô nhưng môi <strong>hoàn toàn không tròn (unrounded)</strong>, mở dẹt ngang thư thái.
+            </p>
+            <div class="p-4 rounded-xl bg-amber-50 border border-amber-200 text-amber-900 text-sm">
+              <strong>Mẹo học viên A1:</strong> Giữ vị trí như khi đọc "Ô" nhưng thả lỏng khóe môi sang hai bên để tạo âm "Ơ".
+            </div>
+            <div class="flex gap-3">
+              <button onclick="playAudio('s2_nhung_ow_desc')" class="px-4 py-2.5 rounded-xl bg-slate-900 text-white text-xs font-bold hover:bg-slate-800 transition-transform active:scale-95">Nghe Giảng Chữ Ơ</button>
+              <button onclick="playAudio('s2_nhung_ow_sound')" class="px-4 py-2.5 rounded-xl bg-amber-600 text-white text-xs font-bold hover:bg-amber-700 transition-transform active:scale-95">Nghe Phát Âm Mẫu: Ơ</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Tab 4: Máy Quét -->
+        <div id="nhung-tab-4" class="hidden grid-cols-1 gap-6">
+          <div class="rounded-2xl overflow-hidden glass-card shadow-md">
+            <img src="./frames_o/s2_nhung_scanner.png" alt="Máy quét O Ô Ơ" class="w-full h-auto object-cover" />
+          </div>
+          <div class="flex flex-col sm:flex-row items-center justify-between gap-3 p-4 rounded-xl bg-white border border-slate-200 shadow-sm">
+            <span class="text-sm font-semibold text-slate-700 text-center sm:text-left">“Cảnh báo: Đừng để dấu đánh lừa bạn! Không dấu là O; có mũ là Ô; có móc râu là Ơ!”</span>
+            <button onclick="playAudio('s2_nhung_scanner')" class="px-4 py-2 rounded-xl bg-sky-600 text-white text-xs font-bold hover:bg-sky-700 transition-transform active:scale-95">Nghe Thuyết Minh Máy Quét</button>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- PHẦN 3: LUYỆN TẬP SHADOWING (MẠC NHƯ Ý) -->
+  <section id="scene-y" class="py-16 px-4 sm:px-8 bg-slate-50/60 border-y border-slate-200/80">
+    <div class="max-w-7xl mx-auto">
+      
+      <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-4 mb-8">
+        <div>
+          <div class="inline-flex items-center gap-2 px-3 py-1 rounded-lg bg-amber-100 text-amber-800 text-xs font-bold uppercase mb-2">
+            Phần III: Luyện Tập Thực Hành
+          </div>
+          <h2 class="text-3xl font-bold text-slate-900">Phương Pháp Shadowing: 2.5s Khoảng Dừng Lặp Lại</h2>
+          <p class="text-sm text-slate-500 mt-1">Phụ trách: <strong>Mạc Như Ý</strong> • Thời lượng kịch bản: 1:25 - 2:10</p>
+        </div>
+
+        <div class="flex flex-wrap items-center gap-2">
+          <button onclick="playAudio('s3_y_intro')" class="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-amber-600 hover:bg-amber-700 text-white font-semibold text-sm shadow-md shadow-amber-600/20 transition-all hover:scale-105 active:scale-95">
+            <svg class="w-4 h-4 fill-current" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+            <span>Nghe Hướng Dẫn Luyện Tập</span>
+          </button>
+          <button id="btn-full-shadowing" onclick="startFullShadowing()" class="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-sm shadow-md shadow-emerald-600/20 transition-all hover:scale-105 active:scale-95">
+            <svg class="w-4 h-4 fill-current" viewBox="0 0 24 24"><path d="M12 4V1L8 5l4 4V6c3.31 0 6 2.69 6 6 0 1.01-.25 1.97-.7 2.8l1.46 1.46C19.54 15.03 20 13.57 20 12c0-4.42-3.58-8-8-8zm0 14c-3.31 0-6-2.69-6-6 0-1.01.25-1.97.7-2.8L5.24 7.74C4.46 8.97 4 10.43 4 12c0 4.42 3.58 8 8 8v3l4-4-4-4v3z"/></svg>
+            <span>🔁 Luyện Trọn Bộ 3 Từ (Full Flow)</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- 3-Step Pedagogical Methodology Banner -->
+      <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 mb-8 p-4 rounded-2xl bg-amber-50/70 border border-amber-200/80 text-xs">
+        <div class="flex items-center gap-2.5">
+          <span class="w-6 h-6 rounded-full bg-amber-500 text-white font-bold flex items-center justify-center flex-shrink-0 text-xs">1</span>
+          <div>
+            <strong class="text-slate-800 block">Nghe Người Bản Xứ (3.4s)</strong>
+            <span class="text-slate-500">Lắng nghe âm mẫu: O, Ô, Ơ & từ vựng</span>
+          </div>
+        </div>
+        <div class="flex items-center gap-2.5">
+          <span class="w-6 h-6 rounded-full bg-emerald-500 text-white font-bold flex items-center justify-center flex-shrink-0 text-xs">2</span>
+          <div>
+            <strong class="text-slate-800 block">Khoảng Dừng Vàng (2.5s)</strong>
+            <span class="text-slate-500">Não bộ giải mã và chuẩn bị cơ môi</span>
+          </div>
+        </div>
+        <div class="flex items-center gap-2.5">
+          <span class="w-6 h-6 rounded-full bg-sky-500 text-white font-bold flex items-center justify-center flex-shrink-0 text-xs">3</span>
+          <div>
+            <strong class="text-slate-800 block">Lặp Lại To Rõ (Shadowing)</strong>
+            <span class="text-slate-500">Bật mic, nói to mô phỏng chính xác</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- 3 Practice Drill Interactive Cards -->
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+        
+        <!-- Card 1: BÒ (O) -->
+        <div id="card-drill-o" class="p-6 rounded-3xl glass-card glass-card-hover border-2 border-rose-200 relative flex flex-col items-center text-center transition-all duration-300">
+          <div class="w-24 h-24 rounded-full overflow-hidden mb-4 border-2 border-rose-300 shadow-sm">
+            <img src="./char_o.png" alt="Bò" class="w-full h-full object-cover" />
+          </div>
+          <span class="text-xs font-bold uppercase tracking-wider text-rose-600 mb-1">Nguyên Âm O</span>
+          <h3 class="text-4xl font-bold text-slate-900 mb-1">BÒ</h3>
+          <p class="text-sm font-medium text-slate-500 mb-4">Con bò (Cow)</p>
+          <p class="text-xs text-slate-600 mb-6 bg-rose-50 px-3 py-1.5 rounded-lg border border-rose-100">
+            Khẩu hình: Môi mở to tròn đều
+          </p>
+          <button onclick="triggerDrill('O', 'BÒ', 's3_y_pair_o')" class="w-full mt-auto py-2.5 px-4 rounded-xl bg-rose-600 hover:bg-rose-700 text-white font-bold text-sm shadow-md shadow-rose-600/20 flex items-center justify-center gap-2 active:scale-95 transition-all">
+            <svg class="w-4 h-4 fill-current" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+            <span>Bắt Đầu Luyện: BÒ</span>
+          </button>
+        </div>
+
+        <!-- Card 2: CÔ (Ô) -->
+        <div id="card-drill-oe" class="p-6 rounded-3xl glass-card glass-card-hover border-2 border-emerald-200 relative flex flex-col items-center text-center transition-all duration-300">
+          <div class="w-24 h-24 rounded-full overflow-hidden mb-4 border-2 border-emerald-300 shadow-sm">
+            <img src="./char_oe.png" alt="Cô" class="w-full h-full object-cover" />
+          </div>
+          <span class="text-xs font-bold uppercase tracking-wider text-emerald-600 mb-1">Nguyên Âm Ô</span>
+          <h3 class="text-4xl font-bold text-slate-900 mb-1">CÔ</h3>
+          <p class="text-sm font-medium text-slate-500 mb-4">Cô giáo (Teacher)</p>
+          <p class="text-xs text-slate-600 mb-6 bg-emerald-50 px-3 py-1.5 rounded-lg border border-emerald-100">
+            Khẩu hình: Môi chúm tròn nhô ra
+          </p>
+          <button onclick="triggerDrill('Ô', 'CÔ', 's3_y_pair_oe')" class="w-full mt-auto py-2.5 px-4 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-sm shadow-md shadow-emerald-600/20 flex items-center justify-center gap-2 active:scale-95 transition-all">
+            <svg class="w-4 h-4 fill-current" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+            <span>Bắt Đầu Luyện: CÔ</span>
+          </button>
+        </div>
+
+        <!-- Card 3: BƠ (Ơ) -->
+        <div id="card-drill-ow" class="p-6 rounded-3xl glass-card glass-card-hover border-2 border-amber-200 relative flex flex-col items-center text-center transition-all duration-300">
+          <div class="w-24 h-24 rounded-full overflow-hidden mb-4 border-2 border-amber-300 shadow-sm">
+            <img src="./char_ow.png" alt="Bơ" class="w-full h-full object-cover" />
+          </div>
+          <span class="text-xs font-bold uppercase tracking-wider text-amber-600 mb-1">Nguyên Âm Ơ</span>
+          <h3 class="text-4xl font-bold text-slate-900 mb-1">BƠ</h3>
+          <p class="text-sm font-medium text-slate-500 mb-4">Quả bơ (Avocado)</p>
+          <p class="text-xs text-slate-600 mb-6 bg-amber-50 px-3 py-1.5 rounded-lg border border-amber-100">
+            Khẩu hình: Môi mở dẹt ngang thư thái
+          </p>
+          <button onclick="triggerDrill('Ơ', 'BƠ', 's3_y_pair_ow')" class="w-full mt-auto py-2.5 px-4 rounded-xl bg-amber-600 hover:bg-amber-700 text-white font-bold text-sm shadow-md shadow-amber-600/20 flex items-center justify-center gap-2 active:scale-95 transition-all">
+            <svg class="w-4 h-4 fill-current" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+            <span>Bắt Đầu Luyện: BƠ</span>
+          </button>
+        </div>
+
+      </div>
+
+      <!-- Live Interactive Shadowing Rhythm Bar & Studio 4.0 -->
+      <div id="drill-box" class="max-w-3xl mx-auto p-6 rounded-3xl glass-card border-sky-300 bg-white/95 shadow-xl text-center transition-all duration-300">
+        <div class="flex items-center justify-between mb-3 px-2">
+          <span id="drill-status-tag" class="text-xs font-bold px-3.5 py-1.5 rounded-full bg-slate-100 text-slate-600 transition-colors">Sẵn sàng luyện tập</span>
+          <div class="flex items-center gap-3">
+            <button id="btn-stop-drill" onclick="stopAndResetDrill(false)" style="display: none;" class="text-xs font-bold px-3 py-1 rounded-full bg-rose-50 text-rose-600 hover:bg-rose-100 border border-rose-200 transition-all items-center gap-1 active:scale-95" title="Hủy bỏ lượt luyện tập hiện tại">
+              <svg class="w-3.5 h-3.5 fill-current" viewBox="0 0 24 24"><path d="M6 6h12v12H6z"/></svg>
+              <span>Dừng Luyện</span>
+            </button>
+            <span id="drill-timer-num" class="text-sm font-bold text-slate-900 font-mono">0.0s / 2.5s</span>
+          </div>
+        </div>
+
+        <!-- Progress bar -->
+        <div class="w-full h-3.5 bg-slate-100 rounded-full overflow-hidden mb-3 relative shadow-inner">
+          <div id="drill-progress" class="h-full bg-sky-500 w-0 transition-all duration-100 rounded-full"></div>
+        </div>
+
+        <!-- Live Waveform Canvas (Active during 2.5s mic recording) -->
+        <div id="waveform-wrap" class="w-full h-11 bg-slate-50 rounded-2xl mb-3 border border-slate-200/80 overflow-hidden relative flex items-center justify-center shadow-sm">
+          <canvas id="drill-waveform-canvas" class="w-full h-full"></canvas>
+          <div id="waveform-empty-hint" class="absolute inset-0 flex items-center justify-center text-xs font-medium text-slate-400 pointer-events-none px-4">
+            🎙️ Sóng âm thanh học viên sẽ hiển thị trực tiếp tại đây khi đến lượt đọc
+          </div>
+        </div>
+
+        <div id="drill-prompt-text" class="text-base font-bold text-slate-700 transition-colors">
+          Nhấn vào một từ vựng ở trên hoặc chọn "Luyện Trọn Bộ 3 Từ" để bắt đầu nhịp đếm Shadowing!
+        </div>
+
+        <!-- DUAL-VOICE COMPARISON STUDIO (Appears after 2.5s repeat) -->
+        <div id="drill-comparison-station" class="hidden mt-6 pt-6 border-t border-slate-200 text-left transition-all">
+          <div class="flex flex-wrap items-center justify-between gap-2 mb-4">
+            <div class="flex items-center gap-2">
+              <span class="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-ping"></span>
+              <span class="text-xs font-bold uppercase tracking-wider text-emerald-800 bg-emerald-100 px-3 py-1 rounded-full">
+                Phòng Thu Đối Chiếu Song Song (Dual-Voice Studio)
+              </span>
+            </div>
+            <span class="text-xs font-medium text-slate-500">So sánh giọng bản xứ vs giọng của bạn</span>
+          </div>
+
+          <!-- Playback Buttons -->
+          <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 mb-5">
+            <button onclick="playTeacherModelAudio()" class="py-2.5 px-4 rounded-xl bg-slate-900 hover:bg-slate-800 text-white font-bold text-xs flex items-center justify-center gap-2 transition-all shadow-sm active:scale-95">
+              <svg class="w-4 h-4 fill-current text-sky-400" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+              <span>1. Nghe Cô Giáo Đọc</span>
+            </button>
+            <button id="btn-play-user-rec" onclick="playUserRecordingAudio()" class="py-2.5 px-4 rounded-xl bg-sky-600 hover:bg-sky-700 text-white font-bold text-xs flex items-center justify-center gap-2 transition-all shadow-sm active:scale-95">
+              <svg class="w-4 h-4 fill-current text-amber-300" viewBox="0 0 24 24"><path d="M12 14c1.66 0 3-1.34 3-3V5c0-1.66-1.34-3-3-3S9 3.34 9 5v6c0 1.66 1.34 3 3 3z"/><path d="M17 11c0 2.76-2.24 5-5 5s-5-2.24-5-5H5c0 3.53 2.61 6.43 6 6.92V21h2v-3.08c3.39-.49 6-3.39 6-6.92h-2z"/></svg>
+              <span id="user-rec-btn-text">2. Nghe Lại Giọng Bạn</span>
+            </button>
+            <button onclick="playSequentialComparison()" class="py-2.5 px-4 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs flex items-center justify-center gap-2 transition-all shadow-sm active:scale-95">
+              <svg class="w-4 h-4 fill-current text-emerald-200" viewBox="0 0 24 24"><path d="M12 4V1L8 5l4 4V6c3.31 0 6 2.69 6 6 0 1.01-.25 1.97-.7 2.8l1.46 1.46C19.54 15.03 20 13.57 20 12c0-4.42-3.58-8-8-8zm0 14c-3.31 0-6-2.69-6-6 0-1.01.25-1.97.7-2.8L5.24 7.74C4.46 8.97 4 10.43 4 12c0 4.42 3.58 8 8 8v3l4-4-4-4v3z"/></svg>
+              <span>3. Đối Chiếu (Cô &rarr; Bạn)</span>
+            </button>
+          </div>
+
+          <!-- Self-Check Rubric -->
+          <div class="p-4 rounded-2xl bg-slate-50 border border-slate-200">
+            <div class="text-xs font-bold text-slate-700 mb-2 flex items-center justify-between">
+              <span>Bảng Tự Đánh Giá Khẩu Hình (Self-Check Rubric):</span>
+              <span id="rubric-badge" class="hidden text-[11px] font-bold text-emerald-700 bg-emerald-100 px-2 py-0.5 rounded-md">⭐ Đạt Chuẩn Khẩu Hình!</span>
+            </div>
+            <div id="rubric-items-container" class="flex flex-wrap gap-2 text-xs">
+              <!-- Dynamically populated based on active vowel (O, Ô, Ơ) -->
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- PHẦN 4: TỔNG KẾT & MINI QUIZ (NÔNG THỊ LỆ THUỶ) -->
+  <section id="scene-thuy" class="py-16 px-4 sm:px-8">
+    <div class="max-w-7xl mx-auto">
+      
+      <div class="text-center max-w-3xl mx-auto mb-10">
+        <div class="inline-flex items-center gap-2 px-3 py-1 rounded-lg bg-rose-100 text-rose-800 text-xs font-bold uppercase mb-2">
+          Phần IV: Thử Thách & Củng Cố
+        </div>
+        <h2 class="text-3xl sm:text-4xl font-bold text-slate-900">Mini Quiz Thính Giác 3 Giây & Bảng Quy Tắc Vàng</h2>
+        <p class="text-sm text-slate-500 mt-1">Phụ trách: <strong>Nông Thị Lệ Thuỷ</strong> • Thời lượng kịch bản: 2:10 - 2:45</p>
+      </div>
+
+      <!-- Interactive Quiz Game Card -->
+      <div class="max-w-4xl mx-auto p-8 rounded-3xl glass-card border-amber-200 bg-gradient-to-b from-white to-amber-50/40 shadow-xl mb-12">
+        <div class="text-center mb-6">
+          <span class="text-xs font-bold uppercase tracking-widest text-amber-700 bg-amber-100 px-3 py-1 rounded-full">Trắc Nghiệm Phản Xạ Âm Thanh</span>
+          <h3 class="text-2xl font-bold text-slate-900 mt-3">Bạn vừa nghe thấy từ nào dưới đây?</h3>
+          <p class="text-sm text-slate-500 mt-1">Nhấn nút phát âm bên dưới, lắng nghe và chọn đáp án trước khi đồng hồ điểm 3 giây!</p>
+        </div>
+
+        <div class="flex justify-center mb-8">
+          <button id="quiz-play-btn" onclick="startQuizSound()" class="inline-flex items-center gap-3 px-6 py-3.5 rounded-2xl bg-gradient-to-r from-sky-600 to-indigo-600 hover:from-sky-700 hover:to-indigo-700 text-white font-bold text-base shadow-lg shadow-sky-600/25 transition-all hover:scale-105 active:scale-95">
+            <svg class="w-5 h-5 fill-current" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+            <span id="quiz-play-label">Phát Âm Thanh Bí Mật</span>
+          </button>
+        </div>
+
+        <!-- 2 Options -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-6 mb-6">
+          <button id="quiz-opt-a" onclick="checkQuizAnswer('A')" class="p-6 rounded-2xl bg-white border-2 border-slate-200 hover:border-emerald-500 text-center transition-all group hover:shadow-md active:scale-95">
+            <div class="w-10 h-10 rounded-xl bg-slate-100 text-slate-800 font-bold flex items-center justify-center mx-auto mb-3 group-hover:bg-emerald-600 group-hover:text-white transition-colors">A</div>
+            <div class="text-4xl font-bold text-slate-900 mb-1">CÔ</div>
+            <div class="text-xs font-medium text-slate-500">Chứa nguyên âm Ô (/o/)</div>
+          </button>
+
+          <button id="quiz-opt-b" onclick="checkQuizAnswer('B')" class="p-6 rounded-2xl bg-white border-2 border-slate-200 hover:border-rose-400 text-center transition-all group hover:shadow-md active:scale-95">
+            <div class="w-10 h-10 rounded-xl bg-slate-100 text-slate-800 font-bold flex items-center justify-center mx-auto mb-3 group-hover:bg-rose-600 group-hover:text-white transition-colors">B</div>
+            <div class="text-4xl font-bold text-slate-900 mb-1">BƠ</div>
+            <div class="text-xs font-medium text-slate-500">Chứa nguyên âm Ơ (/ɤ/)</div>
+          </button>
+        </div>
+
+        <!-- Quiz Feedback box -->
+        <div id="quiz-result" class="hidden p-5 rounded-2xl bg-emerald-50 border border-emerald-300 text-center">
+          <div class="text-lg font-bold text-emerald-800 mb-1">🎉 CHÍNH XÁC 100%! ĐÁP ÁN LÀ: [A] CÔ</div>
+          <p class="text-sm text-emerald-700">
+            Từ "CÔ" chứa nguyên âm Ô với khẩu hình đặc trưng: hai khóe môi chúm tròn nhô ra phía trước.
+          </p>
+        </div>
+        <div id="quiz-error" class="hidden p-5 rounded-2xl bg-rose-50 border border-rose-300 text-center">
+          <div class="text-lg font-bold text-rose-800 mb-1">❌ CHƯA CHÍNH XÁC! THỬ LẠI NHÉ</div>
+          <p class="text-sm text-rose-700">
+            Âm bạn vừa nghe có môi chúm tròn nhô ra phía trước (nguyên âm Ô), đáp án đúng phải là <strong>[A] CÔ</strong>!
+          </p>
+        </div>
+      </div>
+
+      <!-- Golden Rule Summary Grid -->
+      <div class="max-w-5xl mx-auto">
+        <h3 class="text-2xl font-bold text-slate-900 text-center mb-6">Bảng Quy Tắc Vàng Ghi Nhớ Vĩnh Viễn</h3>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <div class="p-6 rounded-3xl bg-white border border-rose-200 shadow-sm text-center">
+            <div class="text-5xl font-bold text-rose-600 mb-2">O</div>
+            <div class="text-lg font-bold text-slate-900 mb-1">O Tròn Quả Trứng</div>
+            <div class="text-xs font-semibold text-slate-500 mb-3">Không có dấu phụ</div>
+            <p class="text-sm text-rose-700 bg-rose-50 p-3 rounded-xl">Khẩu hình: Môi mở tròn rộng tối đa</p>
+          </div>
+
+          <div class="p-6 rounded-3xl bg-white border border-emerald-200 shadow-sm text-center">
+            <div class="text-5xl font-bold text-emerald-600 mb-2">Ô</div>
+            <div class="text-lg font-bold text-slate-900 mb-1">Ô Thì Đội Mũ</div>
+            <div class="text-xs font-semibold text-slate-500 mb-3">Có chiếc mũ trên đầu (^)</div>
+            <p class="text-sm text-emerald-700 bg-emerald-50 p-3 rounded-xl">Khẩu hình: Môi chúm tròn nhô ra trước</p>
+          </div>
+
+          <div class="p-6 rounded-3xl bg-white border border-amber-200 shadow-sm text-center">
+            <div class="text-5xl font-bold text-amber-600 mb-2">Ơ</div>
+            <div class="text-lg font-bold text-slate-900 mb-1">Ơ Thì Thêm Râu</div>
+            <div class="text-xs font-semibold text-slate-500 mb-3">Có chiếc móc râu bên phải</div>
+            <p class="text-sm text-amber-700 bg-amber-50 p-3 rounded-xl">Khẩu hình: Môi mở dẹt ngang thư thái</p>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- MASTER VIDEO PLAYER -->
+  <section id="video-master" class="py-16 px-4 sm:px-8 bg-slate-900 text-white">
+    <div class="max-w-6xl mx-auto">
+      
+      <div class="text-center max-w-3xl mx-auto mb-10">
+        <div class="inline-flex items-center gap-2 px-3 py-1 rounded-lg bg-sky-900/80 text-sky-400 text-xs font-bold uppercase mb-2 border border-sky-700">
+          Sản Phẩm Video Hoàn Chỉnh (Full HD 1080p)
+        </div>
+        <h2 class="text-3xl sm:text-4xl font-bold text-white tracking-tight">Trình Phát Video Microlearning Chính Thức</h2>
+        <p class="text-sm text-slate-400 mt-2">Đã xuất bản với chuẩn màu tươi sáng, bộ font SVN-Gilroy và âm thanh chất lượng phòng thu.</p>
+      </div>
+
+      <div class="rounded-3xl overflow-hidden shadow-2xl border border-slate-700 bg-black aspect-video relative mb-8">
+        <video id="hero-video" class="w-full h-full object-cover" controls preload="metadata" playsinline poster="./frames_o/s1_lim_intro.png">
+          <source src="./video_microlearning_O_Ô_Ơ.mp4" type="video/mp4" />
+          <source src="./video_o_o_o.mp4" type="video/mp4" />
+          Trình duyệt của bạn không hỗ trợ phát video HTML5.
+        </video>
+      </div>
+
+      <div class="flex flex-wrap items-center justify-between gap-4 p-6 rounded-2xl bg-slate-800/80 border border-slate-700">
+        <div>
+          <div class="text-base font-bold text-white">video_microlearning_O_Ô_Ơ.mp4</div>
+          <div class="text-xs text-slate-400">1920x1080 Full HD • 30 fps • H.264 / AAC Stereo • 138.69s (2 phút 18s)</div>
+        </div>
+        <a href="./video_microlearning_O_Ô_Ơ.mp4" download="video_microlearning_O_Ô_Ơ.mp4" class="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-sm shadow-md shadow-emerald-600/30 transition-all hover:scale-105 active:scale-95">
+          <svg class="w-4 h-4 fill-current" viewBox="0 0 24 24"><path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/></svg>
+          <span>Tải File Video Về Máy (MP4)</span>
+        </a>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- PHẦN 5: HỒ SƠ NHÓM 5 THÀNH VIÊN -->
+  <section id="scene-team" class="py-16 px-4 sm:px-8 bg-white border-t border-slate-200">
+    <div class="max-w-7xl mx-auto">
+      
+      <div class="text-center max-w-3xl mx-auto mb-12">
+        <div class="inline-flex items-center gap-2 px-3 py-1 rounded-lg bg-indigo-100 text-indigo-800 text-xs font-bold uppercase mb-2">
+          Hồ Sơ Năng Lực & Phân Công Nhiệm Vụ
+        </div>
+        <h2 class="text-3xl sm:text-4xl font-bold text-slate-900">Danh Sách 5 Thành Viên Nhóm Dự Án</h2>
+        <p class="text-sm text-slate-500 mt-1">Đảm bảo đóng góp đồng đều và đúng tiêu chuẩn Rubric 100/100</p>
+      </div>
+
+      <!-- 5 Team Member Cards -->
+      <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-5 gap-4 mb-12">
+        
+        <div class="p-5 rounded-2xl bg-slate-50 border border-slate-200 text-center flex flex-col items-center">
+          <div class="w-12 h-12 rounded-full bg-amber-500 text-white font-bold text-lg flex items-center justify-center mb-3 shadow-md">T</div>
+          <h4 class="font-bold text-slate-900 text-sm">Nông Thị Lệ Thuỷ</h4>
+          <span class="text-xs text-amber-700 font-semibold mb-2">Trưởng Nhóm</span>
+          <p class="text-xs text-slate-500 mt-auto">Phụ trách Phần IV: Tổng kết, Mini Quiz thính giác & Bảng quy tắc vàng.</p>
+          <div class="mt-2 text-xs font-bold text-slate-400">Đóng góp: 20%</div>
+        </div>
+
+        <div class="p-5 rounded-2xl bg-slate-50 border border-slate-200 text-center flex flex-col items-center">
+          <div class="w-12 h-12 rounded-full bg-indigo-500 text-white font-bold text-lg flex items-center justify-center mb-3 shadow-md">T</div>
+          <h4 class="font-bold text-slate-900 text-sm">Nguyễn Thị Hồng Thương</h4>
+          <span class="text-xs text-indigo-700 font-semibold mb-2">Nghiên Cứu & Đánh Giá</span>
+          <p class="text-xs text-slate-500 mt-auto">Phụ trách: Báo cáo AI Log, Bằng chứng khảo sát người học A1 & Tài liệu tham khảo.</p>
+          <div class="mt-2 text-xs font-bold text-slate-400">Đóng góp: 20%</div>
+        </div>
+
+        <div class="p-5 rounded-2xl bg-slate-50 border border-slate-200 text-center flex flex-col items-center">
+          <div class="w-12 h-12 rounded-full bg-sky-500 text-white font-bold text-lg flex items-center justify-center mb-3 shadow-md">L</div>
+          <h4 class="font-bold text-slate-900 text-sm">Thí Thuỳ Lim</h4>
+          <span class="text-xs text-sky-700 font-semibold mb-2">Nội Dung Khởi Động</span>
+          <p class="text-xs text-slate-500 mt-auto">Phụ trách Phần I: Khởi động, kết nối ca dao & mục tiêu bài học.</p>
+          <div class="mt-2 text-xs font-bold text-slate-400">Đóng góp: 20%</div>
+        </div>
+
+        <div class="p-5 rounded-2xl bg-slate-50 border border-slate-200 text-center flex flex-col items-center">
+          <div class="w-12 h-12 rounded-full bg-rose-500 text-white font-bold text-lg flex items-center justify-center mb-3 shadow-md">N</div>
+          <h4 class="font-bold text-slate-900 text-sm">Dương Thị Nhung</h4>
+          <span class="text-xs text-rose-700 font-semibold mb-2">Ngữ Âm & Kỹ Thuật Viết</span>
+          <p class="text-xs text-slate-500 mt-auto">Phụ trách Phần II: Quy tắc nét chữ, hoạt cảnh chiếc mũ, chiếc râu & máy quét.</p>
+          <div class="mt-2 text-xs font-bold text-slate-400">Đóng góp: 20%</div>
+        </div>
+
+        <div class="p-5 rounded-2xl bg-slate-50 border border-slate-200 text-center flex flex-col items-center">
+          <div class="w-12 h-12 rounded-full bg-emerald-500 text-white font-bold text-lg flex items-center justify-center mb-3 shadow-md">Y</div>
+          <h4 class="font-bold text-slate-900 text-sm">Mạc Như Ý</h4>
+          <span class="text-xs text-emerald-700 font-semibold mb-2">Thực Hành & Shadowing</span>
+          <p class="text-xs text-slate-500 mt-auto">Phụ trách Phần III: Thiết kế bài tập Shadowing 2.5s (Bò - Cô - Bơ).</p>
+          <div class="mt-2 text-xs font-bold text-slate-400">Đóng góp: 20%</div>
+        </div>
+
+      </div>
+
+      <!-- Dossier Markdown Quick Links -->
+      <div class="p-6 sm:p-8 rounded-3xl bg-slate-50 border border-slate-200">
+        <h3 class="text-lg font-bold text-slate-900 mb-4">Trọn Bộ Hồ Sơ Học Thuật Đính Kèm (Markdown Files)</h3>
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 text-sm">
+          <a href="./kich_ban_video.md" target="_blank" class="p-4 rounded-xl bg-white border border-slate-200 hover:border-sky-500 flex items-center justify-between group transition-colors">
+            <span class="font-semibold text-slate-800">1. Kịch bản phân cảnh 4 cột</span>
+            <span class="text-sky-600 text-xs group-hover:underline">kich_ban_video.md &rarr;</span>
+          </a>
+          <a href="./ai_log.md" target="_blank" class="p-4 rounded-xl bg-white border border-slate-200 hover:border-sky-500 flex items-center justify-between group transition-colors">
+            <span class="font-semibold text-slate-800">2. Nhật ký AI Log (1 trang A4)</span>
+            <span class="text-sky-600 text-xs group-hover:underline">ai_log.md &rarr;</span>
+          </a>
+          <a href="./tai_lieu_tham_khao.md" target="_blank" class="p-4 rounded-xl bg-white border border-slate-200 hover:border-sky-500 flex items-center justify-between group transition-colors">
+            <span class="font-semibold text-slate-800">3. Tài liệu ngữ âm GS. Đoàn Thiện Thuật</span>
+            <span class="text-sky-600 text-xs group-hover:underline">tai_lieu_tham_khao.md &rarr;</span>
+          </a>
+          <a href="./bang_chung_thu_nghiem.md" target="_blank" class="p-4 rounded-xl bg-white border border-slate-200 hover:border-sky-500 flex items-center justify-between group transition-colors">
+            <span class="font-semibold text-slate-800">4. Bằng chứng thử nghiệm quốc tế</span>
+            <span class="text-sky-600 text-xs group-hover:underline">bang_chung_thu_nghiem.md &rarr;</span>
+          </a>
+          <a href="./phan_cong_nhiem_vu.md" target="_blank" class="p-4 rounded-xl bg-white border border-slate-200 hover:border-sky-500 flex items-center justify-between group transition-colors">
+            <span class="font-semibold text-slate-800">5. Ma trận phân công nhiệm vụ 5 người</span>
+            <span class="text-sky-600 text-xs group-hover:underline">phan_cong_nhiem_vu.md &rarr;</span>
+          </a>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- STICKY BOTTOM AUDIO NARRATION CONTROLLER -->
+  <div id="sticky-audio-bar" class="fixed bottom-4 left-4 right-4 max-w-4xl mx-auto z-50 p-3 sm:p-4 rounded-2xl glass-card border-slate-300/80 shadow-2xl flex items-center gap-4">
+    <button id="global-play-btn" onclick="toggleGlobalAudio()" class="w-12 h-12 rounded-xl bg-sky-600 hover:bg-sky-700 text-white flex items-center justify-center flex-shrink-0 shadow-md shadow-sky-600/30 transition-transform active:scale-95">
+      <svg id="play-icon" class="w-6 h-6 fill-current" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+      <svg id="pause-icon" class="w-6 h-6 fill-current hidden" viewBox="0 0 24 24"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>
+    </button>
+
+    <div class="flex-grow min-w-0">
+      <div class="flex items-center justify-between text-xs mb-1">
+        <span id="audio-track-title" class="font-bold text-slate-800 truncate">Sẵn sàng phát thuyết minh bài giảng</span>
+        <span id="audio-time-label" class="text-slate-500 font-mono text-[11px] ml-2 flex-shrink-0">0:00 / 2:18</span>
+      </div>
+      <div class="w-full h-2 bg-slate-200 rounded-full overflow-hidden cursor-pointer" onclick="seekGlobalAudio(event)">
+        <div id="global-audio-progress" class="h-full bg-sky-600 w-0 transition-all duration-150"></div>
+      </div>
+      <div id="audio-sub-text" class="text-[11px] text-slate-500 truncate mt-1">
+        Nhấn phát để nghe toàn bộ bài giảng đồng bộ từ Phần 1 đến Phần 4
+      </div>
+    </div>
+
+    <div class="hidden sm:flex items-center gap-1">
+      <span class="w-1.5 bg-sky-500 rounded-full eq-bar-1"></span>
+      <span class="w-1.5 bg-emerald-500 rounded-full eq-bar-2"></span>
+      <span class="w-1.5 bg-amber-500 rounded-full eq-bar-3"></span>
+    </div>
+
+    <button id="btn-toggle-audio-collapse" onclick="toggleAudioBarCollapse()" title="Thu gọn / Mở rộng" class="w-8 h-8 rounded-xl hover:bg-slate-200/80 text-slate-500 flex items-center justify-center flex-shrink-0 transition-all active:scale-90">
+      <svg id="collapse-arrow" class="w-5 h-5 fill-current transition-transform duration-300" viewBox="0 0 24 24"><path d="M7.41 8.59L12 13.17l4.59-4.58L18 10l-6 6-6-6 1.41-1.41z"/></svg>
+    </button>
+  </div>
+
+  <!-- JAVASCRIPT LOGIC & THREE.JS ENGINE -->
+  <script>
+    // Audio Playlist Definition
+    const PLAYLIST = [
+      { id: "s1_lim_intro", title: "Khởi động: O tròn như quả trứng gà (Lim)", file: "./audio_o/s1_lim_intro.mp3", vi: "Xin chào các em! O tròn như quả trứng gà, Ô thì đội mũ, Ơ thì thêm râu...", en: "Welcome! Plain is O, with a hat is Ô, with a hook is Ơ." },
+      { id: "s2_nhung_o_desc", title: "Phát âm & Cách viết: Chữ O ban đầu (Nhung)", file: "./audio_o/s2_nhung_o_desc.mp3", vi: "Đây là O. Một chữ cái rất quen thuộc...", en: "This is O. A very familiar letter..." },
+      { id: "s2_nhung_o_sound", title: "Phát âm chuẩn: O (Nhung)", file: "./audio_o/s2_nhung_o_sound.mp3", vi: "O. O. Môi mở rộng, tròn môi: O.", en: "O. O. Open mouth wide, round lips: O." },
+      { id: "s2_nhung_oe_desc", title: "Biến đổi: Chiếc mũ tạo thành Ô (Nhung)", file: "./audio_o/s2_nhung_oe_desc.mp3", vi: "Một chiếc mũ nhỏ xuất hiện. O đã trở thành Ô!", en: "A little hat drops down. O transforms into Ô!" },
+      { id: "s2_nhung_oe_sound", title: "Phát âm chuẩn: Ô (Nhung)", file: "./audio_o/s2_nhung_oe_sound.mp3", vi: "Ô. Ô. Môi chúm tròn nhô ra phía trước: Ô.", en: "Ô. Ô. Pucker rounded lips forward: Ô." },
+      { id: "s2_nhung_ow_desc", title: "Biến đổi: Chiếc râu tạo thành Ơ (Nhung)", file: "./audio_o/s2_nhung_ow_desc.mp3", vi: "Một chiếc râu nhỏ xuất hiện: O đã trở thành Ơ!", en: "A little hook sprouts: O becomes Ơ!" },
+      { id: "s2_nhung_ow_sound", title: "Phát âm chuẩn: Ơ (Nhung)", file: "./audio_o/s2_nhung_ow_sound.mp3", vi: "Ơ. Ơ. Khẩu hình như Ô nhưng môi không tròn, mở dẹt ngang: Ơ.", en: "Ơ. Ơ. Mouth relaxes, lips unrounded: Ơ." },
+      { id: "s2_nhung_scanner", title: "Máy quét so sánh O - Ô - Ơ (Nhung)", file: "./audio_o/s2_nhung_scanner.mp3", vi: "Đừng để dấu đánh lừa bạn! Không dấu là O, có mũ là Ô, có móc râu là Ơ!", en: "Don't let marks trick you: Plain is O, hat is Ô, hook is Ơ!" },
+      { id: "s3_y_intro", title: "Luyện tập Shadowing (Ý)", file: "./audio_o/s3_y_intro.mp3", vi: "Bây giờ chúng ta cùng luyện tập nhé! Lắng nghe và lặp lại thật to...", en: "Now let's practice! Listen and repeat out loud..." },
+      { id: "s3_y_pair_o", title: "Luyện từ âm O: BÒ (Ý)", file: "./audio_o/s3_y_pair_o.mp3", vi: "O. Bò. Con bò.", en: "O. Bò. (Cow)." },
+      { id: "s3_y_pair_oe", title: "Luyện từ âm Ô: CÔ (Ý)", file: "./audio_o/s3_y_pair_oe.mp3", vi: "Ô. Cô. Cô giáo.", en: "Ô. Cô. (Teacher)." },
+      { id: "s3_y_pair_ow", title: "Luyện từ âm Ơ: BƠ (Ý)", file: "./audio_o/s3_y_pair_ow.mp3", vi: "Ơ. Bơ. Quả bơ.", en: "Ơ. Bơ. (Avocado)." },
+      { id: "s3_y_outro", title: "Cổ vũ người học (Ý)", file: "./audio_o/s3_y_outro.mp3", vi: "Rất tốt! Cảm nhận đôi môi chuyển động từ tròn rộng đến dẹt nhé!", en: "Great job! Feel your lips moving from round to unrounded!" },
+      { id: "s4_thuy_quiz_q", title: "Câu hỏi Mini Quiz (Thuỷ)", file: "./audio_o/s4_thuy_quiz_q.mp3", vi: "Thử thách thính giác nào! Bạn vừa nghe thấy từ nào dưới đây?", en: "Listening challenge! Which word did you just hear?" },
+      { id: "s4_thuy_quiz_sound", title: "Âm thanh bí mật: CÔ (Thuỷ)", file: "./audio_o/s4_thuy_quiz_sound.mp3", vi: "Cô.", en: "Cô." },
+      { id: "s4_thuy_quiz_ans", title: "Công bố đáp án đúng (Thuỷ)", file: "./audio_o/s4_thuy_quiz_ans.mp3", vi: "Ba, hai, một. Chính xác! Đó là đáp án A: CÔ!", en: "Three, two, one. Correct! It is A: CÔ!" },
+      { id: "s4_thuy_golden_rule", title: "Quy tắc vàng & Lời kết (Thuỷ)", file: "./audio_o/s4_thuy_golden_rule.mp3", vi: "Hãy luôn nhớ quy tắc vàng: O trứng, Ô mũ, Ơ râu. Tạm biệt!", en: "Always remember: O egg, Ô hat, Ơ hook. Goodbye!" }
+    ];
+
+    let currentTrackIdx = 0;
+    let globalAudio = new Audio();
+    let isPlayingGlobal = false;
+    let sfxTick = new Audio('./audio/sfx_tick.mp3');
+    let sfxDing = new Audio('./audio/sfx_ding.mp3');
+
+    // Centralized Drill Session Management (100% Race-Condition Free)
+    let drillSessionCounter = 0;
+    let activeDrillInterval = null;
+    let activeChainTimeouts = [];
+    let activeDrillAudioListener = null;
+
+    // Studio Shadowing 4.0 State Engine
+    let currentDrillLetter = 'O';
+    let currentDrillWord = 'BÒ';
+    let currentDrillAudioId = 's3_y_pair_o';
+
+    let mediaRecorder = null;
+    let recordedAudioChunks = [];
+    let userRecordedAudioUrl = null;
+    let userAudioPlayer = new Audio();
+    let audioStream = null;
+    let micAudioContext = null;
+    let micAnalyser = null;
+    let waveformAnimId = null;
+
+    const RUBRIC_CRITERIA = {
+      'O': [
+        'Khóe môi mở tròn to tối đa',
+        'Lưỡi hạ thấp tự nhiên trong khoang miệng'
+      ],
+      'Ô': [
+        'Khóe môi chúm tròn nhô ra phía trước',
+        'Khoang miệng thu hẹp và âm trầm hơn O'
+      ],
+      'Ơ': [
+        'Khóe môi mở dẹt ngang thư thái',
+        'Tuyệt đối không tròn môi, lưng lưỡi nâng nhẹ'
+      ]
+    };
+
+    function initWaveformCanvas() {
+      const canvas = document.getElementById('drill-waveform-canvas');
+      if (!canvas) return;
+      const ctx = canvas.getContext('2d');
+      canvas.width = canvas.parentElement.clientWidth || 600;
+      canvas.height = canvas.parentElement.clientHeight || 44;
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      ctx.strokeStyle = '#E2E8F0';
+      ctx.lineWidth = 1.5;
+      ctx.beginPath();
+      ctx.moveTo(0, canvas.height / 2);
+      ctx.lineTo(canvas.width, canvas.height / 2);
+      ctx.stroke();
+    }
+
+    function startWaveformVisualization(stream) {
+      const canvas = document.getElementById('drill-waveform-canvas');
+      const hint = document.getElementById('waveform-empty-hint');
+      if (hint) hint.classList.add('hidden');
+      if (!canvas) return;
+      const ctx = canvas.getContext('2d');
+      canvas.width = canvas.parentElement.clientWidth || 600;
+      canvas.height = canvas.parentElement.clientHeight || 44;
+
+      try {
+        const AudioCtxClass = window.AudioContext || window.webkitAudioContext;
+        if (!AudioCtxClass) return;
+        micAudioContext = new AudioCtxClass();
+        const source = micAudioContext.createMediaStreamSource(stream);
+        micAnalyser = micAudioContext.createAnalyser();
+        micAnalyser.fftSize = 256;
+        source.connect(micAnalyser);
+
+        const bufferLength = micAnalyser.frequencyBinCount;
+        const dataArray = new Uint8Array(bufferLength);
+
+        const draw = () => {
+          waveformAnimId = requestAnimationFrame(draw);
+          micAnalyser.getByteTimeDomainData(dataArray);
+
+          ctx.fillStyle = '#F8FAFC';
+          ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+          let strokeColor = '#0284C7';
+          if (currentDrillLetter === 'O') strokeColor = '#E11D48';
+          if (currentDrillLetter === 'Ô') strokeColor = '#059669';
+          if (currentDrillLetter === 'Ơ') strokeColor = '#D97706';
+
+          ctx.lineWidth = 2.5;
+          ctx.strokeStyle = strokeColor;
+          ctx.beginPath();
+
+          const sliceWidth = canvas.width / bufferLength;
+          let x = 0;
+
+          for (let i = 0; i < bufferLength; i++) {
+            const v = dataArray[i] / 128.0;
+            const y = (v * canvas.height) / 2;
+            if (i === 0) {
+              ctx.moveTo(x, y);
+            } else {
+              ctx.lineTo(x, y);
+            }
+            x += sliceWidth;
+          }
+
+          ctx.lineTo(canvas.width, canvas.height / 2);
+          ctx.stroke();
+        };
+        draw();
+      } catch (err) {
+        console.log('Audio visualizer note:', err);
+      }
+    }
+
+    function stopWaveformVisualization() {
+      if (waveformAnimId) {
+        cancelAnimationFrame(waveformAnimId);
+        waveformAnimId = null;
+      }
+      if (micAudioContext) {
+        try { micAudioContext.close(); } catch (e) {}
+        micAudioContext = null;
+      }
+      initWaveformCanvas();
+      const hint = document.getElementById('waveform-empty-hint');
+      if (hint) {
+        hint.innerText = "🎙️ Sóng âm thanh học viên sẽ hiển thị trực tiếp tại đây khi đến lượt đọc";
+        hint.classList.remove('hidden');
+      }
+    }
+
+    async function startUserVoiceRecording() {
+      recordedAudioChunks = [];
+      userRecordedAudioUrl = null;
+      const hint = document.getElementById('waveform-empty-hint');
+
+      if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
+        if (hint) {
+          hint.innerText = "🎤 Đang đếm nhịp 2.5s: Hãy đọc to rõ!";
+          hint.classList.remove('hidden');
+        }
+        return;
+      }
+
+      try {
+        audioStream = await navigator.mediaDevices.getUserMedia({ audio: true });
+        startWaveformVisualization(audioStream);
+
+        mediaRecorder = new MediaRecorder(audioStream);
+        mediaRecorder.ondataavailable = (e) => {
+          if (e.data && e.data.size > 0) {
+            recordedAudioChunks.push(e.data);
+          }
+        };
+        mediaRecorder.onstop = () => {
+          if (recordedAudioChunks.length > 0) {
+            const blob = new Blob(recordedAudioChunks, { type: 'audio/webm' });
+            userRecordedAudioUrl = URL.createObjectURL(blob);
+            userAudioPlayer.src = userRecordedAudioUrl;
+            const btnText = document.getElementById('user-rec-btn-text');
+            if (btnText) btnText.innerText = `2. Nghe Lại Giọng Bạn (${currentDrillWord})`;
+          }
+        };
+        mediaRecorder.start();
+      } catch (err) {
+        if (hint) {
+          hint.innerText = "🎤 Micro không kích hoạt - Hãy đọc to theo nhịp đếm 2.5s!";
+          hint.classList.remove('hidden');
+        }
+      }
+    }
+
+    function stopUserVoiceRecording() {
+      if (mediaRecorder && mediaRecorder.state !== 'inactive') {
+        try { mediaRecorder.stop(); } catch (e) {}
+      }
+      if (audioStream) {
+        audioStream.getTracks().forEach(track => track.stop());
+        audioStream = null;
+      }
+      stopWaveformVisualization();
+    }
+
+    function populateRubricItems(letter) {
+      const container = document.getElementById('rubric-items-container');
+      const badge = document.getElementById('rubric-badge');
+      if (!container) return;
+      if (badge) badge.classList.add('hidden');
+      container.innerHTML = '';
+
+      const items = RUBRIC_CRITERIA[letter] || RUBRIC_CRITERIA['O'];
+      items.forEach((txt) => {
+        const btn = document.createElement('button');
+        btn.className = "rubric-pill px-3 py-1.5 rounded-xl border border-slate-300 bg-white text-slate-700 hover:border-emerald-500 flex items-center gap-1.5 transition-all text-xs font-medium active:scale-95";
+        btn.innerHTML = `<span class="pill-check text-slate-300">○</span> <span>${txt}</span>`;
+        btn.onclick = () => {
+          btn.classList.toggle('bg-emerald-50');
+          btn.classList.toggle('border-emerald-500');
+          btn.classList.toggle('text-emerald-800');
+          const checkIcon = btn.querySelector('.pill-check');
+          if (btn.classList.contains('bg-emerald-50')) {
+            checkIcon.innerText = '●';
+            checkIcon.className = 'pill-check text-emerald-600 font-bold';
+          } else {
+            checkIcon.innerText = '○';
+            checkIcon.className = 'pill-check text-slate-300';
+          }
+          checkRubricCompletion();
+        };
+        container.appendChild(btn);
+      });
+    }
+
+    function checkRubricCompletion() {
+      const pills = document.querySelectorAll('.rubric-pill');
+      const checkedPills = document.querySelectorAll('.rubric-pill.bg-emerald-50');
+      const badge = document.getElementById('rubric-badge');
+      if (pills.length > 0 && checkedPills.length === pills.length) {
+        if (badge) badge.classList.remove('hidden');
+      } else {
+        if (badge) badge.classList.add('hidden');
+      }
+    }
+
+    window.playTeacherModelAudio = function() {
+      playAudio(currentDrillAudioId, true);
+    };
+
+    window.playUserRecordingAudio = function() {
+      if (userRecordedAudioUrl) {
+        try {
+          globalAudio.pause();
+          userAudioPlayer.currentTime = 0;
+          userAudioPlayer.play().catch(e => console.log('User audio play error:', e));
+        } catch (e) {}
+      } else {
+        const promptText = document.getElementById('drill-prompt-text');
+        if (promptText) promptText.innerHTML = "💡 Chưa có bản thu âm. Hãy bấm <strong>Bắt Đầu Luyện</strong> để thu âm giọng bạn!";
+      }
+    };
+
+    window.playSequentialComparison = function() {
+      playTeacherModelAudio();
+      const onTeacherEnd = () => {
+        globalAudio.removeEventListener('ended', onTeacherEnd);
+        setTimeout(() => {
+          playUserRecordingAudio();
+        }, 350);
+      };
+      globalAudio.addEventListener('ended', onTeacherEnd, { once: true });
+    };
+
+    // Reset drill cards highlight rings
+    function resetDrillCardsHighlight() {
+      ['card-drill-o', 'card-drill-oe', 'card-drill-ow'].forEach(id => {
+        const el = document.getElementById(id);
+        if (el) el.classList.remove('ring-4', 'ring-rose-400', 'ring-emerald-400', 'ring-amber-400', 'shadow-2xl', 'scale-[1.02]');
+      });
+    }
+
+    // Completely stop and reset any active drill, intervals, timeouts, and listeners
+    window.stopAndResetDrill = function(preserveUI = false) {
+      drillSessionCounter++; // Invalidate any running session or callback immediately
+
+      // 1. Clear active interval
+      if (activeDrillInterval) {
+        clearInterval(activeDrillInterval);
+        activeDrillInterval = null;
+      }
+
+      // 2. Clear all chained timeouts
+      activeChainTimeouts.forEach(t => clearTimeout(t));
+      activeChainTimeouts = [];
+
+      // 3. Remove pending audio listeners
+      if (activeDrillAudioListener) {
+        globalAudio.removeEventListener('ended', activeDrillAudioListener);
+        activeDrillAudioListener = null;
+      }
+
+      // 4. Mute & reset SFX immediately
+      try {
+        sfxTick.pause();
+        sfxTick.currentTime = 0;
+      } catch (e) {}
+      try {
+        sfxDing.pause();
+        sfxDing.currentTime = 0;
+      } catch (e) {}
+
+      // 5. Hide stop button and reset Full Shadowing button ring
+      const stopBtn = document.getElementById('btn-stop-drill');
+      if (stopBtn) stopBtn.style.display = 'none';
+      const btnFull = document.getElementById('btn-full-shadowing');
+      if (btnFull) btnFull.classList.remove('ring-4', 'ring-emerald-400');
+
+      // 6. Reset UI & audio if requested
+      if (!preserveUI) {
+        try {
+          globalAudio.pause();
+          isPlayingGlobal = false;
+          const pPlay = document.getElementById('play-icon');
+          const pPause = document.getElementById('pause-icon');
+          if (pPlay) pPlay.classList.remove('hidden');
+          if (pPause) pPause.classList.add('hidden');
+        } catch (e) {}
+
+        stopUserVoiceRecording();
+        const station = document.getElementById('drill-comparison-station');
+        if (station) station.classList.add('hidden');
+        userRecordedAudioUrl = null;
+        try { userAudioPlayer.pause(); } catch (e) {}
+
+        resetDrillCardsHighlight();
+        const tag = document.getElementById('drill-status-tag');
+        const timerNum = document.getElementById('drill-timer-num');
+        const promptText = document.getElementById('drill-prompt-text');
+        const bar = document.getElementById('drill-progress');
+        if (tag) {
+          tag.className = "text-xs font-bold px-3.5 py-1.5 rounded-full bg-slate-100 text-slate-600 transition-colors";
+          tag.innerText = "Sẵn sàng luyện tập";
+        }
+        if (timerNum) timerNum.innerText = "0.0s / 2.5s";
+        if (promptText) promptText.innerHTML = 'Nhấn vào một từ vựng ở trên hoặc chọn "Luyện Trọn Bộ 3 Từ" để bắt đầu nhịp đếm Shadowing!';
+        if (bar) {
+          bar.style.width = "0%";
+          bar.className = "h-full bg-sky-500 w-0 transition-all duration-100 rounded-full";
+        }
+      }
+    };
+
+    // Global audio playing function with strict drill isolation
+    window.playAudio = function(trackId, isPartOfDrill = false) {
+      // If user triggers ANY track outside the active drill, cancel and reset the drill immediately!
+      if (!isPartOfDrill) {
+        stopAndResetDrill(false);
+      }
+
+      // Pause master video if it is currently playing to prevent dual sound conflict
+      const heroVid = document.getElementById('hero-video');
+      if (heroVid && !heroVid.paused) {
+        try { heroVid.pause(); } catch(e) {}
+      }
+
+      const idx = PLAYLIST.findIndex(p => p.id === trackId);
+      if (idx === -1) return;
+      currentTrackIdx = idx;
+      const found = PLAYLIST[idx];
+
+      try {
+        globalAudio.pause();
+      } catch (e) {}
+
+      globalAudio.src = found.file;
+      globalAudio.play().catch(e => console.log('Audio play error:', e));
+      isPlayingGlobal = true;
+      updateAudioBarUI(found);
+    };
+
+    window.toggleGlobalAudio = function() {
+      if (isPlayingGlobal) {
+        globalAudio.pause();
+        isPlayingGlobal = false;
+        document.getElementById('play-icon').classList.remove('hidden');
+        document.getElementById('pause-icon').classList.add('hidden');
+      } else {
+        // Pause master video if playing
+        const heroVid = document.getElementById('hero-video');
+        if (heroVid && !heroVid.paused) {
+          try { heroVid.pause(); } catch(e) {}
+        }
+
+        if (!globalAudio.src || globalAudio.src.endsWith('/')) {
+          globalAudio.src = PLAYLIST[currentTrackIdx].file;
+          updateAudioBarUI(PLAYLIST[currentTrackIdx]);
+        }
+        globalAudio.play().catch(e => console.log('Audio play error:', e));
+        isPlayingGlobal = true;
+        document.getElementById('play-icon').classList.add('hidden');
+        document.getElementById('pause-icon').classList.remove('hidden');
+      }
+    };
+
+    function updateAudioBarUI(track) {
+      document.getElementById('audio-track-title').innerText = track.title;
+      document.getElementById('audio-sub-text').innerText = `${track.vi} — [EN] ${track.en}`;
+      document.getElementById('play-icon').classList.add('hidden');
+      document.getElementById('pause-icon').classList.remove('hidden');
+    }
+
+    globalAudio.addEventListener('timeupdate', () => {
+      if (globalAudio.duration) {
+        const pct = (globalAudio.currentTime / globalAudio.duration) * 100;
+        document.getElementById('global-audio-progress').style.width = `${pct}%`;
+        const curMin = Math.floor(globalAudio.currentTime / 60);
+        const curSec = Math.floor(globalAudio.currentTime % 60).toString().padStart(2, '0');
+        const durMin = Math.floor(globalAudio.duration / 60);
+        const durSec = Math.floor(globalAudio.duration % 60).toString().padStart(2, '0');
+        document.getElementById('audio-time-label').innerText = `${curMin}:${curSec} / ${durMin}:${durSec}`;
+      }
+    });
+
+    globalAudio.addEventListener('ended', () => {
+      isPlayingGlobal = false;
+      document.getElementById('play-icon').classList.remove('hidden');
+      document.getElementById('pause-icon').classList.add('hidden');
+      document.getElementById('global-audio-progress').style.width = '100%';
+    });
+
+    // Mutual exclusion: pause audio player & drill if user presses Play on the master video
+    document.addEventListener('DOMContentLoaded', () => {
+      const heroVid = document.getElementById('hero-video');
+      if (heroVid) {
+        heroVid.addEventListener('play', () => {
+          if (isPlayingGlobal) {
+            globalAudio.pause();
+            isPlayingGlobal = false;
+            document.getElementById('play-icon').classList.remove('hidden');
+            document.getElementById('pause-icon').classList.add('hidden');
+          }
+          stopAndResetDrill(false);
+        });
+      }
+    });
+
+    window.seekGlobalAudio = function(e) {
+      const rect = e.currentTarget.getBoundingClientRect();
+      const clickX = e.clientX - rect.left;
+      const ratio = Math.max(0, Math.min(1, clickX / rect.width));
+      if (globalAudio.duration) {
+        globalAudio.currentTime = ratio * globalAudio.duration;
+      }
+    };
+
+    let isAudioBarCollapsed = false;
+    window.toggleAudioBarCollapse = function() {
+      const bar = document.getElementById('sticky-audio-bar');
+      const arrow = document.getElementById('collapse-arrow');
+      isAudioBarCollapsed = !isAudioBarCollapsed;
+      if (isAudioBarCollapsed) {
+        bar.style.transform = 'translateY(calc(100% - 20px))';
+        arrow.style.transform = 'rotate(180deg)';
+      } else {
+        bar.style.transform = 'translateY(0)';
+        arrow.style.transform = 'rotate(0deg)';
+      }
+    };
+
+    // Tab switcher for Nhung Section
+    window.switchNhungTab = function(tabNum) {
+      for (let i = 1; i <= 4; i++) {
+        const content = document.getElementById(`nhung-tab-${i}`);
+        const btn = document.getElementById(`nhung-btn-${i}`);
+        if (i === tabNum) {
+          content.classList.remove('hidden');
+          content.classList.add('grid');
+          btn.className = "px-5 py-2.5 rounded-xl font-bold text-sm bg-sky-600 text-white shadow-md transition-all active:scale-95";
+        } else {
+          content.classList.add('hidden');
+          content.classList.remove('grid');
+          btn.className = "px-5 py-2.5 rounded-xl font-bold text-sm bg-white text-slate-700 hover:bg-slate-100 border border-slate-200 transition-all active:scale-95";
+        }
+      }
+    };
+
+    // Interactive Shadowing Drill Runner (Precision Pedagogical Timing)
+    function highlightDrillCard(letter) {
+      resetDrillCardsHighlight();
+      if (letter === 'O') {
+        const el = document.getElementById('card-drill-o');
+        if (el) el.classList.add('ring-4', 'ring-rose-400', 'shadow-2xl', 'scale-[1.02]');
+      } else if (letter === 'Ô') {
+        const el = document.getElementById('card-drill-oe');
+        if (el) el.classList.add('ring-4', 'ring-emerald-400', 'shadow-2xl', 'scale-[1.02]');
+      } else if (letter === 'Ơ') {
+        const el = document.getElementById('card-drill-ow');
+        if (el) el.classList.add('ring-4', 'ring-amber-400', 'shadow-2xl', 'scale-[1.02]');
+      }
+    }
+
+    window.triggerDrill = function(letter, word, audioId, onCompleteCb) {
+      // Step 0: Abort any previous drill session cleanly
+      stopAndResetDrill(true);
+
+      const sessionId = drillSessionCounter;
+      currentDrillLetter = letter;
+      currentDrillWord = word;
+      currentDrillAudioId = audioId;
+
+      // Step 1: Highlight selected card & show Stop button
+      highlightDrillCard(letter);
+      const stopBtn = document.getElementById('btn-stop-drill');
+      if (stopBtn) stopBtn.style.display = 'inline-flex';
+
+      const tag = document.getElementById('drill-status-tag');
+      const timerNum = document.getElementById('drill-timer-num');
+      const promptText = document.getElementById('drill-prompt-text');
+      const bar = document.getElementById('drill-progress');
+      
+      tag.className = "text-xs font-bold px-3.5 py-1.5 rounded-full bg-sky-100 text-sky-800 flex items-center justify-center gap-1.5";
+      tag.innerHTML = `<span class="w-2 h-2 rounded-full bg-sky-600 animate-pulse"></span> 1. Đang nghe giáo viên phát âm: ${letter} — ${word}...`;
+      promptText.innerHTML = `🎧 Lắng nghe cô Như Ý phát âm mẫu: <strong class="text-sky-700">"${letter} ... ${word}"</strong>`;
+      bar.style.width = "0%";
+      bar.className = "h-full bg-sky-500 w-0 transition-all duration-100 rounded-full";
+      timerNum.innerText = "0.0s / 2.5s";
+
+      // Step 2: Function to start the 2.5s repeat countdown
+      const startRepeatCountdown = () => {
+        // If session was cancelled or superseded, abort immediately!
+        if (sessionId !== drillSessionCounter) return;
+
+        tag.className = "text-xs font-bold px-3.5 py-1.5 rounded-full bg-emerald-100 text-emerald-800 animate-pulse flex items-center justify-center gap-1.5";
+        tag.innerHTML = `<span class="w-2 h-2 rounded-full bg-emerald-600 animate-ping"></span> 2. [MIC ON] ĐẾN LƯỢT BẠN: HÃY ĐỌC TO!`;
+        promptText.innerHTML = `🎙️ Hãy bật mic và đọc to ngay: <strong class="text-emerald-700 text-lg">"${letter} ... ${word}"</strong>! (2.5 giây đếm ngược)`;
+        bar.className = "h-full bg-emerald-500 transition-all duration-100 rounded-full";
+        
+        // Activate Studio 4.0 User Voice Recording & Live Waveform
+        startUserVoiceRecording();
+
+        let elapsed = 0;
+        const total = 2500;
+        const step = 100;
+
+        if (activeDrillInterval) {
+          clearInterval(activeDrillInterval);
+          activeDrillInterval = null;
+        }
+
+        const thisTimer = setInterval(() => {
+          // If session was cancelled, self-terminate this timer immediately
+          if (sessionId !== drillSessionCounter) {
+            clearInterval(thisTimer);
+            return;
+          }
+
+          elapsed += step;
+          const clamped = Math.min(elapsed, total);
+          const ratio = clamped / total;
+          bar.style.width = `${(ratio * 100).toFixed(1)}%`;
+          timerNum.innerText = `${(clamped / 1000).toFixed(1)}s / 2.5s`;
+          
+          // Precision rhythmic tick SFX: only at exactly 0.8s and 1.6s
+          if ((clamped === 800 || clamped === 1600) && elapsed < total) {
+            try {
+              sfxTick.currentTime = 0;
+              sfxTick.play().catch(() => {});
+            } catch (e) {}
+          }
+          
+          if (elapsed >= total) {
+            // Unconditionally clear timer first to ensure it NEVER runs again
+            clearInterval(thisTimer);
+            if (activeDrillInterval === thisTimer) activeDrillInterval = null;
+
+            // Stop user recording
+            stopUserVoiceRecording();
+
+            // Ding sound
+            try {
+              sfxDing.currentTime = 0;
+              sfxDing.play().catch(() => {});
+            } catch (e) {}
+
+            tag.className = "text-xs font-bold px-3.5 py-1.5 rounded-full bg-emerald-600 text-white";
+            tag.innerText = "🎉 Hoàn thành lượt đọc Shadowing!";
+            promptText.innerHTML = `✨ Tuyệt vời! Bạn đã phát âm rất chuẩn xác từ <strong class="text-emerald-700">${word}</strong>!`;
+            bar.style.width = "100%";
+            timerNum.innerText = "2.5s / 2.5s";
+
+            // Reveal Studio 4.0 Comparison Drawer
+            const station = document.getElementById('drill-comparison-station');
+            if (station) station.classList.remove('hidden');
+            populateRubricItems(letter);
+
+            if (!onCompleteCb && stopBtn) {
+              stopBtn.style.display = 'none';
+            }
+
+            if (onCompleteCb && sessionId === drillSessionCounter) {
+              onCompleteCb();
+            }
+          }
+        }, step);
+
+        activeDrillInterval = thisTimer;
+      };
+
+      // Register listener for native audio ending
+      activeDrillAudioListener = () => {
+        globalAudio.removeEventListener('ended', activeDrillAudioListener);
+        activeDrillAudioListener = null;
+        if (sessionId === drillSessionCounter) {
+          startRepeatCountdown();
+        }
+      };
+      globalAudio.addEventListener('ended', activeDrillAudioListener, { once: true });
+
+      // Play teacher's native audio (flagged as part of drill)
+      playAudio(audioId, true);
+    };
+
+    // Full 3-Word Sequential Flow Runner (Safe & Cancelable)
+    window.startFullShadowing = function() {
+      stopAndResetDrill(true);
+      const btn = document.getElementById('btn-full-shadowing');
+      if (btn) btn.classList.add('ring-4', 'ring-emerald-400');
+
+      const fullFlowSessionId = drillSessionCounter;
+
+      // 1. O - BÒ
+      triggerDrill('O', 'BÒ', 's3_y_pair_o', () => {
+        if (fullFlowSessionId !== drillSessionCounter) return;
+        const t1 = setTimeout(() => {
+          if (fullFlowSessionId !== drillSessionCounter) return;
+          // 2. Ô - CÔ
+          triggerDrill('Ô', 'CÔ', 's3_y_pair_oe', () => {
+            if (fullFlowSessionId !== drillSessionCounter) return;
+            const t2 = setTimeout(() => {
+              if (fullFlowSessionId !== drillSessionCounter) return;
+              // 3. Ơ - BƠ
+              triggerDrill('Ơ', 'BƠ', 's3_y_pair_ow', () => {
+                if (fullFlowSessionId !== drillSessionCounter) return;
+                const t3 = setTimeout(() => {
+                  if (fullFlowSessionId !== drillSessionCounter) return;
+                  // Outro
+                  playAudio('s3_y_outro', true);
+                  if (btn) btn.classList.remove('ring-4', 'ring-emerald-400');
+                  const stopBtn = document.getElementById('btn-stop-drill');
+                  if (stopBtn) stopBtn.style.display = 'none';
+                }, 800);
+                activeChainTimeouts.push(t3);
+              });
+            }, 800);
+            activeChainTimeouts.push(t2);
+          });
+        }, 800);
+        activeChainTimeouts.push(t1);
+      });
+    };
+
+    // Quiz logic
+    window.startQuizSound = function() {
+      stopAndResetDrill(false);
+      playAudio('s4_thuy_quiz_sound');
+      document.getElementById('quiz-result').classList.add('hidden');
+      const errEl = document.getElementById('quiz-error');
+      if (errEl) errEl.classList.add('hidden');
+      document.getElementById('quiz-play-label').innerText = "Đang phát lại âm thanh...";
+      setTimeout(() => {
+        document.getElementById('quiz-play-label').innerText = "Phát Lại Âm Thanh Bí Mật";
+      }, 1500);
+    };
+
+    window.checkQuizAnswer = function(opt) {
+      stopAndResetDrill(false);
+      const resOk = document.getElementById('quiz-result');
+      const resErr = document.getElementById('quiz-error');
+      if (opt === 'A') {
+        try {
+          sfxDing.currentTime = 0;
+          sfxDing.play().catch(() => {});
+        } catch(e) {}
+        if (resErr) resErr.classList.add('hidden');
+        if (resOk) resOk.classList.remove('hidden');
+        document.getElementById('quiz-opt-a').classList.add('border-emerald-500', 'bg-emerald-50');
+        document.getElementById('quiz-opt-b').classList.remove('border-emerald-500', 'bg-emerald-50', 'border-rose-500', 'bg-rose-50');
+      } else {
+        try {
+          sfxTick.currentTime = 0;
+          sfxTick.play().catch(() => {});
+        } catch(e) {}
+        if (resOk) resOk.classList.add('hidden');
+        if (resErr) resErr.classList.remove('hidden');
+        document.getElementById('quiz-opt-b').classList.add('border-rose-500', 'bg-rose-50');
+      }
+    };
+  </script>
+
+  <!-- THREE.JS 3D WEBGL MASCOTS SCRIPT (STABLE & VIBRANT) -->
+  <script type="module">
+    import * as THREE from 'three';
+
+    const container = document.getElementById('three-canvas-container');
+
+    // Scene, Camera, Renderer
+    const scene = new THREE.Scene();
+    scene.background = new THREE.Color(0xFFFDF9);
+
+    const camera = new THREE.PerspectiveCamera(40, container.clientWidth / container.clientHeight, 0.1, 100);
+    camera.position.set(0, 0.2, 9.2);
+
+    const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true, powerPreference: "high-performance" });
+    renderer.setSize(container.clientWidth, container.clientHeight);
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+    renderer.shadowMap.enabled = true;
+    renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+    container.appendChild(renderer.domElement);
+
+    // Warm Sunbeam Lighting Setup
+    const ambientLight = new THREE.AmbientLight(0xFFFBF5, 1.3);
+    scene.add(ambientLight);
+
+    // Main Sun Key Light
+    const sunLight = new THREE.DirectionalLight(0xFFFBEB, 1.8);
+    sunLight.position.set(3, 7, 5);
+    sunLight.castShadow = true;
+    sunLight.shadow.mapSize.width = 1024;
+    sunLight.shadow.mapSize.height = 1024;
+    scene.add(sunLight);
+
+    // Soft Lavender-Blue Fill Light from left
+    const fillLight = new THREE.DirectionalLight(0xE0E7FF, 0.7);
+    fillLight.position.set(-5, 2, 4);
+    scene.add(fillLight);
+
+    // Reflective Wooden Ground Plane
+    const floorGeo = new THREE.PlaneGeometry(30, 20);
+    const floorMat = new THREE.MeshStandardMaterial({ 
+      color: 0xF5E6D3, 
+      roughness: 0.35, 
+      metalness: 0.02 
+    });
+    const floor = new THREE.Mesh(floorGeo, floorMat);
+    floor.rotation.x = -Math.PI / 2;
+    floor.position.y = -2.1;
+    floor.receiveShadow = true;
+    scene.add(floor);
+
+    // Letter Factory: Cute Pixar 3D Letters
+    function createMascot(colorHex, hasHat = false, hasHook = false) {
+      const group = new THREE.Group();
+
+      // Torus Body
+      const torusGeo = new THREE.TorusGeometry(1.2, 0.55, 32, 64);
+      const torusMat = new THREE.MeshPhysicalMaterial({
+        color: colorHex,
+        roughness: 0.12,
+        metalness: 0.02,
+        clearcoat: 0.85,
+        clearcoatRoughness: 0.05,
+      });
+      const body = new THREE.Mesh(torusGeo, torusMat);
+      body.castShadow = true;
+      body.receiveShadow = true;
+      group.add(body);
+
+      // Expressive Cute Eyes
+      const eyeGeo = new THREE.SphereGeometry(0.25, 24, 24);
+      const eyeWhiteMat = new THREE.MeshStandardMaterial({ color: 0xFFFFFF, roughness: 0.05 });
+      const pupilMat = new THREE.MeshBasicMaterial({ color: 0x090D16 });
+      const glintMat = new THREE.MeshBasicMaterial({ color: 0xFFFFFF });
+
+      function makeEye(xOffset) {
+        const eye = new THREE.Group();
+        const white = new THREE.Mesh(eyeGeo, eyeWhiteMat);
+        white.scale.set(1, 1.25, 0.6);
+        eye.add(white);
+
+        const pupil = new THREE.Mesh(new THREE.SphereGeometry(0.13, 16, 16), pupilMat);
+        pupil.scale.set(1, 1, 0.4);
+        pupil.position.set(0, 0, 0.12);
+        eye.add(pupil);
+
+        const glint1 = new THREE.Mesh(new THREE.SphereGeometry(0.045, 8, 8), glintMat);
+        glint1.position.set(0.04, 0.05, 0.16);
+        eye.add(glint1);
+
+        const glint2 = new THREE.Mesh(new THREE.SphereGeometry(0.025, 8, 8), glintMat);
+        glint2.position.set(-0.03, -0.04, 0.16);
+        eye.add(glint2);
+
+        eye.position.set(xOffset, 0.45, 0.54);
+        return eye;
+      }
+      group.add(makeEye(-0.48));
+      group.add(makeEye(0.48));
+
+      // Cheerful Smile Mouth
+      const mouthGeo = new THREE.TorusGeometry(0.24, 0.065, 16, 32, Math.PI);
+      const mouthMat = new THREE.MeshBasicMaterial({ color: 0x2D0A0E });
+      const mouth = new THREE.Mesh(mouthGeo, mouthMat);
+      mouth.position.set(0, 0.08, 0.55);
+      mouth.rotation.z = Math.PI;
+      group.add(mouth);
+
+      // Rosy Cheeks
+      const cheekGeo = new THREE.SphereGeometry(0.15, 16, 16);
+      const cheekMat = new THREE.MeshBasicMaterial({ color: 0xFB7185 });
+      const cheekL = new THREE.Mesh(cheekGeo, cheekMat);
+      cheekL.scale.set(1, 0.5, 0.2);
+      cheekL.position.set(-0.75, 0.22, 0.52);
+      group.add(cheekL);
+
+      const cheekR = new THREE.Mesh(cheekGeo, cheekMat);
+      cheekR.scale.set(1, 0.5, 0.2);
+      cheekR.position.set(0.75, 0.22, 0.52);
+      group.add(cheekR);
+
+      // Cartoon Waving Hands
+      const handGeo = new THREE.SphereGeometry(0.28, 20, 20);
+      const handMat = new THREE.MeshStandardMaterial({ color: 0xFFFFFF, roughness: 0.15 });
+      const handL = new THREE.Mesh(handGeo, handMat);
+      handL.scale.set(1.1, 1.3, 0.7);
+      handL.position.set(-1.85, 0.4, 0.2);
+      group.add(handL);
+      group.handL = handL;
+
+      const handR = new THREE.Mesh(handGeo, handMat);
+      handR.scale.set(1.1, 1.3, 0.7);
+      handR.position.set(1.85, 0.4, 0.2);
+      group.add(handR);
+      group.handR = handR;
+
+      // Sneaker Shoes
+      const shoeGeo = new THREE.BoxGeometry(0.42, 0.24, 0.65);
+      const shoeMat = new THREE.MeshStandardMaterial({ color: 0xDC2626, roughness: 0.3 });
+      const shoeSoleMat = new THREE.MeshStandardMaterial({ color: 0xFFFFFF });
+
+      function makeSneaker(x) {
+        const shoe = new THREE.Group();
+        const upper = new THREE.Mesh(shoeGeo, shoeMat);
+        upper.position.y = 0.12;
+        shoe.add(upper);
+
+        const sole = new THREE.Mesh(new THREE.BoxGeometry(0.46, 0.08, 0.7), shoeSoleMat);
+        sole.position.y = 0.04;
+        shoe.add(sole);
+
+        shoe.position.set(x, -1.8, 0.1);
+        return shoe;
+      }
+      group.add(makeSneaker(-0.55));
+      group.add(makeSneaker(0.55));
+
+      // Hat for Ô
+      if (hasHat) {
+        const hatGroup = new THREE.Group();
+        const hatMat = new THREE.MeshPhysicalMaterial({ color: 0x15803D, roughness: 0.15, clearcoat: 0.8 });
+        
+        const sideGeo = new THREE.BoxGeometry(0.75, 0.24, 0.32);
+        const leftWing = new THREE.Mesh(sideGeo, hatMat);
+        leftWing.rotation.z = Math.PI / 4;
+        leftWing.position.set(-0.24, 0.24, 0);
+        hatGroup.add(leftWing);
+
+        const rightWing = new THREE.Mesh(sideGeo, hatMat);
+        rightWing.rotation.z = -Math.PI / 4;
+        rightWing.position.set(0.24, 0.24, 0);
+        hatGroup.add(rightWing);
+
+        hatGroup.position.set(0, 1.85, 0);
+        group.add(hatGroup);
+        group.hat = hatGroup;
+      }
+
+      // Hook for Ơ
+      if (hasHook) {
+        const hookGroup = new THREE.Group();
+        const hookMat = new THREE.MeshPhysicalMaterial({ color: 0xC2410C, roughness: 0.15, clearcoat: 0.8 });
+
+        const curve = new THREE.CatmullRomCurve3([
+          new THREE.Vector3(0, 0, 0),
+          new THREE.Vector3(0.32, 0.35, 0),
+          new THREE.Vector3(0.52, 0.7, 0),
+          new THREE.Vector3(0.32, 0.95, 0),
+          new THREE.Vector3(0.12, 0.85, 0)
+        ]);
+        const hookGeo = new THREE.TubeGeometry(curve, 24, 0.16, 16, false);
+        const hookMesh = new THREE.Mesh(hookGeo, hookMat);
+        hookGroup.add(hookMesh);
+
+        hookGroup.position.set(0.95, 0.95, 0.1);
+        group.add(hookGroup);
+        group.hook = hookGroup;
+      }
+
+      return group;
+    }
+
+    // Add Mascots with rich colors (Red, Green, Orange)
+    const charO = createMascot(0xDC2626);
+    charO.position.set(-3.2, 0, 0);
+    scene.add(charO);
+
+    const charOE = createMascot(0x16A34A, true, false);
+    charOE.position.set(0, 0, 0);
+    scene.add(charOE);
+
+    const charOW = createMascot(0xEA580C, false, true);
+    charOW.position.set(3.2, 0, 0);
+    scene.add(charOW);
+
+    // Global bounce trigger for buttons
+    window.triggerMascotBounce = function(letter) {
+      let target = charO;
+      if (letter === 'OE') target = charOE;
+      if (letter === 'OW') target = charOW;
+
+      if (window.gsap) {
+        gsap.to(target.scale, {
+          y: 0.72, x: 1.25, duration: 0.12, yoyo: true, repeat: 1, ease: "power1.inOut",
+          onComplete: () => {
+            gsap.to(target.scale, { x: 1, y: 1, duration: 0.35, ease: "elastic.out(1.2, 0.4)" });
+          }
+        });
+      }
+    };
+
+    // Subtly clamped gaze tracking (NEVER spins around!)
+    let mouseX = 0, mouseY = 0;
+    container.addEventListener('mousemove', (e) => {
+      const rect = container.getBoundingClientRect();
+      const x = (e.clientX - rect.left) / rect.width - 0.5;
+      const y = (e.clientY - rect.top) / rect.height - 0.5;
+      mouseX = Math.max(-0.4, Math.min(0.4, x));
+      mouseY = Math.max(-0.4, Math.min(0.4, y));
+    });
+
+    container.addEventListener('mouseleave', () => {
+      mouseX = 0;
+      mouseY = 0;
+    });
+
+    // Performance optimization: Pause 3D render loop when container is off-screen
+    let isCanvasVisible = true;
+    if ('IntersectionObserver' in window) {
+      const canvasObserver = new IntersectionObserver(([entry]) => {
+        isCanvasVisible = entry.isIntersecting;
+      }, { threshold: 0.05 });
+      canvasObserver.observe(container);
+    }
+
+    // Stable Animation Loop (STABLE, CUTE, NO ROTATING IN CIRCLES)
+    let clock = new THREE.Clock();
+    function animate() {
+      requestAnimationFrame(animate);
+      if (!isCanvasVisible) return; // 100% GPU idle when scrolled past Hero!
+
+      const t = clock.getElapsedTime();
+
+      // Subtle gaze tracking (clamped to +/- 7 degrees)
+      const targetGazeY = mouseX * 0.25;
+      const targetGazeX = -mouseY * 0.15;
+
+      // Character O
+      charO.position.y = Math.sin(t * 1.8) * 0.05;
+      charO.rotation.y += (targetGazeY - charO.rotation.y) * 0.08;
+      charO.rotation.x += (targetGazeX - charO.rotation.x) * 0.08;
+      if (charO.handL) charO.handL.position.y = 0.4 + Math.sin(t * 3.2) * 0.08;
+
+      // Character Ô
+      charOE.position.y = Math.sin(t * 1.8 + 1.0) * 0.05;
+      charOE.rotation.y += (targetGazeY - charOE.rotation.y) * 0.08;
+      charOE.rotation.x += (targetGazeX - charOE.rotation.x) * 0.08;
+      if (charOE.hat) charOE.hat.position.y = 1.85 + Math.sin(t * 2.2) * 0.04;
+      if (charOE.handR) charOE.handR.position.y = 0.4 + Math.sin(t * 3.2 + 1.0) * 0.08;
+
+      // Character Ơ
+      charOW.position.y = Math.sin(t * 1.8 + 2.0) * 0.05;
+      charOW.rotation.y += (targetGazeY - charOW.rotation.y) * 0.08;
+      charOW.rotation.x += (targetGazeX - charOW.rotation.x) * 0.08;
+
+      renderer.render(scene, camera);
+    }
+    animate();
+
+    // Click Mascot Raycaster
+    const raycaster = new THREE.Raycaster();
+    const mouseVec = new THREE.Vector2();
+
+    container.addEventListener('click', (e) => {
+      const rect = container.getBoundingClientRect();
+      mouseVec.x = ((e.clientX - rect.left) / rect.width) * 2 - 1;
+      mouseVec.y = -((e.clientY - rect.top) / rect.height) * 2 + 1;
+
+      raycaster.setFromCamera(mouseVec, camera);
+      const intersects = raycaster.intersectObjects([charO, charOE, charOW], true);
+
+      if (intersects.length > 0) {
+        let obj = intersects[0].object;
+        while (obj.parent && obj.parent !== scene) obj = obj.parent;
+
+        if (obj === charO) {
+          playAudio('s2_nhung_o_sound');
+          triggerMascotBounce('O');
+        } else if (obj === charOE) {
+          playAudio('s2_nhung_oe_sound');
+          triggerMascotBounce('OE');
+        } else if (obj === charOW) {
+          playAudio('s2_nhung_ow_sound');
+          triggerMascotBounce('OW');
+        }
+      }
+    });
+
+    // Resize
+    window.addEventListener('resize', () => {
+      if (!container) return;
+      camera.aspect = container.clientWidth / container.clientHeight;
+      camera.updateProjectionMatrix();
+      renderer.setSize(container.clientWidth, container.clientHeight);
+    });
+  </script>
+
+  <!-- GSAP ENHANCED SCROLL ANIMATIONS -->
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      if (window.gsap && window.ScrollTrigger) {
+        gsap.registerPlugin(ScrollTrigger);
+
+        gsap.from('#main-nav', { y: -50, opacity: 0, duration: 0.8, ease: 'power2.out' });
+
+        gsap.utils.toArray('section').forEach(sec => {
+          const cards = sec.querySelectorAll('.glass-card');
+          if (cards.length > 0) {
+            gsap.from(cards, {
+              scrollTrigger: {
+                trigger: sec,
+                start: 'top 95%',
+                toggleActions: 'play none none none',
+                once: true
+              },
+              y: 20,
+              duration: 0.5,
+              stagger: 0.06,
+              ease: 'power2.out',
+              clearProps: 'all'
+            });
+          }
+        });
+      }
+    });
+  </script>
+
+</body>
+</html>
