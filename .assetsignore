@@ -1,0 +1,56 @@
+# Git internals and large repository packfiles
+.git
+.git/**
+.gitignore
+.assetsignore
+
+# Uncompressed audio and temporary audio working dirs
+*.wav
+audio/
+audio/**
+
+# Python virtualenv, caches, scripts
+.venv/
+.venv/**
+__pycache__/
+*.py
+*.pyc
+*.sh
+*.log
+
+# Markdown docs and project planning
+*.md
+
+# Node modules & testing
+node_modules/
+node_modules/**
+package.json
+package-lock.json
+scratch/
+scratch/**
+test_*.js
+test_*.png
+screenshot_*.png
+web_screenshot.png
+
+# Raw video inputs & heavy frame caches
+1WUpukmslzvIW4hK1s5OZ9SlLs7Q0hyqOgTUtVbvWwbM9Aw1N2S683xLrOjGtDYsBi2.mp4
+snaptik.vn_7666363353710857493.mp4
+snaptik_frames/
+snaptik_frames/**
+cartoon_temp_*/
+cartoon_temp_*/**
+*_temp/
+*_temp/**
+frames*/
+frames*/**
+inspect_*/
+inspect_*/**
+brief_frames/
+temp_segments/
+pipe_test.mp4
+test_diagram.png
+test_3d_actions_preview/
+test_scenes_preview/
+assets/test_crop_*.png
+assets/hook_preview.png
