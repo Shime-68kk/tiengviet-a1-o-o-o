@@ -1,7 +1,15 @@
-# Python virtual environment
+# Python virtual environment & secrets
 .venv/
 __pycache__/
 *.pyc
+.env
+.env.*
+
+# Pipeline folders
+raw_clips/
+ref_frames/
+rendered_clips/
+final/
 
 # Temporary render frames and video segments (heavy cache)
 *_temp/
@@ -21,6 +29,7 @@ test_3d_actions_preview/
 test_scenes_preview/
 assets/test_crop_*.png
 assets/hook_preview.png
+clips_10s/
 
 # Old topic artifacts (D vs Đ)
 video_microlearning_D_Đ.mp4
@@ -34,3 +43,11 @@ test_results.json
 screenshot_*.png
 web_screenshot.png
 test_card_o.png
+archive_ai_kling_clips/
+8174229090550578669.mp4
+nav_ref_frames/
+test_liquid_nav.html
+ffmpeg_scene1.log
+*.log
+assets/scene_inspections/
+assets/scene_01_pixar.png

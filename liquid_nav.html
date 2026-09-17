@@ -1,0 +1,696 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <title>Liquid Animated Navigation Bar — Magic Menu Indicator</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  
+  <style>
+    :root {
+      --body-bg: #434853;
+      --nav-bg: #18191f;
+      --nav-shadow: rgba(0, 0, 0, 0.35);
+      --indicator-bg: #ffffff;
+      --active-icon-color: #18191f;
+      --inactive-icon-color: #94a3b8;
+      --text-color: #ffffff;
+      --accent: #38bdf8;
+      --card-bg: rgba(255, 255, 255, 0.08);
+      --card-border: rgba(255, 255, 255, 0.12);
+      --spring-ease: cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    }
+
+    [data-theme="cyberpunk"] {
+      --body-bg: #0b0f19;
+      --nav-bg: #111827;
+      --nav-shadow: rgba(0, 0, 0, 0.6);
+      --indicator-bg: #38bdf8;
+      --active-icon-color: #0b0f19;
+      --inactive-icon-color: #64748b;
+      --text-color: #38bdf8;
+      --accent: #38bdf8;
+      --card-bg: rgba(17, 24, 39, 0.8);
+      --card-border: rgba(56, 189, 248, 0.2);
+    }
+
+    [data-theme="warm"] {
+      --body-bg: #f3ede2;
+      --nav-bg: #292524;
+      --nav-shadow: rgba(41, 37, 36, 0.2);
+      --indicator-bg: #f59e0b;
+      --active-icon-color: #ffffff;
+      --inactive-icon-color: #a8a29e;
+      --text-color: #f59e0b;
+      --accent: #f59e0b;
+      --card-bg: rgba(255, 255, 255, 0.85);
+      --card-border: rgba(214, 211, 209, 0.6);
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    body {
+      min-height: 100vh;
+      background: var(--body-bg);
+      color: #ffffff;
+      transition: background 0.4s ease;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 24px 16px 120px 16px;
+      overflow-x: hidden;
+    }
+
+    /* TOP HEADER & CONTROLS */
+    .header-panel {
+      text-align: center;
+      max-width: 680px;
+      margin-bottom: 28px;
+    }
+
+    .badge-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 6px 14px;
+      border-radius: 9999px;
+      background: rgba(255, 255, 255, 0.1);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      font-size: 0.8rem;
+      font-weight: 600;
+      color: #e2e8f0;
+      margin-bottom: 12px;
+      backdrop-blur: 8px;
+    }
+
+    .main-title {
+      font-size: 2.25rem;
+      font-weight: 800;
+      letter-spacing: -0.03em;
+      margin-bottom: 8px;
+      background: linear-gradient(135deg, #ffffff 40%, #94a3b8 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .sub-title {
+      font-size: 0.95rem;
+      color: #cbd5e1;
+      line-height: 1.5;
+    }
+
+    /* THEME SWITCHER TOOLBAR */
+    .controls-bar {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      margin-bottom: 32px;
+      background: rgba(0, 0, 0, 0.2);
+      padding: 8px 12px;
+      border-radius: 16px;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+    }
+
+    .ctrl-btn {
+      padding: 8px 16px;
+      border-radius: 10px;
+      font-size: 0.825rem;
+      font-weight: 600;
+      border: 1px solid transparent;
+      background: transparent;
+      color: #cbd5e1;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .ctrl-btn:hover {
+      background: rgba(255, 255, 255, 0.1);
+      color: #ffffff;
+    }
+
+    .ctrl-btn.active {
+      background: #ffffff;
+      color: #0f172a;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    }
+
+    /* CONTENT DISPLAY SCREEN */
+    .screen-container {
+      width: 100%;
+      max-width: 440px;
+      min-height: 220px;
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 24px;
+      padding: 28px 24px;
+      backdrop-filter: blur(16px);
+      margin-bottom: 48px;
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      transition: all 0.3s ease;
+      position: relative;
+    }
+
+    .tab-content {
+      display: none;
+      animation: fadeInSlide 0.35s ease forwards;
+    }
+
+    .tab-content.active {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .content-icon-wrap {
+      width: 56px;
+      height: 56px;
+      border-radius: 18px;
+      background: rgba(255, 255, 255, 0.15);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #ffffff;
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+    }
+
+    .content-title {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #ffffff;
+    }
+
+    .content-desc {
+      font-size: 0.875rem;
+      color: #cbd5e1;
+      max-width: 320px;
+    }
+
+    @keyframes fadeInSlide {
+      from { opacity: 0; transform: translateY(12px) scale(0.97); }
+      to { opacity: 1; transform: translateY(0) scale(1); }
+    }
+
+    /* ================================================================ */
+    /* 🔥 CORE COMPONENT: LIQUID ANIMATED NAVIGATION BAR 🔥 */
+    /* ================================================================ */
+
+    .nav-wrapper {
+      position: relative;
+      width: 100%;
+      max-width: 420px;
+      display: flex;
+      justify-content: center;
+    }
+
+    .navigation {
+      position: relative;
+      width: 100%;
+      height: 72px;
+      background: var(--nav-bg);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      border-radius: 20px;
+      box-shadow: 0 20px 40px var(--nav-shadow);
+      user-select: none;
+    }
+
+    .navigation ul {
+      display: flex;
+      width: 100%;
+      height: 100%;
+      padding: 0;
+      margin: 0;
+      position: relative;
+    }
+
+    .navigation ul li {
+      position: relative;
+      list-style: none;
+      width: 20%; /* 5 equal slots */
+      height: 72px;
+      z-index: 2;
+    }
+
+    .navigation ul li a {
+      position: relative;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+      width: 100%;
+      height: 100%;
+      text-decoration: none;
+      cursor: pointer;
+    }
+
+    /* Icon Styling & Transition */
+    .navigation ul li a .icon {
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 28px;
+      height: 28px;
+      color: var(--inactive-icon-color);
+      transition: transform 0.5s var(--spring-ease), color 0.3s ease;
+    }
+
+    .navigation ul li a .icon svg {
+      width: 24px;
+      height: 24px;
+      fill: none;
+      stroke: currentColor;
+      stroke-width: 2.2;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+
+    /* Active Icon moves up into protruding circle */
+    .navigation ul li.active a .icon {
+      transform: translateY(-34px);
+      color: var(--active-icon-color);
+      filter: drop-shadow(0 4px 6px rgba(0, 0, 0, 0.15));
+    }
+
+    /* Text Label Styling & Transition */
+    .navigation ul li a .text {
+      position: absolute;
+      color: var(--text-color);
+      font-weight: 700;
+      font-size: 0.72rem;
+      letter-spacing: 0.03em;
+      transition: transform 0.5s var(--spring-ease), opacity 0.4s ease;
+      opacity: 0;
+      transform: translateY(20px);
+      pointer-events: none;
+      white-space: nowrap;
+    }
+
+    .navigation ul li.active a .text {
+      opacity: 1;
+      transform: translateY(12px);
+    }
+
+    /* ================================================================ */
+    /* 🌊 LIQUID INDICATOR WITH CURVED CUTOUT WINGS 🌊 */
+    /* ================================================================ */
+
+    /* Container spans 1/5 (20%) width and translates dynamically */
+    .indicator-track {
+      position: absolute;
+      top: -35px;
+      left: 0;
+      width: 20%;
+      height: 70px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      pointer-events: none;
+      z-index: 1;
+      transition: transform 0.5s var(--spring-ease);
+    }
+
+    /* The glowing circular bubble */
+    .indicator-bubble {
+      position: relative;
+      width: 66px;
+      height: 66px;
+      background: var(--indicator-bg);
+      border-radius: 50%;
+      border: 6px solid var(--body-bg);
+      box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+      transition: border-color 0.4s ease, background 0.3s ease;
+    }
+
+    /* Left liquid curve wing cutout */
+    .indicator-bubble::before {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: -22px;
+      width: 20px;
+      height: 20px;
+      background: transparent;
+      border-top-right-radius: 20px;
+      box-shadow: 1px -10px 0 0 var(--body-bg);
+      transition: box-shadow 0.4s ease;
+    }
+
+    /* Right liquid curve wing cutout */
+    .indicator-bubble::after {
+      content: '';
+      position: absolute;
+      top: 50%;
+      right: -22px;
+      width: 20px;
+      height: 20px;
+      background: transparent;
+      border-top-left-radius: 20px;
+      box-shadow: -1px -10px 0 0 var(--body-bg);
+      transition: box-shadow 0.4s ease;
+    }
+
+    /* ================================================================ */
+    /* 📱 MOBILE RESPONSIVE ADAPTATION (width <= 768px) */
+    /* ================================================================ */
+
+    @media (max-width: 768px) {
+      body {
+        padding: 16px 12px 100px 12px;
+      }
+
+      .main-title {
+        font-size: 1.75rem;
+      }
+
+      /* Fixed bottom dock mode on mobile */
+      .nav-wrapper.mobile-dock {
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        max-width: 100%;
+        z-index: 999;
+      }
+
+      .nav-wrapper.mobile-dock .navigation {
+        width: 100%;
+        border-radius: 24px 24px 0 0;
+        padding-bottom: calc(10px + env(safe-area-inset-bottom));
+        height: calc(72px + env(safe-area-inset-bottom));
+        box-shadow: 0 -10px 30px rgba(0, 0, 0, 0.3);
+      }
+    }
+
+    /* CODE EXPORT SECTION */
+    .code-section {
+      width: 100%;
+      max-width: 680px;
+      margin-top: 60px;
+      background: rgba(15, 23, 42, 0.6);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 20px;
+      padding: 24px;
+      backdrop-filter: blur(12px);
+    }
+
+    .code-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 16px;
+    }
+
+    .code-title {
+      font-size: 1rem;
+      font-weight: 700;
+      color: #f1f5f9;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .code-box {
+      background: #090d16;
+      border-radius: 12px;
+      padding: 16px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.8rem;
+      color: #e2e8f0;
+      overflow-x: auto;
+      line-height: 1.6;
+      border: 1px solid rgba(255, 255, 255, 0.06);
+    }
+
+    .copy-btn {
+      padding: 6px 12px;
+      border-radius: 8px;
+      background: rgba(255, 255, 255, 0.1);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      color: #ffffff;
+      font-size: 0.75rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .copy-btn:hover {
+      background: rgba(255, 255, 255, 0.2);
+    }
+  </style>
+</head>
+<body>
+
+  <!-- HEADER -->
+  <div class="header-panel">
+    <div class="badge-pill">
+      <span>✨</span> Liquid Animated Navigation Bar (Magic Menu)
+    </div>
+    <h1 class="main-title">Liquid Navigation</h1>
+    <p class="sub-title">Khối chỉ báo hình tròn trồi lên mượt mà kết hợp đường cong lượn sóng liền mạch (curved cutout) chuẩn theo clip mẫu TikTok & Gemini.</p>
+  </div>
+
+  <!-- THEME & MODE SWITCHERS -->
+  <div class="controls-bar">
+    <button class="ctrl-btn active" onclick="setTheme('default', this)">Slate Grey (Video Mẫu)</button>
+    <button class="ctrl-btn" onclick="setTheme('cyberpunk', this)">Dark Cyberpunk</button>
+    <button class="ctrl-btn" onclick="setTheme('warm', this)">Warm Learning A1</button>
+    <button class="ctrl-btn" onclick="toggleDockMode(this)">📱 Chuyển Dock Mobile</button>
+  </div>
+
+  <!-- INTERACTIVE CONTENT SCREEN -->
+  <div class="screen-container">
+    <div id="tab-0" class="tab-content">
+      <div class="content-icon-wrap" style="background: rgba(56, 189, 248, 0.2); color: #38bdf8;">
+        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>
+      </div>
+      <div class="content-title">Home Dashboard</div>
+      <div class="content-desc">Trang chủ khám phá các bài giảng tương tác và video hoạt hình O, Ô, Ơ chất lượng cao.</div>
+    </div>
+
+    <div id="tab-1" class="tab-content active">
+      <div class="content-icon-wrap" style="background: rgba(168, 85, 247, 0.2); color: #a855f7;">
+        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+      </div>
+      <div class="content-title">User Profile</div>
+      <div class="content-desc">Hồ sơ học viên, thông tin trưởng nhóm Nguyễn Thị Hồng Thương và tiến độ tích lũy sao thưởng.</div>
+    </div>
+
+    <div id="tab-2" class="tab-content">
+      <div class="content-icon-wrap" style="background: rgba(34, 197, 94, 0.2); color: #22c55e;">
+        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>
+      </div>
+      <div class="content-title">Messages & Audio</div>
+      <div class="content-desc">Kênh phản hồi phát âm trực tiếp với giảng viên và các đoạn hội thoại mẫu bản ngữ.</div>
+    </div>
+
+    <div id="tab-3" class="tab-content">
+      <div class="content-icon-wrap" style="background: rgba(245, 158, 11, 0.2); color: #f59e0b;">
+        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"></path><circle cx="12" cy="13" r="4"></circle></svg>
+      </div>
+      <div class="content-title">Photos & Flashcards</div>
+      <div class="content-desc">Thư viện thẻ từ vựng trực quan: Con Bò, Cô Giáo, Quả Bơ kèm hình họa 3D vui nhộn.</div>
+    </div>
+
+    <div id="tab-4" class="tab-content">
+      <div class="content-icon-wrap" style="background: rgba(239, 68, 68, 0.2); color: #ef4444;">
+        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>
+      </div>
+      <div class="content-title">Settings & Sound</div>
+      <div class="content-desc">Tùy chỉnh tốc độ phát âm thanh, bật tắt phụ đề song ngữ Anh — Việt và hiệu ứng âm thanh.</div>
+    </div>
+  </div>
+
+  <!-- LIQUID NAVIGATION BAR COMPONENT -->
+  <div id="nav-wrapper" class="nav-wrapper">
+    <div class="navigation">
+      <ul>
+        <!-- TAB 0: HOME -->
+        <li class="list" data-index="0">
+          <a href="#home">
+            <span class="icon">
+              <svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>
+            </span>
+            <span class="text">Home</span>
+          </a>
+        </li>
+
+        <!-- TAB 1: PROFILE (DEFAULT ACTIVE) -->
+        <li class="list active" data-index="1">
+          <a href="#profile">
+            <span class="icon">
+              <svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+            </span>
+            <span class="text">Profile</span>
+          </a>
+        </li>
+
+        <!-- TAB 2: MESSAGE -->
+        <li class="list" data-index="2">
+          <a href="#message">
+            <span class="icon">
+              <svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>
+            </span>
+            <span class="text">Message</span>
+          </a>
+        </li>
+
+        <!-- TAB 3: PHOTOS -->
+        <li class="list" data-index="3">
+          <a href="#photos">
+            <span class="icon">
+              <svg viewBox="0 0 24 24"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"></path><circle cx="12" cy="13" r="4"></circle></svg>
+            </span>
+            <span class="text">Photos</span>
+          </a>
+        </li>
+
+        <!-- TAB 4: SETTINGS -->
+        <li class="list" data-index="4">
+          <a href="#settings">
+            <span class="icon">
+              <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>
+            </span>
+            <span class="text">Settings</span>
+          </a>
+        </li>
+
+        <!-- DYNAMIC LIQUID INDICATOR TRACK -->
+        <div class="indicator-track">
+          <div class="indicator-bubble"></div>
+        </div>
+      </ul>
+    </div>
+  </div>
+
+  <!-- CODE SNIPPET DOCUMENTATION -->
+  <div class="code-section">
+    <div class="code-header">
+      <span class="code-title">💡 Giải Thích Kỹ Thuật (CSS Pseudo-elements & Box-Shadow)</span>
+      <button class="copy-btn" onclick="copyCssSnippet()">📋 Copy CSS</button>
+    </div>
+    <div class="code-box" id="css-snippet">/* Đường cong lượn sóng liền mạch (Liquid Cutout) */
+.indicator-bubble::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: -22px;
+  width: 20px;
+  height: 20px;
+  background: transparent;
+  border-top-right-radius: 20px;
+  box-shadow: 1px -10px 0 0 var(--body-bg);
+}
+
+.indicator-bubble::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  right: -22px;
+  width: 20px;
+  height: 20px;
+  background: transparent;
+  border-top-left-radius: 20px;
+  box-shadow: -1px -10px 0 0 var(--body-bg);
+}
+
+/* Bouncy spring transition */
+.indicator-track {
+  transition: transform 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}</div>
+  </div>
+
+  <!-- JAVASCRIPT LOGIC -->
+  <script>
+    const navItems = document.querySelectorAll('.navigation ul li');
+    const indicatorTrack = document.querySelector('.indicator-track');
+    const tabContents = document.querySelectorAll('.tab-content');
+    const navWrapper = document.getElementById('nav-wrapper');
+
+    let currentIndex = 1;
+
+    function activateTab(index) {
+      currentIndex = index;
+
+      // 1. Update active tab class
+      navItems.forEach(item => item.classList.remove('active'));
+      navItems[index].classList.add('active');
+
+      // 2. Mathematically precise indicator translation: translateX(100% * index)
+      indicatorTrack.style.transform = `translateX(${index * 100}%)`;
+
+      // 3. Switch content card
+      tabContents.forEach(c => c.classList.remove('active'));
+      const activeCard = document.getElementById(`tab-${index}`);
+      if (activeCard) {
+        activeCard.classList.add('active');
+      }
+
+      // 4. Haptic vibration feedback on mobile
+      if (navigator.vibrate) {
+        navigator.vibrate(12);
+      }
+    }
+
+    // Attach click events
+    navItems.forEach((item, index) => {
+      item.addEventListener('click', (e) => {
+        e.preventDefault();
+        activateTab(index);
+      });
+    });
+
+    // Theme Switcher
+    function setTheme(themeName, btn) {
+      document.querySelectorAll('.ctrl-btn').forEach(b => {
+        if (!b.innerText.includes('Dock')) b.classList.remove('active');
+      });
+      btn.classList.add('active');
+
+      if (themeName === 'default') {
+        document.documentElement.removeAttribute('data-theme');
+      } else {
+        document.documentElement.setAttribute('data-theme', themeName);
+      }
+    }
+
+    // Toggle Mobile Bottom Dock
+    function toggleDockMode(btn) {
+      navWrapper.classList.toggle('mobile-dock');
+      const isDock = navWrapper.classList.contains('mobile-dock');
+      btn.classList.toggle('active', isDock);
+      btn.innerText = isDock ? '🖥️ Chuyển Floating Desktop' : '📱 Chuyển Dock Mobile';
+    }
+
+    // Copy Code snippet
+    function copyCssSnippet() {
+      const code = document.getElementById('css-snippet').innerText;
+      navigator.clipboard.writeText(code).then(() => {
+        const btn = document.querySelector('.copy-btn');
+        btn.innerText = '✅ Đã Copy!';
+        setTimeout(() => { btn.innerText = '📋 Copy CSS'; }, 2000);
+      });
+    }
+
+    // Initialize default tab (Profile)
+    activateTab(1);
+  </script>
+</body>
+</html>

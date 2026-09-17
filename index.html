@@ -212,12 +212,298 @@
     #sticky-audio-bar.audio-bar-collapsed #btn-toggle-audio-collapse:hover {
       background: #0369a1;
     }
+
+    /* ================================================================ */
+    /* 🌊 LIQUID ANIMATED NAVIGATION BAR (DESKTOP & MOBILE) 🌊 */
+    /* ================================================================ */
+    :root {
+      --liquid-spring: cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    }
+
+    /* DESKTOP LIQUID NAVIGATION (Embedded in Header) */
+    .desktop-liquid-nav {
+      position: relative;
+      width: 480px;
+      height: 54px;
+      background: #18191f;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      border-radius: 16px;
+      box-shadow: 0 10px 25px -3px rgba(0, 0, 0, 0.25);
+      user-select: none;
+      margin-top: 14px;
+    }
+
+    .desktop-liquid-nav ul {
+      display: flex;
+      width: 100%;
+      height: 100%;
+      padding: 0;
+      margin: 0;
+      position: relative;
+    }
+
+    .desktop-liquid-nav ul li {
+      position: relative;
+      list-style: none;
+      width: 20%;
+      height: 54px;
+      z-index: 2;
+    }
+
+    .desktop-liquid-nav ul li a {
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      width: 100%;
+      height: 100%;
+      text-decoration: none;
+      cursor: pointer;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    .desktop-liquid-nav ul li a .liquid-icon {
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 24px;
+      height: 24px;
+      color: #94a3b8;
+      transition: transform 0.5s var(--liquid-spring), color 0.3s ease;
+    }
+
+    .desktop-liquid-nav ul li a .liquid-icon svg {
+      width: 20px;
+      height: 20px;
+      fill: none;
+      stroke: currentColor;
+      stroke-width: 2.2;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+
+    .desktop-liquid-nav ul li.active a .liquid-icon {
+      transform: translateY(-27px);
+      color: #0f172a;
+      filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.15));
+    }
+
+    .desktop-liquid-nav ul li a .liquid-text {
+      position: absolute;
+      color: #38bdf8;
+      font-weight: 700;
+      font-size: 10px;
+      letter-spacing: 0.02em;
+      transition: transform 0.5s var(--liquid-spring), opacity 0.35s ease;
+      opacity: 0;
+      transform: translateY(16px);
+      pointer-events: none;
+      white-space: nowrap;
+    }
+
+    .desktop-liquid-nav ul li.active a .liquid-text {
+      opacity: 1;
+      transform: translateY(8px);
+    }
+
+    /* DESKTOP LIQUID INDICATOR TRACK & BUBBLE */
+    .desktop-liquid-nav .liquid-indicator-track {
+      position: absolute;
+      top: -27px;
+      left: 0;
+      width: 20%;
+      height: 54px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      pointer-events: none;
+      z-index: 1;
+      transition: transform 0.5s var(--liquid-spring);
+    }
+
+    .desktop-liquid-nav .liquid-indicator-bubble {
+      position: relative;
+      width: 52px;
+      height: 52px;
+      background: #38bdf8;
+      border-radius: 50%;
+      border: 5px solid #ffffff;
+      box-shadow: 0 8px 18px rgba(56, 189, 248, 0.4);
+    }
+
+    .desktop-liquid-nav .liquid-indicator-bubble::before {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: -18px;
+      width: 16px;
+      height: 16px;
+      background: transparent;
+      border-top-right-radius: 16px;
+      box-shadow: 1px -7px 0 0 #ffffff;
+    }
+
+    .desktop-liquid-nav .liquid-indicator-bubble::after {
+      content: '';
+      position: absolute;
+      top: 50%;
+      right: -18px;
+      width: 16px;
+      height: 16px;
+      background: transparent;
+      border-top-left-radius: 16px;
+      box-shadow: -1px -7px 0 0 #ffffff;
+    }
+
+    /* MOBILE DOCKED LIQUID NAVIGATION */
+    #mobile-liquid-dock {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      width: 100%;
+      z-index: 45;
+      background: #18191f;
+      border-radius: 24px 24px 0 0;
+      box-shadow: 0 -10px 30px rgba(0, 0, 0, 0.35);
+      padding-bottom: calc(6px + env(safe-area-inset-bottom));
+      height: calc(64px + env(safe-area-inset-bottom));
+      user-select: none;
+    }
+
+    #mobile-liquid-dock ul {
+      display: flex;
+      width: 100%;
+      height: 64px;
+      padding: 0;
+      margin: 0;
+      position: relative;
+    }
+
+    #mobile-liquid-dock ul li {
+      position: relative;
+      list-style: none;
+      width: 20%;
+      height: 64px;
+      z-index: 2;
+    }
+
+    #mobile-liquid-dock ul li a {
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      width: 100%;
+      height: 100%;
+      text-decoration: none;
+      cursor: pointer;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    #mobile-liquid-dock ul li a .liquid-icon {
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 26px;
+      height: 26px;
+      color: #94a3b8;
+      transition: transform 0.5s var(--liquid-spring), color 0.3s ease;
+    }
+
+    #mobile-liquid-dock ul li a .liquid-icon svg {
+      width: 22px;
+      height: 22px;
+      fill: none;
+      stroke: currentColor;
+      stroke-width: 2.2;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+
+    #mobile-liquid-dock ul li.active a .liquid-icon {
+      transform: translateY(-30px);
+      color: #0f172a;
+      filter: drop-shadow(0 3px 5px rgba(0, 0, 0, 0.2));
+    }
+
+    #mobile-liquid-dock ul li a .liquid-text {
+      position: absolute;
+      color: #38bdf8;
+      font-weight: 700;
+      font-size: 10px;
+      letter-spacing: 0.02em;
+      transition: transform 0.5s var(--liquid-spring), opacity 0.35s ease;
+      opacity: 0;
+      transform: translateY(18px);
+      pointer-events: none;
+      white-space: nowrap;
+    }
+
+    #mobile-liquid-dock ul li.active a .liquid-text {
+      opacity: 1;
+      transform: translateY(10px);
+    }
+
+    /* MOBILE LIQUID INDICATOR TRACK & BUBBLE */
+    #mobile-liquid-dock .liquid-indicator-track {
+      position: absolute;
+      top: -30px;
+      left: 0;
+      width: 20%;
+      height: 64px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      pointer-events: none;
+      z-index: 1;
+      transition: transform 0.5s var(--liquid-spring);
+    }
+
+    #mobile-liquid-dock .liquid-indicator-bubble {
+      position: relative;
+      width: 58px;
+      height: 58px;
+      background: #38bdf8;
+      border-radius: 50%;
+      border: 5px solid #fffdf8;
+      box-shadow: 0 8px 20px rgba(56, 189, 248, 0.35);
+    }
+
+    #mobile-liquid-dock .liquid-indicator-bubble::before {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: -20px;
+      width: 18px;
+      height: 18px;
+      background: transparent;
+      border-top-right-radius: 18px;
+      box-shadow: 1px -8px 0 0 #fffdf8;
+    }
+
+    #mobile-liquid-dock .liquid-indicator-bubble::after {
+      content: '';
+      position: absolute;
+      top: 50%;
+      right: -20px;
+      width: 18px;
+      height: 18px;
+      background: transparent;
+      border-top-left-radius: 18px;
+      box-shadow: -1px -8px 0 0 #fffdf8;
+    }
   </style>
 </head>
 <body class="relative antialiased selection:bg-amber-200 selection:text-amber-900 pb-32">
 
   <!-- TOP STICKY NAVIGATION BAR -->
-  <header id="main-nav" class="sticky top-0 z-50 w-full transition-all duration-300 bg-white/90 backdrop-blur-md border-b border-slate-200/80 px-4 sm:px-8 py-3">
+  <header id="main-nav" class="sticky top-0 z-50 w-full transition-all duration-300 bg-white/95 backdrop-blur-md border-b border-slate-200/80 px-4 sm:px-8 pt-3.5 pb-3">
     <div class="max-w-7xl mx-auto flex items-center justify-between">
       <a href="#hero" class="flex items-center gap-3 group">
         <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-amber-500 to-rose-500 flex items-center justify-center text-white font-bold text-xl shadow-md shadow-amber-500/20 group-hover:scale-105 transition-transform">
@@ -229,14 +515,64 @@
         </div>
       </a>
 
-      <nav class="hidden md:flex items-center gap-1 text-sm font-medium text-slate-600">
-        <a href="#three-section" class="px-3 py-1.5 rounded-lg hover:text-sky-600 hover:bg-slate-100 transition-colors" data-i18n="nav_3d">Nhân Vật 3D</a>
-        <a href="#scene-lim" class="px-3 py-1.5 rounded-lg hover:text-sky-600 hover:bg-slate-100 transition-colors" data-i18n="nav_intro">I. Khởi Động</a>
-        <a href="#scene-ipa" class="px-3 py-1.5 rounded-lg hover:text-indigo-600 hover:bg-indigo-50 transition-colors font-semibold text-indigo-700" data-i18n="nav_ipa">Tọa Độ IPA</a>
-        <a href="#scene-nhung" class="px-3 py-1.5 rounded-lg hover:text-sky-600 hover:bg-slate-100 transition-colors" data-i18n="nav_articulation">II. Phát Âm & Viết</a>
-        <a href="#scene-y" class="px-3 py-1.5 rounded-lg hover:text-sky-600 hover:bg-slate-100 transition-colors" data-i18n="nav_shadowing">III. Luyện Tập</a>
-        <a href="#scene-thuy" class="px-3 py-1.5 rounded-lg hover:text-sky-600 hover:bg-slate-100 transition-colors" data-i18n="nav_quiz">IV. Thử Thách Quiz</a>
-        <a href="#scene-team" class="px-3 py-1.5 rounded-lg hover:text-sky-600 hover:bg-slate-100 transition-colors" data-i18n="nav_team">Hồ Sơ Nhóm</a>
+      <!-- DESKTOP LIQUID ANIMATED NAVIGATION BAR (MAGIC MENU) -->
+      <nav class="hidden lg:flex desktop-liquid-nav" id="desktop-liquid-nav" aria-label="Main Liquid Navigation">
+        <ul>
+          <!-- TAB 0: 3D MASCOTS -->
+          <li class="list active" data-index="0" data-target="#three-section">
+            <a href="#three-section" onclick="onLiquidNavClick(event, 0, '#three-section')" title="Không Gian 3D Tương Tác">
+              <span class="liquid-icon">
+                <svg viewBox="0 0 24 24"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
+              </span>
+              <span class="liquid-text" data-i18n="nav_3d">3D Vần</span>
+            </a>
+          </li>
+
+          <!-- TAB 1: TỌA ĐỘ IPA -->
+          <li class="list" data-index="1" data-target="#scene-ipa">
+            <a href="#scene-ipa" onclick="onLiquidNavClick(event, 1, '#scene-ipa')" title="Tọa Độ IPA Ngữ Âm">
+              <span class="liquid-icon">
+                <svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg>
+              </span>
+              <span class="liquid-text" data-i18n="nav_ipa">Tọa Độ IPA</span>
+            </a>
+          </li>
+
+          <!-- TAB 2: PHÁT ÂM & VIẾT -->
+          <li class="list" data-index="2" data-target="#scene-nhung">
+            <a href="#scene-nhung" onclick="onLiquidNavClick(event, 2, '#scene-nhung')" title="Kỹ Thuật Cấu Âm & Viết Chữ">
+              <span class="liquid-icon">
+                <svg viewBox="0 0 24 24"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path></svg>
+              </span>
+              <span class="liquid-text" data-i18n="nav_articulation">Phát Âm</span>
+            </a>
+          </li>
+
+          <!-- TAB 3: LUYỆN TẬP & QUIZ -->
+          <li class="list" data-index="3" data-target="#scene-y">
+            <a href="#scene-y" onclick="onLiquidNavClick(event, 3, '#scene-y')" title="Luyện Đọc Shadowing & Trắc Nghiệm">
+              <span class="liquid-icon">
+                <svg viewBox="0 0 24 24"><path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="22"/></svg>
+              </span>
+              <span class="liquid-text" data-i18n="nav_shadowing">Luyện Tập</span>
+            </a>
+          </li>
+
+          <!-- TAB 4: HỒ SƠ NHÓM -->
+          <li class="list" data-index="4" data-target="#scene-team">
+            <a href="#scene-team" onclick="onLiquidNavClick(event, 4, '#scene-team')" title="Ban Phát Triển">
+              <span class="liquid-icon">
+                <svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+              </span>
+              <span class="liquid-text" data-i18n="nav_team">Hồ Sơ Nhóm</span>
+            </a>
+          </li>
+
+          <!-- LIQUID INDICATOR TRACK & BUBBLE -->
+          <div class="liquid-indicator-track" id="desktop-indicator-track">
+            <div class="liquid-indicator-bubble"></div>
+          </div>
+        </ul>
       </nav>
 
       <div class="flex items-center gap-2 sm:gap-3">
@@ -1027,36 +1363,68 @@
     </div>
   </section>
 
-  <!-- DEDICATED MOBILE FLOATING BOTTOM LEARNING DOCK (MOBILE ONLY) -->
-  <div id="mobile-nav-dock" class="md:hidden fixed bottom-[76px] left-3 right-3 z-40 p-1 rounded-2xl bg-white/95 backdrop-blur-md border border-slate-200/90 shadow-xl flex items-center justify-around text-[10px] font-bold text-slate-600 transition-all">
-    <a href="#three-section" class="flex flex-col items-center py-1 px-2 rounded-xl hover:text-rose-600 active:scale-95 transition-all text-center">
-      <span class="text-sm">🎨</span>
-      <span class="leading-tight" data-i18n="mob_dock_3d">3D Vần</span>
-    </a>
-    <a href="#scene-ipa" class="flex flex-col items-center py-1 px-2 rounded-xl hover:text-indigo-600 active:scale-95 transition-all text-center">
-      <span class="text-sm">📐</span>
-      <span class="leading-tight" data-i18n="mob_dock_ipa">Tọa Độ IPA</span>
-    </a>
-    <a href="#scene-nhung" class="flex flex-col items-center py-1 px-2 rounded-xl hover:text-emerald-600 active:scale-95 transition-all text-center">
-      <span class="text-sm">👄</span>
-      <span class="leading-tight" data-i18n="mob_dock_nhung">Khẩu Hình</span>
-    </a>
-    <a href="#scene-y" class="flex flex-col items-center py-1 px-2 rounded-xl text-sky-600 bg-sky-50 active:scale-95 transition-all text-center">
-      <span class="text-sm">🎙️</span>
-      <span class="leading-tight" data-i18n="mob_dock_shadowing">Luyện Đọc</span>
-    </a>
-    <a href="#scene-thuy" class="flex flex-col items-center py-1 px-2 rounded-xl hover:text-amber-600 active:scale-95 transition-all text-center">
-      <span class="text-sm">🏆</span>
-      <span class="leading-tight" data-i18n="mob_dock_quiz">Quiz</span>
-    </a>
-    <a href="#video-master" class="flex flex-col items-center py-1 px-2 rounded-xl hover:text-indigo-600 active:scale-95 transition-all text-center">
-      <span class="text-sm">🎬</span>
-      <span class="leading-tight" data-i18n="mob_dock_video">Video</span>
-    </a>
-  </div>
+  <!-- DEDICATED MOBILE LIQUID ANIMATED BOTTOM DOCK (MOBILE ONLY) -->
+  <nav id="mobile-liquid-dock" class="lg:hidden" aria-label="Mobile Liquid Navigation">
+    <ul>
+      <!-- TAB 0: 3D MASCOTS -->
+      <li class="list active" data-index="0" data-target="#three-section">
+        <a href="#three-section" onclick="onLiquidNavClick(event, 0, '#three-section')" title="Không Gian 3D Tương Tác">
+          <span class="liquid-icon">
+            <svg viewBox="0 0 24 24"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
+          </span>
+          <span class="liquid-text" data-i18n="nav_3d">3D Vần</span>
+        </a>
+      </li>
+
+      <!-- TAB 1: TỌA ĐỘ IPA -->
+      <li class="list" data-index="1" data-target="#scene-ipa">
+        <a href="#scene-ipa" onclick="onLiquidNavClick(event, 1, '#scene-ipa')" title="Tọa Độ IPA Ngữ Âm">
+          <span class="liquid-icon">
+            <svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg>
+          </span>
+          <span class="liquid-text" data-i18n="nav_ipa">Tọa Độ IPA</span>
+        </a>
+      </li>
+
+      <!-- TAB 2: PHÁT ÂM & VIẾT -->
+      <li class="list" data-index="2" data-target="#scene-nhung">
+        <a href="#scene-nhung" onclick="onLiquidNavClick(event, 2, '#scene-nhung')" title="Kỹ Thuật Cấu Âm">
+          <span class="liquid-icon">
+            <svg viewBox="0 0 24 24"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path></svg>
+          </span>
+          <span class="liquid-text" data-i18n="nav_articulation">Phát Âm</span>
+        </a>
+      </li>
+
+      <!-- TAB 3: LUYỆN TẬP -->
+      <li class="list" data-index="3" data-target="#scene-y">
+        <a href="#scene-y" onclick="onLiquidNavClick(event, 3, '#scene-y')" title="Luyện Tập Shadowing">
+          <span class="liquid-icon">
+            <svg viewBox="0 0 24 24"><path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="22"/></svg>
+          </span>
+          <span class="liquid-text" data-i18n="nav_shadowing">Luyện Tập</span>
+        </a>
+      </li>
+
+      <!-- TAB 4: HỒ SƠ NHÓM -->
+      <li class="list" data-index="4" data-target="#scene-team">
+        <a href="#scene-team" onclick="onLiquidNavClick(event, 4, '#scene-team')" title="Ban Phát Triển">
+          <span class="liquid-icon">
+            <svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+          </span>
+          <span class="liquid-text" data-i18n="nav_team">Hồ Sơ Nhóm</span>
+        </a>
+      </li>
+
+      <!-- MOBILE LIQUID INDICATOR TRACK & BUBBLE -->
+      <div class="liquid-indicator-track" id="mobile-indicator-track">
+        <div class="liquid-indicator-bubble"></div>
+      </div>
+    </ul>
+  </nav>
 
   <!-- STICKY BOTTOM AUDIO NARRATION CONTROLLER (RESPONSIVE MOBILE & DESKTOP) -->
-  <div id="sticky-audio-bar" class="fixed bottom-2 sm:bottom-4 left-2.5 sm:left-4 right-2.5 sm:right-4 max-w-4xl mx-auto z-50 p-2.5 sm:p-4 rounded-2xl audio-glass-bar border-slate-300/80 shadow-2xl flex items-center gap-3 sm:gap-4 transition-all duration-300">
+  <div id="sticky-audio-bar" class="fixed bottom-[84px] lg:bottom-4 left-2.5 sm:left-4 right-2.5 sm:right-4 max-w-4xl mx-auto z-50 p-2.5 sm:p-4 rounded-2xl audio-glass-bar border-slate-300/80 shadow-2xl flex items-center gap-3 sm:gap-4 transition-all duration-300">
     <button id="global-play-btn" onclick="toggleGlobalAudio()" class="w-10 h-10 sm:w-12 sm:h-12 rounded-xl bg-sky-600 hover:bg-sky-700 text-white flex items-center justify-center flex-shrink-0 shadow-md shadow-sky-600/30 transition-transform active:scale-95">
       <svg id="play-icon" class="w-5 h-5 sm:w-6 sm:h-6 fill-current" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
       <svg id="pause-icon" class="w-5 h-5 sm:w-6 sm:h-6 fill-current hidden" viewBox="0 0 24 24"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>
@@ -1277,11 +1645,11 @@
     // BILINGUAL TRANSLATION DICTIONARY (VI / EN)
     const I18N_DICT = {
       // Nav
-      nav_3d: { vi: "Nhân Vật 3D", en: "3D Mascots" },
+      nav_3d: { vi: "3D Vần", en: "3D Mascots" },
       nav_intro: { vi: "I. Khởi Động", en: "I. Warm-up" },
       nav_ipa: { vi: "Tọa Độ IPA", en: "IPA Chart" },
-      nav_articulation: { vi: "II. Phát Âm & Viết", en: "II. Articulation" },
-      nav_shadowing: { vi: "III. Luyện Tập", en: "III. Shadowing" },
+      nav_articulation: { vi: "Phát Âm", en: "Pronounce" },
+      nav_shadowing: { vi: "Luyện Tập", en: "Shadowing" },
       nav_quiz: { vi: "IV. Thử Thách Quiz", en: "IV. Mini Quiz" },
       nav_team: { vi: "Hồ Sơ Nhóm", en: "Team Profile" },
       watch_video_btn: { vi: "Xem Video 1080p", en: "Watch 1080p Video" },
@@ -2800,6 +3168,83 @@
       const savedLang = localStorage.getItem('vsl_lang') || 'vi';
       if (typeof setLanguage === 'function') setLanguage(savedLang);
       if (typeof selectIpaVowel === 'function') selectIpaVowel('O');
+
+      // ================================================================
+      // 🌊 LIQUID ANIMATED NAVIGATION CONTROLLER 🌊
+      // ================================================================
+      window.activeLiquidIndex = 0;
+
+      window.setLiquidActive = function(index) {
+        window.activeLiquidIndex = index;
+
+        // Desktop Liquid Nav
+        const dItems = document.querySelectorAll('#desktop-liquid-nav ul li');
+        const dTrack = document.getElementById('desktop-indicator-track');
+        if (dItems.length && dTrack) {
+          dItems.forEach(li => li.classList.remove('active'));
+          if (dItems[index]) {
+            dItems[index].classList.add('active');
+            dTrack.style.transform = `translateX(${index * 100}%)`;
+          }
+        }
+
+        // Mobile Liquid Dock
+        const mItems = document.querySelectorAll('#mobile-liquid-dock ul li');
+        const mTrack = document.getElementById('mobile-indicator-track');
+        if (mItems.length && mTrack) {
+          mItems.forEach(li => li.classList.remove('active'));
+          if (mItems[index]) {
+            mItems[index].classList.add('active');
+            mTrack.style.transform = `translateX(${index * 100}%)`;
+          }
+        }
+      };
+
+      window.onLiquidNavClick = function(e, index, targetId) {
+        if (e) e.preventDefault();
+        setLiquidActive(index);
+
+        if (targetId) {
+          const el = document.querySelector(targetId);
+          if (el) {
+            el.scrollIntoView({ behavior: 'smooth' });
+          }
+        }
+
+        if (navigator.vibrate) {
+          navigator.vibrate(12);
+        }
+      };
+
+      // Auto-sync active tab when user scrolls
+      function initLiquidScrollSync() {
+        const sections = [
+          { id: 'three-section', index: 0 },
+          { id: 'scene-ipa', index: 1 },
+          { id: 'scene-nhung', index: 2 },
+          { id: 'scene-y', index: 3 },
+          { id: 'scene-team', index: 4 }
+        ];
+
+        const observer = new IntersectionObserver((entries) => {
+          entries.forEach(entry => {
+            if (entry.isIntersecting) {
+              const match = sections.find(s => s.id === entry.target.id);
+              if (match !== undefined) {
+                setLiquidActive(match.index);
+              }
+            }
+          });
+        }, { root: null, rootMargin: '-20% 0px -55% 0px', threshold: 0.1 });
+
+        sections.forEach(s => {
+          const el = document.getElementById(s.id);
+          if (el) observer.observe(el);
+        });
+      }
+
+      initLiquidScrollSync();
+      setLiquidActive(0);
     });
   </script>
 

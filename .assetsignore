@@ -1,8 +1,20 @@
-# Git internals and large repository packfiles
+# Git internals and secrets
 .git
 .git/**
 .gitignore
 .assetsignore
+.env
+.env.*
+
+# Pipeline folders
+raw_clips/
+raw_clips/**
+ref_frames/
+ref_frames/**
+rendered_clips/
+rendered_clips/**
+final/
+final/**
 
 # Uncompressed audio and temporary audio working dirs
 *.wav
@@ -54,3 +66,6 @@ test_3d_actions_preview/
 test_scenes_preview/
 assets/test_crop_*.png
 assets/hook_preview.png
+clips_10s/
+clips_10s/**
+archive_ai_kling_clips/
