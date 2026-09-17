@@ -619,13 +619,12 @@ ffmpeg_cmd = [
     "-i", "-",
     "-i", master_audio_wav,
     "-c:v", "libx264",
-    "-preset", "medium",
-    "-b:v", "3000k",
-    "-maxrate", "4000k",
-    "-bufsize", "6000k",
+    "-preset", "slow",
+    "-crf", "25",
     "-pix_fmt", "yuv420p",
     "-c:a", "aac",
-    "-b:a", "192k",
+    "-b:a", "128k",
+    "-movflags", "+faststart",
     "-shortest",
     FINAL_OUTPUT
 ]
