@@ -3172,37 +3172,49 @@
       // 🌊 LIQUID ANIMATED NAVIGATION CONTROLLER 🌊
       // ================================================================
       window.activeLiquidIndex = 0;
+      let isClickNavigating = false;
+      let navLockTimer = null;
 
       window.setLiquidActive = function(index) {
+        if (index < 0 || index > 4) return;
         window.activeLiquidIndex = index;
 
         // Desktop Liquid Nav
         const dItems = document.querySelectorAll('#desktop-liquid-nav ul li');
         const dTrack = document.getElementById('desktop-indicator-track');
         if (dItems.length && dTrack) {
-          dItems.forEach(li => li.classList.remove('active'));
-          if (dItems[index]) {
-            dItems[index].classList.add('active');
-            dTrack.style.transform = `translateX(${index * 100}%)`;
-          }
+          dItems.forEach((li, i) => {
+            if (i === index) li.classList.add('active');
+            else li.classList.remove('active');
+          });
+          dTrack.style.transform = `translateX(${index * 100}%)`;
         }
 
         // Mobile Liquid Dock
         const mItems = document.querySelectorAll('#mobile-liquid-dock ul li');
         const mTrack = document.getElementById('mobile-indicator-track');
         if (mItems.length && mTrack) {
-          mItems.forEach(li => li.classList.remove('active'));
-          if (mItems[index]) {
-            mItems[index].classList.add('active');
-            mTrack.style.transform = `translateX(${index * 100}%)`;
-          }
+          mItems.forEach((li, i) => {
+            if (i === index) li.classList.add('active');
+            else li.classList.remove('active');
+          });
+          mTrack.style.transform = `translateX(${index * 100}%)`;
         }
       };
 
       window.onLiquidNavClick = function(e, index, targetId) {
         if (e) e.preventDefault();
+
+        // 1. Lock scroll observer so intermediate sections scrolled past do NOT hijack the indicator
+        isClickNavigating = true;
         setLiquidActive(index);
 
+        if (navLockTimer) clearTimeout(navLockTimer);
+        navLockTimer = setTimeout(() => {
+          isClickNavigating = false;
+        }, 1100); // 1.1s safety fallback for longest smooth scroll
+
+        // 2. Programmatic smooth scroll to target section
         if (targetId) {
           const el = document.querySelector(targetId);
           if (el) {
@@ -3215,7 +3227,21 @@
         }
       };
 
-      // Auto-sync active tab when user scrolls
+      // Unlock programmatic scroll lock when smooth scroll completes
+      window.addEventListener('scrollend', () => {
+        if (isClickNavigating) {
+          if (navLockTimer) clearTimeout(navLockTimer);
+          setTimeout(() => {
+            isClickNavigating = false;
+          }, 100);
+        }
+      });
+
+      // Release lock early if user manually intervenes with wheel or touch
+      window.addEventListener('wheel', () => { isClickNavigating = false; }, { passive: true });
+      window.addEventListener('touchstart', () => { isClickNavigating = false; }, { passive: true });
+
+      // Auto-sync active tab when user manually scrolls
       function initLiquidScrollSync() {
         const sections = [
           { id: 'three-section', index: 0 },
@@ -3225,16 +3251,38 @@
           { id: 'scene-team', index: 4 }
         ];
 
+        const visibleSections = new Map();
+
         const observer = new IntersectionObserver((entries) => {
+          // If user clicked a tab and the page is auto-scrolling to it, DO NOT INTERRUPT
+          if (isClickNavigating) return;
+
           entries.forEach(entry => {
-            if (entry.isIntersecting) {
-              const match = sections.find(s => s.id === entry.target.id);
-              if (match !== undefined) {
-                setLiquidActive(match.index);
+            const match = sections.find(s => s.id === entry.target.id);
+            if (match !== undefined) {
+              if (entry.isIntersecting) {
+                visibleSections.set(match.index, entry.intersectionRatio);
+              } else {
+                visibleSections.delete(match.index);
               }
             }
           });
-        }, { root: null, rootMargin: '-20% 0px -55% 0px', threshold: 0.1 });
+
+          if (visibleSections.size > 0) {
+            // Find section with highest visibility in viewport
+            let bestIndex = -1;
+            let maxRatio = -1;
+            visibleSections.forEach((ratio, idx) => {
+              if (ratio > maxRatio) {
+                maxRatio = ratio;
+                bestIndex = idx;
+              }
+            });
+            if (bestIndex !== -1 && bestIndex !== window.activeLiquidIndex) {
+              setLiquidActive(bestIndex);
+            }
+          }
+        }, { root: null, rootMargin: '-20% 0px -50% 0px', threshold: [0.1, 0.25, 0.5, 0.75] });
 
         sections.forEach(s => {
           const el = document.getElementById(s.id);
