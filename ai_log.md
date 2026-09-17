@@ -1,6 +1,6 @@
 # NHẬT KÝ ỨNG DỤNG TRÍ TUỆ NHÂN TẠO (AI LOG)
 **Dự án**: Thiết kế video Microlearning "Nguyên âm O - Ô - Ơ trong tiếng Việt" cho người nước ngoài trình độ A1  
-**Phụ trách hồ sơ**: Nguyễn Thị Hồng Thương  
+**Trưởng nhóm & Phụ trách hồ sơ**: Nguyễn Thị Hồng Thương  
 **Quy mô**: 1 trang theo đúng yêu cầu hồ sơ nộp  
 
 ---

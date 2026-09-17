@@ -5,13 +5,22 @@ __pycache__/
 
 # Temporary render frames and video segments (heavy cache)
 *_temp/
+snaptik_frames/
+cartoon_temp_*/
 frames/
+frames_1w/
 frames_v2/
 frames_v3/
+inspect_1w/
+inspect_1w_full/
 brief_frames/
 temp_segments/
 pipe_test.mp4
 test_diagram.png
+test_3d_actions_preview/
+test_scenes_preview/
+assets/test_crop_*.png
+assets/hook_preview.png
 
 # Old topic artifacts (D vs Đ)
 video_microlearning_D_Đ.mp4
