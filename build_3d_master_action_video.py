@@ -29,8 +29,57 @@ def get_fonts():
         "sub_vi": ImageFont.truetype(FONT_BOLD, 28),
         "sub_en": ImageFont.truetype(FONT_REG, 22),
         "quiz_opt": ImageFont.truetype(FONT_BOLD, 26),
+        "quiz_title": ImageFont.truetype(FONT_BOLD, 28),
         "timer": ImageFont.truetype(FONT_BOLD, 72)
     }
+
+QUIZ_DATA = {
+    "quiz_q1": {
+        "num": "CÂU HỎI 1/5",
+        "title": "Ai đang ĐỘI CHIẾC MŨ?",
+    },
+    "quiz_a1": {
+        "ans": "ĐÁP ÁN: [B] BÉ Ô",
+        "desc": "Bé Ô đội chiếc mũ nhọn cực xinh!",
+        "asset": "hat"
+    },
+    "quiz_q2": {
+        "num": "CÂU HỎI 2/5",
+        "title": "Ai có chiếc RÂU MÓC cong cong?",
+    },
+    "quiz_a2": {
+        "ans": "ĐÁP ÁN: [C] BÉ Ơ",
+        "desc": "Bé Ơ có chiếc râu móc cực xinh!",
+        "asset": "hook"
+    },
+    "quiz_q3": {
+        "num": "CÂU HỎI 3/5",
+        "title": "Từ 'CON BÒ' chứa âm bạn nào?",
+    },
+    "quiz_a3": {
+        "ans": "ĐÁP ÁN: [A] BÉ O",
+        "desc": "Từ Con bò chứa nguyên âm O tròn xoe!",
+        "asset": "cow"
+    },
+    "quiz_q4": {
+        "num": "CÂU HỎI 4/5",
+        "title": "Môi MỈM CƯỜI DẸT NGANG là ai?",
+    },
+    "quiz_a4": {
+        "ans": "ĐÁP ÁN: [C] BÉ Ơ",
+        "desc": "Phát âm Ơ: khóe môi kéo dẹt ngang!",
+        "asset": "avocado"
+    },
+    "quiz_q5": {
+        "num": "CÂU HỎI 5/5",
+        "title": "O tròn thêm MŨ CHÓP là ai?",
+    },
+    "quiz_a5": {
+        "ans": "ĐÁP ÁN: [B] BÉ Ô",
+        "desc": "O đội mũ thành Ô — Rất xuất sắc!",
+        "asset": "hat"
+    }
+}
 
 def get_dur(path):
     res = subprocess.run([
@@ -198,16 +247,56 @@ timeline = [
      "Xuất sắc! Các bạn nói từ Bơ rất hay!",
      "Excellent! You said Bơ wonderfully!"),
 
-    # --- SCENE 6: Gameshow Đố Vui Trắc Nghiệm (Spotlight Quiz Arena) ---
-    ("dim_quiz", "Bé O", "#EF4444", "quiz_q",
-     [prep_wav(AUDIO_DIR, "c_quiz_q.mp3"), sil_04, wav_tick, sil_05, wav_tick, sil_05, wav_tick, sil_05],
-     "Đố các bạn nhanh trí nè: Ai trong ba chúng tớ đang ĐỘI CHIẾC MŨ trên đầu?",
-     "Quick quiz: Which one of us is wearing a HAT on its head?"),
-
-    ("dim_quiz", "Bé Ô", "#10B981", "quiz_ans",
-     [wav_ding, prep_wav(AUDIO_DIR, "c_quiz_ans.mp3"), sil_05],
+    # --- SCENE 6: Gameshow Đố Vui Trắc Nghiệm (Spotlight Quiz Arena - 5 Câu) ---
+    # Q1: Đội mũ -> Ô (B)
+    ("dim_quiz", "Bé O", "#EF4444", "quiz_q1",
+     [prep_wav(AUDIO_DIR, "c_quiz_q1.mp3"), sil_04, wav_tick, sil_05, wav_tick, sil_05, wav_tick, sil_05],
+     "Đố các bạn nhanh trí nè: Câu số một: Ai trong ba chúng tớ đang ĐỘI CHIẾC MŨ trên đầu?",
+     "Quick quiz: Question 1: Which one of us is wearing a HAT on its head?"),
+    ("dim_quiz", "Bé Ô", "#10B981", "quiz_a1",
+     [wav_ding, prep_wav(AUDIO_DIR, "c_quiz_a1.mp3"), sil_05],
      "Hê hê! Chính là tớ, Bé Ô đội chiếc mũ nhọn xinh xắn đây nè!",
      "Hehe! It's me, Bé Ô with the cute pointy hat!"),
+
+    # Q2: Râu móc -> Ơ (C)
+    ("dim_quiz", "Bé O", "#EF4444", "quiz_q2",
+     [prep_wav(AUDIO_DIR, "c_quiz_q2.mp3"), sil_04, wav_tick, sil_05, wav_tick, sil_05, wav_tick, sil_05],
+     "Câu số hai: Đố các bạn, ai có chiếc RÂU MÓC cong cong ở bên phải?",
+     "Question 2: Which one of us has a curved HOOK on the right side?"),
+    ("dim_quiz", "Bé Ơ", "#F59E0B", "quiz_a2",
+     [wav_ding, prep_wav(AUDIO_DIR, "c_quiz_a2.mp3"), sil_05],
+     "Hihi, chính là tớ! Bé Ơ có chiếc râu móc cong cong bên phải nè!",
+     "Hihi! It's me, Bé Ơ with the cute curved hook on the right!"),
+
+    # Q3: Thính giác Con bò -> O (A)
+    ("dim_quiz", "Bé Ô", "#10B981", "quiz_q3",
+     [prep_wav(AUDIO_DIR, "c_quiz_q3.mp3"), sil_03, prep_wav(AUDIO_DIR, "c_quiz_sound3.mp3"), sil_03, wav_tick, sil_05, wav_tick, sil_05, wav_tick, sil_05],
+     "Câu số ba: Lắng nghe âm thanh sau và đoán xem từ này chứa nguyên âm của bạn nào nhé: Bò... Con bò!",
+     "Question 3: Listen to the audio and guess which vowel it contains: Bò... Con bò!"),
+    ("dim_quiz", "Bé O", "#EF4444", "quiz_a3",
+     [wav_ding, prep_wav(AUDIO_DIR, "c_quiz_a3.mp3"), sil_05],
+     "Chính xác một trăm phần trăm! Từ 'Con bò' chứa nguyên âm O tròn xoe!",
+     "100% correct! The word 'Con bò' contains the round vowel O!"),
+
+    # Q4: Khẩu hình dẹt ngang -> Ơ (C)
+    ("dim_quiz", "Bé Ô", "#10B981", "quiz_q4",
+     [prep_wav(AUDIO_DIR, "c_quiz_q4.mp3"), sil_04, wav_tick, sil_05, wav_tick, sil_05, wav_tick, sil_05],
+     "Câu số bốn: Khi phát âm, hai mép môi MỈM CƯỜI VÀ DẸT NGANG là của bạn nào?",
+     "Question 4: When pronouncing, which mascot has smiling and horizontally flattened lips?"),
+    ("dim_quiz", "Bé Ơ", "#F59E0B", "quiz_a4",
+     [wav_ding, prep_wav(AUDIO_DIR, "c_quiz_a4.mp3"), sil_05],
+     "Xuất sắc! Đúng rồi, khi phát âm Ơ, hai mép môi dẹt ngang như đang mỉm cười!",
+     "Excellent! Exactly, when saying Ơ, lips flatten sideways like a smile!"),
+
+    # Q5: Vận dụng O + Mũ = Ô -> Ô (B)
+    ("dim_quiz", "Bé O", "#EF4444", "quiz_q5",
+     [prep_wav(AUDIO_DIR, "c_quiz_q5.mp3"), sil_04, wav_tick, sil_05, wav_tick, sil_05, wav_tick, sil_05],
+     "Câu số năm: Lấy bạn O tròn xoe, thêm một CHIẾC MŨ CHÓP, ta được bạn nào?",
+     "Question 5: Take round O, add a pointy hat on top, what letter do we get?"),
+    ("dim_quiz", "Bé Ô", "#10B981", "quiz_a5",
+     [wav_ding, prep_wav(AUDIO_DIR, "c_quiz_a5.mp3"), sil_05],
+     "Hoan hô! O tròn như quả trứng gà, Ô thì đội mũ — O thêm mũ chính là Bé Ô! Các bạn làm bài rất tuyệt vời!",
+     "Hooray! Round like an egg is O, with a hat is Ô — O with a hat is Bé Ô! You did amazing!"),
 
     # --- SCENE 7: Lễ Hội Đồng Dao & Điệu Nhảy Tạm Biệt (Grand Finale 3D Room) ---
     ("wide", "Bé Ơ", "#F59E0B", "rhyme_1",
@@ -546,33 +635,36 @@ def compose_3d_frame(base_img, seg, frame_i, total_f):
             draw.text((400, 635), "Hãy nói theo Bé Ơ nhé!", font=fonts["h2"], fill="#334155", anchor="mm")
 
     # 6. Gameshow Spotlight Quiz
-    elif vis == "quiz_q":
+    # 6. Gameshow Spotlight Quiz (5 Questions)
+    elif vis.startswith("quiz_q"):
+        q_data = QUIZ_DATA.get(vis, {"num": "CÂU HỎI", "title": "Ai đang ĐỘI CHIẾC MŨ?"})
         draw.rounded_rectangle([1180, 80, 1880, 870], radius=28, fill=(255, 255, 255, 245), outline="#3B82F6", width=4)
-        draw.text((1530, 140), "ĐỐ VUI NHANH TRÍ", font=fonts["badge"], fill="#2563EB", anchor="mm")
-        draw.text((1530, 200), "Ai đang ĐỘI CHIẾC MŨ?", font=fonts["title"], fill="#1E293B", anchor="mm")
+        draw.text((1530, 135), f"ĐỐ VUI NHANH TRÍ ({q_data['num']})", font=fonts["badge"], fill="#2563EB", anchor="mm")
+        draw.text((1530, 195), q_data["title"], font=fonts["quiz_title"], fill="#1E293B", anchor="mm")
         
-        draw.rounded_rectangle([1220, 270, 1840, 360], radius=16, fill="#F8FAFC", outline="#CBD5E1", width=2)
-        draw.text((1530, 315), "[A] Bé O (Tròn xoe)", font=fonts["quiz_opt"], fill="#334155", anchor="mm")
+        draw.rounded_rectangle([1220, 260, 1840, 350], radius=16, fill="#F8FAFC", outline="#CBD5E1", width=2)
+        draw.text((1530, 305), "[A] Bé O", font=fonts["quiz_opt"], fill="#334155", anchor="mm")
         
-        draw.rounded_rectangle([1220, 380, 1840, 470], radius=16, fill="#EFF6FF", outline="#3B82F6", width=3)
-        draw.text((1530, 425), "[B] Bé Ô (Đội mũ chóp)", font=fonts["quiz_opt"], fill="#1D4ED8", anchor="mm")
+        draw.rounded_rectangle([1220, 370, 1840, 460], radius=16, fill="#F8FAFC", outline="#CBD5E1", width=2)
+        draw.text((1530, 415), "[B] Bé Ô", font=fonts["quiz_opt"], fill="#334155", anchor="mm")
         
-        draw.rounded_rectangle([1220, 490, 1840, 580], radius=16, fill="#F8FAFC", outline="#CBD5E1", width=2)
-        draw.text((1530, 535), "[C] Bé Ơ (Có râu móc)", font=fonts["quiz_opt"], fill="#334155", anchor="mm")
+        draw.rounded_rectangle([1220, 480, 1840, 570], radius=16, fill="#F8FAFC", outline="#CBD5E1", width=2)
+        draw.text((1530, 525), "[C] Bé Ơ", font=fonts["quiz_opt"], fill="#334155", anchor="mm")
         
         sec_left = max(1, 3 - int(t_ratio * 3))
-        draw.ellipse([1455, 650, 1605, 800], fill="#FEF08A", outline="#EAB308", width=4)
-        draw.text((1530, 725), str(sec_left), font=fonts["timer"], fill="#B45309", anchor="mm")
+        draw.ellipse([1455, 640, 1605, 790], fill="#FEF08A", outline="#EAB308", width=4)
+        draw.text((1530, 715), str(sec_left), font=fonts["timer"], fill="#B45309", anchor="mm")
 
-    elif vis == "quiz_ans":
+    elif vis.startswith("quiz_a"):
+        a_data = QUIZ_DATA.get(vis, {"ans": "ĐÁP ÁN: [B] BÉ Ô", "desc": "Bé Ô đội chiếc mũ nhọn cực xinh!", "asset": "hat"})
         draw.rounded_rectangle([1180, 80, 1880, 870], radius=28, fill=(255, 255, 255, 245), outline="#10B981", width=5)
         draw.text((1530, 150), "CHÍNH XÁC!", font=fonts["title"], fill="#059669", anchor="mm")
         draw.rounded_rectangle([1220, 220, 1840, 350], radius=20, fill="#ECFDF5", outline="#10B981", width=3)
-        draw.text((1530, 285), "ĐÁP ÁN: [B] BÉ Ô", font=fonts["title"], fill="#047857", anchor="mm")
+        draw.text((1530, 285), a_data["ans"], font=fonts["title"], fill="#047857", anchor="mm")
         
-        hat_im = ASSETS["hat"].resize((170, 170))
-        frame.paste(hat_im, (1445, 390), hat_im)
-        draw.text((1530, 600), "Bé Ô đội chiếc mũ nhọn cực xinh!", font=fonts["h2"], fill="#059669", anchor="mm")
+        item_im = ASSETS[a_data["asset"]].resize((170, 170))
+        frame.paste(item_im, (1445, 390), item_im)
+        draw.text((1530, 600), a_data["desc"], font=fonts["h2"], fill="#059669", anchor="mm")
         trophy_im = ASSETS["trophy"].resize((120, 120))
         frame.paste(trophy_im, (1470, 670), trophy_im)
 

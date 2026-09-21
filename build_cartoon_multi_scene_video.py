@@ -528,14 +528,13 @@ def compose_cartoon_frame(base_img, seg, frame_i, total_f):
         
         # 3 Options
         draw.rounded_rectangle([1220, 290, 1840, 380], radius=16, fill="#F8FAFC", outline="#CBD5E1", width=2)
-        draw.text((1530, 335), "[A] Bé O (Tròn xoe)", font=fonts["quiz_opt"], fill="#334155", anchor="mm")
+        draw.text((1530, 335), "[A] Bé O", font=fonts["quiz_opt"], fill="#334155", anchor="mm")
         
-        # Option B (Pulsing highlight)
-        draw.rounded_rectangle([1220, 410, 1840, 500], radius=16, fill="#EFF6FF", outline="#3B82F6", width=3)
-        draw.text((1530, 455), "[B] Bé Ô (Đội mũ chóp)", font=fonts["quiz_opt"], fill="#1D4ED8", anchor="mm")
+        draw.rounded_rectangle([1220, 410, 1840, 500], radius=16, fill="#F8FAFC", outline="#CBD5E1", width=2)
+        draw.text((1530, 455), "[B] Bé Ô", font=fonts["quiz_opt"], fill="#334155", anchor="mm")
         
         draw.rounded_rectangle([1220, 530, 1840, 620], radius=16, fill="#F8FAFC", outline="#CBD5E1", width=2)
-        draw.text((1530, 575), "[C] Bé Ơ (Có râu móc)", font=fonts["quiz_opt"], fill="#334155", anchor="mm")
+        draw.text((1530, 575), "[C] Bé Ơ", font=fonts["quiz_opt"], fill="#334155", anchor="mm")
         
         # Countdown timer
         sec_left = max(1, 3 - int(t_ratio * 3))
