@@ -223,16 +223,17 @@
     /* DESKTOP LIQUID NAVIGATION (Embedded in Header) */
     .desktop-liquid-nav {
       position: relative;
-      width: 480px;
-      height: 54px;
+      width: clamp(340px, 32vw, 460px);
+      height: 48px;
       background: #18191f;
       display: flex;
       justify-content: center;
       align-items: center;
-      border-radius: 16px;
-      box-shadow: 0 10px 25px -3px rgba(0, 0, 0, 0.25);
+      border-radius: 14px;
+      box-shadow: 0 8px 20px -3px rgba(0, 0, 0, 0.25);
       user-select: none;
-      margin-top: 14px;
+      margin-top: 10px;
+      flex-shrink: 1;
     }
 
     .desktop-liquid-nav ul {
@@ -248,7 +249,7 @@
       position: relative;
       list-style: none;
       width: 20%;
-      height: 54px;
+      height: 48px;
       z-index: 2;
     }
 
@@ -270,15 +271,15 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      width: 24px;
-      height: 24px;
+      width: 22px;
+      height: 22px;
       color: #94a3b8;
       transition: transform 0.5s var(--liquid-spring), color 0.3s ease;
     }
 
     .desktop-liquid-nav ul li a .liquid-icon svg {
-      width: 20px;
-      height: 20px;
+      width: 18px;
+      height: 18px;
       fill: none;
       stroke: currentColor;
       stroke-width: 2.2;
@@ -287,7 +288,7 @@
     }
 
     .desktop-liquid-nav ul li.active a .liquid-icon {
-      transform: translateY(-27px);
+      transform: translateY(-22px);
       color: #0f172a;
       filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.15));
     }
@@ -296,27 +297,27 @@
       position: absolute;
       color: #38bdf8;
       font-weight: 700;
-      font-size: 10px;
+      font-size: 9.5px;
       letter-spacing: 0.02em;
       transition: transform 0.5s var(--liquid-spring), opacity 0.35s ease;
       opacity: 0;
-      transform: translateY(16px);
+      transform: translateY(14px);
       pointer-events: none;
       white-space: nowrap;
     }
 
     .desktop-liquid-nav ul li.active a .liquid-text {
       opacity: 1;
-      transform: translateY(8px);
+      transform: translateY(7px);
     }
 
     /* DESKTOP LIQUID INDICATOR TRACK & BUBBLE */
     .desktop-liquid-nav .liquid-indicator-track {
       position: absolute;
-      top: -27px;
+      top: -22px;
       left: 0;
       width: 20%;
-      height: 54px;
+      height: 48px;
       display: flex;
       justify-content: center;
       align-items: center;
@@ -327,36 +328,36 @@
 
     .desktop-liquid-nav .liquid-indicator-bubble {
       position: relative;
-      width: 52px;
-      height: 52px;
+      width: 44px;
+      height: 44px;
       background: #38bdf8;
       border-radius: 50%;
-      border: 5px solid #ffffff;
-      box-shadow: 0 8px 18px rgba(56, 189, 248, 0.4);
+      border: 4px solid #ffffff;
+      box-shadow: 0 6px 14px rgba(56, 189, 248, 0.4);
     }
 
     .desktop-liquid-nav .liquid-indicator-bubble::before {
       content: '';
       position: absolute;
       top: 50%;
-      left: -18px;
-      width: 16px;
-      height: 16px;
+      left: -15px;
+      width: 14px;
+      height: 14px;
       background: transparent;
-      border-top-right-radius: 16px;
-      box-shadow: 1px -7px 0 0 #ffffff;
+      border-top-right-radius: 14px;
+      box-shadow: 1px -6px 0 0 #ffffff;
     }
 
     .desktop-liquid-nav .liquid-indicator-bubble::after {
       content: '';
       position: absolute;
       top: 50%;
-      right: -18px;
-      width: 16px;
-      height: 16px;
+      right: -15px;
+      width: 14px;
+      height: 14px;
       background: transparent;
-      border-top-left-radius: 16px;
-      box-shadow: -1px -7px 0 0 #ffffff;
+      border-top-left-radius: 14px;
+      box-shadow: -1px -6px 0 0 #ffffff;
     }
 
     /* MOBILE DOCKED LIQUID NAVIGATION */
@@ -544,8 +545,20 @@
     #slide-navigator .slide-dot:hover .slide-label {
       opacity: 1;
     }
-    @media (max-width: 1023px) {
+    @media (max-width: 1279px) {
       #slide-navigator { display: none; }
+    }
+
+    /* ===== HERO VOWEL INTERACTION ===== */
+    .hero-vowel-letter {
+      display: inline-block;
+      opacity: 1 !important;
+      transform-origin: center;
+      transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+      cursor: pointer;
+    }
+    .hero-vowel-letter:hover {
+      transform: scale(1.18) translateY(-6px);
     }
 
     /* ===== CINEMA AMBIENT GLOW ===== */
@@ -691,15 +704,15 @@
   <div id="cursor-spotlight"></div>
 
   <!-- TOP STICKY NAVIGATION BAR -->
-  <header id="main-nav" class="sticky top-0 z-50 w-full transition-all duration-300 bg-white/95 backdrop-blur-md border-b border-slate-200/80 px-4 sm:px-8 pt-3.5 pb-3">
-    <div class="max-w-7xl mx-auto flex items-center justify-between">
-      <a href="#hero" class="flex items-center gap-3 group">
-        <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-amber-500 to-rose-500 flex items-center justify-center text-white font-bold text-xl shadow-md shadow-amber-500/20 group-hover:scale-105 transition-transform">
+  <header id="main-nav" class="sticky top-0 z-50 w-full transition-all duration-300 bg-white/95 backdrop-blur-md border-b border-slate-200/80 px-4 sm:px-8 pt-3 pb-2.5">
+    <div class="max-w-7xl mx-auto flex items-center justify-between gap-2 sm:gap-4 flex-nowrap">
+      <a href="#hero" class="flex items-center gap-2.5 sm:gap-3 group shrink-0">
+        <div class="w-9 h-9 sm:w-10 sm:h-10 rounded-xl bg-gradient-to-tr from-amber-500 to-rose-500 flex items-center justify-center text-white font-bold text-lg sm:text-xl shadow-md shadow-amber-500/20 group-hover:scale-105 transition-transform">
           O
         </div>
         <div>
-          <span class="text-xs font-bold uppercase tracking-wider text-amber-600 block leading-none" data-i18n="nav_logo_sub">Microlearning Tiếng Việt A1</span>
-          <span class="text-base font-bold text-slate-900 tracking-tight" data-i18n="nav_logo_title">Nguyên Âm O — Ô — Ơ</span>
+          <span class="text-[11px] font-bold uppercase tracking-wider text-amber-600 block leading-none" data-i18n="nav_logo_sub">Microlearning Tiếng Việt A1</span>
+          <span class="text-sm sm:text-base font-bold text-slate-900 tracking-tight" data-i18n="nav_logo_title">Nguyên Âm O — Ô — Ơ</span>
         </div>
       </a>
 
@@ -763,7 +776,7 @@
         </ul>
       </nav>
 
-      <div class="flex items-center gap-2 sm:gap-3">
+      <div class="flex items-center gap-1.5 sm:gap-3 shrink-0">
         <!-- BILINGUAL TOGGLE -->
         <div class="flex items-center p-0.5 rounded-xl bg-slate-100 border border-slate-200">
           <button id="lang-btn-vi" onclick="setLanguage('vi')" class="px-2 py-1 rounded-lg text-xs font-bold transition-all bg-white text-slate-800 shadow-sm active:scale-95" title="Giao diện Tiếng Việt">
@@ -774,15 +787,15 @@
           </button>
         </div>
 
-        <a href="#video-master" class="hidden sm:inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-sky-600 hover:bg-sky-700 text-white font-semibold text-sm shadow-md shadow-sky-600/25 transition-all hover:scale-105">
-          <svg class="w-4 h-4 fill-current" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
-          <span data-i18n="watch_video_btn">Xem Video 1080p</span>
+        <a href="#video-master" class="hidden sm:inline-flex items-center gap-1.5 px-3 sm:px-4 py-2 rounded-xl bg-sky-600 hover:bg-sky-700 text-white font-semibold text-xs sm:text-sm shadow-md shadow-sky-600/25 transition-all hover:scale-105 whitespace-nowrap">
+          <svg class="w-4 h-4 fill-current shrink-0" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+          <span class="hidden xl:inline" data-i18n="watch_video_btn">Xem Video 1080p</span>
         </a>
 
         <!-- FULLSCREEN PRESENTATION MODE BUTTON -->
-        <button id="btn-fullscreen-toggle" onclick="togglePresentationMode()" class="flex items-center gap-1.5 px-3 py-2 rounded-xl bg-slate-100 hover:bg-slate-200 border border-slate-200 text-slate-700 font-bold text-xs shadow-sm transition-all active:scale-95" title="Chế độ Trình Chiếu Toàn Màn Hình">
-          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 8V4m0 0h4M4 4l5 5m11-5h-4m4 0v4m0 0l-5-5M4 16v4m0 0h4m-4 0l5-5m11 5l-5-5m5 5v-4m0 4h-4"/></svg>
-          <span class="hidden md:inline">Trình Chiếu</span>
+        <button id="btn-fullscreen-toggle" onclick="togglePresentationMode()" class="flex items-center gap-1.5 px-2.5 sm:px-3 py-2 rounded-xl bg-slate-100 hover:bg-slate-200 border border-slate-200 text-slate-700 font-bold text-xs shadow-sm transition-all active:scale-95 whitespace-nowrap" title="Chế độ Trình Chiếu Toàn Màn Hình">
+          <svg class="w-4 h-4 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 8V4m0 0h4M4 4l5 5m11-5h-4m4 0v4m0 0l-5-5M4 16v4m0 0h4m-4 0l5-5m11 5l-5-5m5 5v-4m0 4h-4"/></svg>
+          <span class="hidden xl:inline">Trình Chiếu</span>
         </button>
       </div>
     </div>
@@ -814,7 +827,7 @@
   </nav>
 
   <!-- HERO SECTION -->
-  <section id="hero" class="relative pt-16 sm:pt-20 pb-12 px-4 sm:px-8 overflow-hidden sun-glow">
+  <section id="hero" class="relative pt-12 sm:pt-16 pb-20 sm:pb-28 px-4 sm:px-8 overflow-hidden sun-glow">
     <div class="max-w-7xl mx-auto">
       
       <div class="text-center max-w-4xl mx-auto mb-10">
@@ -822,8 +835,12 @@
           <span class="block text-3xl sm:text-5xl lg:text-6xl font-extrabold text-slate-900 mb-3 tracking-tight leading-snug" data-i18n="hero_title_prefix">
             Khám Phá Bộ Ba Nguyên Âm
           </span>
-          <span class="block text-5xl sm:text-7xl lg:text-8xl font-black text-transparent bg-clip-text bg-gradient-to-r from-rose-600 via-emerald-600 to-amber-600 tracking-wider leading-none py-2 mb-4 drop-shadow-sm">
-            <span class="inline-block float-bob-1">O</span> — <span class="inline-block float-bob-2">Ô</span> — <span class="inline-block float-bob-3">Ơ</span>
+          <span class="block text-5xl sm:text-7xl lg:text-8xl font-black tracking-wider leading-none py-2 mb-4 flex items-center justify-center gap-3 sm:gap-6">
+            <span class="hero-vowel-letter inline-block text-rose-600 float-bob-1 drop-shadow-md">O</span>
+            <span class="inline-block text-slate-300 font-light">—</span>
+            <span class="hero-vowel-letter inline-block text-emerald-600 float-bob-2 drop-shadow-md">Ô</span>
+            <span class="inline-block text-slate-300 font-light">—</span>
+            <span class="hero-vowel-letter inline-block text-amber-600 float-bob-3 drop-shadow-md">Ơ</span>
           </span>
         </h1>
         <p class="text-base sm:text-lg text-slate-600 max-w-2xl mx-auto leading-relaxed mt-3" data-i18n="hero_desc">
@@ -3732,42 +3749,6 @@
       initLiquidScrollSync();
 
       // ================================================================
-      // ✨ HERO KINETIC TYPOGRAPHY (GSAP)
-      // ================================================================
-      if (window.gsap) {
-        const heroTl = gsap.timeline({ defaults: { ease: 'power3.out' } });
-        // Title slide up
-        heroTl.from('[data-i18n="hero_title_prefix"]', {
-          y: 60, opacity: 0, duration: 0.8
-        });
-        // O — Ô — Ơ scale in
-        heroTl.from('#hero h1 span:nth-child(2)', {
-          scale: 0.3, opacity: 0, duration: 0.9, ease: 'back.out(1.7)'
-        }, '-=0.3');
-        // Description fade in
-        heroTl.from('[data-i18n="hero_desc"]', {
-          y: 30, opacity: 0, duration: 0.6
-        }, '-=0.4');
-        // Folk rhyme card
-        heroTl.from('[data-i18n="folk_tag"]', {
-          y: 20, opacity: 0, duration: 0.5
-        }, '-=0.2');
-        heroTl.from('[data-i18n="folk_line_1"]', {
-          x: -40, opacity: 0, duration: 0.6
-        }, '-=0.1');
-        heroTl.from('[data-i18n="folk_line_2"]', {
-          x: 40, opacity: 0, duration: 0.6
-        }, '-=0.3');
-        heroTl.from('[data-i18n="folk_goal"]', {
-          scale: 0.8, opacity: 0, duration: 0.5
-        }, '-=0.2');
-        // 3 Quick buttons stagger
-        heroTl.from('#btn-quick-o, #btn-quick-oe, #btn-quick-ow', {
-          y: 30, opacity: 0, duration: 0.5, stagger: 0.15
-        }, '-=0.2');
-      }
-
-      // ================================================================
       // 🔊 WEB AUDIO API MICRO-SYNTHESIZER (ZERO ASSET SFX)
       // ================================================================
       const AudioCtx = window.AudioContext || window.webkitAudioContext;
@@ -4144,6 +4125,7 @@
         const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
         document.querySelectorAll('section').forEach(sec => {
+          if (sec.id === 'hero') return;
           const elements = sec.querySelectorAll('h2, h3, .glass-card, .grid > div, p, button, .inline-flex');
           elements.forEach((el, i) => {
             const fromProps = {
