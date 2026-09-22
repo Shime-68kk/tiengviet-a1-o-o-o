@@ -583,11 +583,11 @@
 
     /* ===== IPA NEON GLOW ===== */
     @keyframes neonPing {
-      0% { r: 16; opacity: 0.8; }
-      100% { r: 40; opacity: 0; }
+      0%, 100% { opacity: 0.8; }
+      50% { opacity: 0.2; }
     }
     .ipa-node-glow {
-      animation: neonPing 1.5s ease-out infinite;
+      animation: neonPing 2s ease-in-out infinite;
     }
 
     /* ===== CONFETTI CANVAS ===== */
@@ -946,7 +946,7 @@
 
                 <!-- NODE O (/ɔ/) - Open-mid Back Rounded -->
                 <g id="svg-node-o" onclick="selectIpaVowel('O')" class="cursor-pointer group">
-                  <circle id="svg-ring-o" cx="340" cy="173" r="18" fill="rgba(225, 29, 72, 0.35)" class="transition-all animate-ping opacity-100"/>
+                  <circle id="svg-ring-o" cx="340" cy="173" r="18" fill="rgba(225, 29, 72, 0.35)" class="ipa-node-glow opacity-100"/>
                   <circle cx="340" cy="173" r="11" fill="#E11D48" stroke="#FFF" stroke-width="2.5" class="transition-transform group-hover:scale-125"/>
                   <text x="340" y="202" fill="#FDA4AF" font-size="12" font-weight="bold" text-anchor="middle">O /ɔ/</text>
                 </g>
@@ -2035,15 +2035,9 @@
       const ringOe = document.getElementById('svg-ring-oe');
       const ringOw = document.getElementById('svg-ring-ow');
 
-      if (ringO) ringO.setAttribute('class', letter === 'O' ? 'transition-all animate-ping opacity-100' : 'transition-all opacity-0 group-hover:opacity-100');
-      if (ringOe) ringOe.setAttribute('class', letter === 'OE' ? 'transition-all animate-ping opacity-100' : 'transition-all opacity-0 group-hover:opacity-100');
-      if (ringOw) ringOw.setAttribute('class', letter === 'OW' ? 'transition-all animate-ping opacity-100' : 'transition-all opacity-0 group-hover:opacity-100');
-
-      // GSAP Neon Punch on selected node
-      if (window.gsap) {
-        const nodeId = letter === 'O' ? '#svg-node-o' : (letter === 'OE' ? '#svg-node-oe' : '#svg-node-ow');
-        gsap.fromTo(nodeId, { scale: 1.6 }, { scale: 1, duration: 0.5, ease: 'elastic.out(1, 0.4)', transformOrigin: 'center center' });
-      }
+      if (ringO) ringO.setAttribute('class', letter === 'O' ? 'ipa-node-glow opacity-100' : 'transition-opacity duration-300 opacity-0 group-hover:opacity-60');
+      if (ringOe) ringOe.setAttribute('class', letter === 'OE' ? 'ipa-node-glow opacity-100' : 'transition-opacity duration-300 opacity-0 group-hover:opacity-60');
+      if (ringOw) ringOw.setAttribute('class', letter === 'OW' ? 'ipa-node-glow opacity-100' : 'transition-opacity duration-300 opacity-0 group-hover:opacity-60');
 
       // Update inspector detail card
       const detailBox = document.getElementById('ipa-detail-box');
