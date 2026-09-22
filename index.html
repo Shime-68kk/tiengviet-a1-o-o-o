@@ -498,9 +498,116 @@
       border-top-left-radius: 18px;
       box-shadow: -1px -8px 0 0 #fffdf8;
     }
+    /* ===== FLOATING SLIDE NAVIGATOR ===== */
+    #slide-navigator {
+      position: fixed;
+      right: 1.25rem;
+      top: 50%;
+      transform: translateY(-50%);
+      z-index: 45;
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+      align-items: flex-end;
+    }
+    #slide-navigator .slide-dot {
+      width: 12px; height: 12px;
+      border-radius: 50%;
+      background: #CBD5E1;
+      border: 2px solid #E2E8F0;
+      cursor: pointer;
+      transition: all 0.3s cubic-bezier(0.4,0,0.2,1);
+      position: relative;
+    }
+    #slide-navigator .slide-dot:hover,
+    #slide-navigator .slide-dot.active {
+      background: #3B82F6;
+      border-color: #3B82F6;
+      transform: scale(1.4);
+      box-shadow: 0 0 12px rgba(59,130,246,0.5);
+    }
+    #slide-navigator .slide-dot .slide-label {
+      position: absolute;
+      right: 24px;
+      top: 50%; transform: translateY(-50%);
+      white-space: nowrap;
+      font-size: 11px; font-weight: 700;
+      color: #1E293B;
+      background: white;
+      padding: 4px 10px;
+      border-radius: 8px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.12);
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.2s;
+    }
+    #slide-navigator .slide-dot:hover .slide-label {
+      opacity: 1;
+    }
+    @media (max-width: 1023px) {
+      #slide-navigator { display: none; }
+    }
+
+    /* ===== CINEMA AMBIENT GLOW ===== */
+    .cinema-glow {
+      position: relative;
+    }
+    .cinema-glow::before {
+      content: '';
+      position: absolute;
+      inset: -40px;
+      background: radial-gradient(ellipse at center, rgba(56,189,248,0.15) 0%, transparent 70%);
+      z-index: -1;
+      border-radius: 2rem;
+      filter: blur(40px);
+      opacity: 0;
+      transition: opacity 0.6s;
+    }
+    .cinema-glow.playing::before {
+      opacity: 1;
+      animation: cinemaBreath 3s ease-in-out infinite;
+    }
+    @keyframes cinemaBreath {
+      0%, 100% { opacity: 0.5; transform: scale(1); }
+      50% { opacity: 1; transform: scale(1.03); }
+    }
+
+    /* ===== 3D TILT CARD ===== */
+    .tilt-card {
+      transform-style: preserve-3d;
+      transition: transform 0.15s ease-out;
+    }
+    .tilt-card:hover {
+      box-shadow: 0 20px 40px -12px rgba(0,0,0,0.15);
+    }
+
+    /* ===== IPA NEON GLOW ===== */
+    @keyframes neonPing {
+      0% { r: 16; opacity: 0.8; }
+      100% { r: 40; opacity: 0; }
+    }
+    .ipa-node-glow {
+      animation: neonPing 1.5s ease-out infinite;
+    }
+
+    /* ===== CONFETTI CANVAS ===== */
+    #confetti-canvas {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      pointer-events: none;
+      z-index: 9999;
+    }
+
+    /* ===== GSAP REVEAL ANIMATIONS ===== */
+    .gsap-reveal {
+      opacity: 0;
+      transform: translateY(40px);
+    }
   </style>
 </head>
 <body class="relative antialiased selection:bg-amber-200 selection:text-amber-900 pb-32">
+  <canvas id="confetti-canvas"></canvas>
 
   <!-- TOP STICKY NAVIGATION BAR -->
   <header id="main-nav" class="sticky top-0 z-50 w-full transition-all duration-300 bg-white/95 backdrop-blur-md border-b border-slate-200/80 px-4 sm:px-8 pt-3.5 pb-3">
@@ -593,6 +700,31 @@
       </div>
     </div>
   </header>
+
+  <!-- FLOATING SLIDE NAVIGATOR (DESKTOP ONLY) -->
+  <nav id="slide-navigator" aria-label="Presentation Progress">
+    <div class="slide-dot active" data-target="#hero" onclick="smoothNavTo('#hero', 0)">
+      <span class="slide-label">01. Khởi Động</span>
+    </div>
+    <div class="slide-dot" data-target="#scene-ipa" onclick="smoothNavTo('#scene-ipa', 1)">
+      <span class="slide-label">02. Tọa Độ IPA</span>
+    </div>
+    <div class="slide-dot" data-target="#scene-nhung" onclick="smoothNavTo('#scene-nhung', 2)">
+      <span class="slide-label">03. Cấu Âm 3 Bé</span>
+    </div>
+    <div class="slide-dot" data-target="#scene-y" onclick="smoothNavTo('#scene-y', 3)">
+      <span class="slide-label">04. Shadowing Lab</span>
+    </div>
+    <div class="slide-dot" data-target="#scene-thuy" onclick="smoothNavTo('#scene-thuy', 4)">
+      <span class="slide-label">05. Mini Quiz</span>
+    </div>
+    <div class="slide-dot" data-target="#video-master" onclick="smoothNavTo('#video-master', 5)">
+      <span class="slide-label">06. Rạp Chiếu 3D</span>
+    </div>
+    <div class="slide-dot" data-target="#scene-team" onclick="smoothNavTo('#scene-team', 6)">
+      <span class="slide-label">07. Nghiệm Thu</span>
+    </div>
+  </nav>
 
   <!-- HERO SECTION -->
   <section id="hero" class="relative pt-16 sm:pt-20 pb-12 px-4 sm:px-8 overflow-hidden sun-glow">
@@ -1254,17 +1386,24 @@
         <p class="text-sm text-slate-400 mt-2">Phim hoạt hình thiếu nhi đa bối cảnh: Từng bạn O, Ô, Ơ tỏa sáng trên sân khấu solo riêng, cỗ máy biến hình 3D, trò chơi tương tác và lễ hội đồng dao rực rỡ.</p>
       </div>
 
-      <div class="rounded-3xl overflow-hidden shadow-2xl border border-slate-700 bg-black aspect-video relative mb-8">
+      <div id="cinema-frame" class="rounded-3xl overflow-hidden shadow-2xl border border-slate-700 bg-black aspect-video relative mb-8 cinema-glow">
         <video id="hero-video" class="w-full h-full object-cover" controls preload="metadata" playsinline poster="./assets/cartoon_stills/c_01_title_intro.png">
           <source src="./video_microlearning_O_Ô_Ơ.mp4" type="video/mp4" />
           Trình duyệt của bạn không hỗ trợ phát video HTML5.
         </video>
+        <!-- Scene Timeline Quick Seek Buttons -->
+        <div class="absolute bottom-4 left-4 right-4 flex items-center justify-center gap-2 z-10 opacity-0 hover:opacity-100 transition-opacity">
+          <button onclick="seekVideo(0)" class="px-3 py-1.5 rounded-lg bg-black/70 text-white text-[11px] font-bold hover:bg-sky-600 transition-colors backdrop-blur-sm">00:00 Nhập Môn</button>
+          <button onclick="seekVideo(35)" class="px-3 py-1.5 rounded-lg bg-black/70 text-white text-[11px] font-bold hover:bg-sky-600 transition-colors backdrop-blur-sm">00:35 Cấu Âm</button>
+          <button onclick="seekVideo(85)" class="px-3 py-1.5 rounded-lg bg-black/70 text-white text-[11px] font-bold hover:bg-sky-600 transition-colors backdrop-blur-sm">01:25 Shadowing</button>
+          <button onclick="seekVideo(130)" class="px-3 py-1.5 rounded-lg bg-black/70 text-white text-[11px] font-bold hover:bg-sky-600 transition-colors backdrop-blur-sm">02:10 Đố Vui</button>
+        </div>
       </div>
 
       <div class="flex flex-wrap items-center justify-between gap-4 p-6 rounded-2xl bg-slate-800/80 border border-slate-700">
         <div>
           <div class="text-base font-bold text-white">video_microlearning_O_Ô_Ơ.mp4</div>
-          <div class="text-xs text-slate-400">1920x1080 Full HD • 30 fps • H.264 / AAC Stereo • 143.07s (2 phút 23s) • 3 Giọng nhí nhảnh 3D</div>
+          <div class="text-xs text-slate-400">1920x1080 Full HD • 30 fps • H.264 / AAC Stereo • 201s (3 phút 21s) • 5 Câu Đố Vui • 3 Giọng Nhí Nhảnh 3D</div>
         </div>
         <a href="./video_microlearning_O_Ô_Ơ.mp4" download="video_microlearning_O_Ô_Ơ.mp4" class="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-sm shadow-md shadow-emerald-600/30 transition-all hover:scale-105 active:scale-95">
           <svg class="w-4 h-4 fill-current" viewBox="0 0 24 24"><path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/></svg>
@@ -1290,7 +1429,7 @@
       <!-- 5 Team Member Cards -->
       <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-5 gap-4 mb-12">
         
-        <div class="p-5 rounded-2xl bg-amber-50/60 border-2 border-amber-300/80 text-center flex flex-col items-center shadow-sm hover:shadow-md transition-all">
+        <div class="p-5 rounded-2xl bg-amber-50/60 border-2 border-amber-300/80 text-center flex flex-col items-center shadow-sm hover:shadow-md transition-all tilt-card">
           <div class="w-12 h-12 rounded-full bg-gradient-to-tr from-amber-500 to-rose-500 text-white font-bold text-lg flex items-center justify-center mb-3 shadow-md">T</div>
           <h4 class="font-bold text-slate-900 text-sm">Nguyễn Thị Hồng Thương</h4>
           <span class="px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-amber-100 text-amber-800 border border-amber-300 mb-2">👑 Trưởng Nhóm</span>
@@ -1298,7 +1437,7 @@
           <div class="mt-2 text-xs font-bold text-amber-700">Đóng góp: 20%</div>
         </div>
 
-        <div class="p-5 rounded-2xl bg-slate-50 border border-slate-200 text-center flex flex-col items-center hover:shadow-md transition-all">
+        <div class="p-5 rounded-2xl bg-slate-50 border border-slate-200 text-center flex flex-col items-center hover:shadow-md transition-all tilt-card">
           <div class="w-12 h-12 rounded-full bg-sky-500 text-white font-bold text-lg flex items-center justify-center mb-3 shadow-md">L</div>
           <h4 class="font-bold text-slate-900 text-sm">Thí Thuỳ Lim</h4>
           <span class="text-xs text-sky-700 font-semibold mb-2">Thành Viên</span>
@@ -1306,7 +1445,7 @@
           <div class="mt-2 text-xs font-bold text-slate-400">Đóng góp: 20%</div>
         </div>
 
-        <div class="p-5 rounded-2xl bg-slate-50 border border-slate-200 text-center flex flex-col items-center hover:shadow-md transition-all">
+        <div class="p-5 rounded-2xl bg-slate-50 border border-slate-200 text-center flex flex-col items-center hover:shadow-md transition-all tilt-card">
           <div class="w-12 h-12 rounded-full bg-rose-500 text-white font-bold text-lg flex items-center justify-center mb-3 shadow-md">N</div>
           <h4 class="font-bold text-slate-900 text-sm">Dương Thị Nhung</h4>
           <span class="text-xs text-rose-700 font-semibold mb-2">Thành Viên</span>
@@ -1314,7 +1453,7 @@
           <div class="mt-2 text-xs font-bold text-slate-400">Đóng góp: 20%</div>
         </div>
 
-        <div class="p-5 rounded-2xl bg-slate-50 border border-slate-200 text-center flex flex-col items-center hover:shadow-md transition-all">
+        <div class="p-5 rounded-2xl bg-slate-50 border border-slate-200 text-center flex flex-col items-center hover:shadow-md transition-all tilt-card">
           <div class="w-12 h-12 rounded-full bg-emerald-500 text-white font-bold text-lg flex items-center justify-center mb-3 shadow-md">Y</div>
           <h4 class="font-bold text-slate-900 text-sm">Mạc Như Ý</h4>
           <span class="text-xs text-emerald-700 font-semibold mb-2">Thành Viên</span>
@@ -1322,7 +1461,7 @@
           <div class="mt-2 text-xs font-bold text-slate-400">Đóng góp: 20%</div>
         </div>
 
-        <div class="p-5 rounded-2xl bg-slate-50 border border-slate-200 text-center flex flex-col items-center hover:shadow-md transition-all">
+        <div class="p-5 rounded-2xl bg-slate-50 border border-slate-200 text-center flex flex-col items-center hover:shadow-md transition-all tilt-card">
           <div class="w-12 h-12 rounded-full bg-indigo-500 text-white font-bold text-lg flex items-center justify-center mb-3 shadow-md">T</div>
           <h4 class="font-bold text-slate-900 text-sm">Nông Thị Lệ Thuỷ</h4>
           <span class="text-xs text-indigo-700 font-semibold mb-2">Thành Viên</span>
@@ -1900,6 +2039,12 @@
       if (ringOe) ringOe.setAttribute('class', letter === 'OE' ? 'transition-all animate-ping opacity-100' : 'transition-all opacity-0 group-hover:opacity-100');
       if (ringOw) ringOw.setAttribute('class', letter === 'OW' ? 'transition-all animate-ping opacity-100' : 'transition-all opacity-0 group-hover:opacity-100');
 
+      // GSAP Neon Punch on selected node
+      if (window.gsap) {
+        const nodeId = letter === 'O' ? '#svg-node-o' : (letter === 'OE' ? '#svg-node-oe' : '#svg-node-ow');
+        gsap.fromTo(nodeId, { scale: 1.6 }, { scale: 1, duration: 0.5, ease: 'elastic.out(1, 0.4)', transformOrigin: 'center center' });
+      }
+
       // Update inspector detail card
       const detailBox = document.getElementById('ipa-detail-box');
       if (detailBox) {
@@ -1937,7 +2082,23 @@
             </div>
             <div class="p-3 rounded-xl bg-slate-50 border border-slate-200/80">
               <div class="text-[11px] uppercase font-bold text-slate-400 mb-0.5">${isEn ? 'Acoustic Formants' : 'Phổ Âm Học (Formants)'}</div>
-              <div class="font-bold text-indigo-700 font-mono">F1: ${data.f1} | F2: ${data.f2}</div>
+              <div class="font-bold text-indigo-700 font-mono text-xs mb-2">F1: ${data.f1} | F2: ${data.f2}</div>
+              <div class="space-y-1.5">
+                <div class="flex items-center gap-2">
+                  <span class="text-[10px] font-bold text-indigo-600 w-6">F1</span>
+                  <div class="flex-1 h-3 bg-indigo-100 rounded-full overflow-hidden">
+                    <div class="h-full bg-gradient-to-r from-indigo-400 to-indigo-600 rounded-full transition-all duration-700" style="width:${Math.round(parseInt(data.f1) / 900 * 100)}%"></div>
+                  </div>
+                  <span class="text-[10px] font-mono text-indigo-500 w-10 text-right">${data.f1}</span>
+                </div>
+                <div class="flex items-center gap-2">
+                  <span class="text-[10px] font-bold text-sky-600 w-6">F2</span>
+                  <div class="flex-1 h-3 bg-sky-100 rounded-full overflow-hidden">
+                    <div class="h-full bg-gradient-to-r from-sky-400 to-sky-600 rounded-full transition-all duration-700" style="width:${Math.round(parseInt(data.f2) / 2500 * 100)}%"></div>
+                  </div>
+                  <span class="text-[10px] font-mono text-sky-500 w-10 text-right">${data.f2}</span>
+                </div>
+              </div>
             </div>
           </div>
 
@@ -2769,6 +2930,7 @@
         if (resErr) resErr.classList.add('hidden');
         if (resOk) {
           resOk.classList.remove('hidden');
+          if (window.fireConfetti) window.fireConfetti();
           resOk.innerHTML = isEn
             ? `<div class="text-lg font-bold text-emerald-800 mb-1">🎉 100% CORRECT! ANSWER IS: [A] CÔ</div><p class="text-sm text-emerald-700">The word "CÔ" contains vowel Ô with characteristic pursed, protruded rounded lips.</p>`
             : `<div class="text-lg font-bold text-emerald-800 mb-1">🎉 CHÍNH XÁC 100%! ĐÁP ÁN LÀ: [A] CÔ</div><p class="text-sm text-emerald-700">Từ "CÔ" chứa nguyên âm Ô với khẩu hình đặc trưng: hai khóe môi chúm tròn nhô ra phía trước.</p>`;
@@ -3317,6 +3479,208 @@
       }
 
       initLiquidScrollSync();
+
+      // ================================================================
+      // ✨ HERO KINETIC TYPOGRAPHY (GSAP)
+      // ================================================================
+      if (window.gsap) {
+        const heroTl = gsap.timeline({ defaults: { ease: 'power3.out' } });
+        // Title slide up
+        heroTl.from('[data-i18n="hero_title_prefix"]', {
+          y: 60, opacity: 0, duration: 0.8
+        });
+        // O — Ô — Ơ scale in
+        heroTl.from('#hero h1 span:nth-child(2)', {
+          scale: 0.3, opacity: 0, duration: 0.9, ease: 'back.out(1.7)'
+        }, '-=0.3');
+        // Description fade in
+        heroTl.from('[data-i18n="hero_desc"]', {
+          y: 30, opacity: 0, duration: 0.6
+        }, '-=0.4');
+        // Folk rhyme card
+        heroTl.from('[data-i18n="folk_tag"]', {
+          y: 20, opacity: 0, duration: 0.5
+        }, '-=0.2');
+        heroTl.from('[data-i18n="folk_line_1"]', {
+          x: -40, opacity: 0, duration: 0.6
+        }, '-=0.1');
+        heroTl.from('[data-i18n="folk_line_2"]', {
+          x: 40, opacity: 0, duration: 0.6
+        }, '-=0.3');
+        heroTl.from('[data-i18n="folk_goal"]', {
+          scale: 0.8, opacity: 0, duration: 0.5
+        }, '-=0.2');
+        // 3 Quick buttons stagger
+        heroTl.from('#btn-quick-o, #btn-quick-oe, #btn-quick-ow', {
+          y: 30, opacity: 0, duration: 0.5, stagger: 0.15
+        }, '-=0.2');
+      }
+
+      // ================================================================
+      // 📍 FLOATING SLIDE NAVIGATOR SCROLLSPY
+      // ================================================================
+      const slideNav = document.getElementById('slide-navigator');
+      if (slideNav) {
+        const slideDots = slideNav.querySelectorAll('.slide-dot');
+        const slideTargets = [
+          '#hero', '#scene-ipa', '#scene-nhung', '#scene-y',
+          '#scene-thuy', '#video-master', '#scene-team'
+        ];
+
+        window.smoothNavTo = function(target, idx) {
+          const el = document.querySelector(target);
+          if (el) el.scrollIntoView({ behavior: 'smooth' });
+        };
+
+        function updateSlideNav() {
+          const scrollPos = window.scrollY;
+          const winH = window.innerHeight;
+          const docH = document.documentElement.scrollHeight;
+          let activeIdx = 0;
+
+          if (scrollPos + winH >= docH - 60) {
+            activeIdx = slideTargets.length - 1;
+          } else {
+            const trigger = winH * 0.35;
+            for (let i = 0; i < slideTargets.length; i++) {
+              const el = document.querySelector(slideTargets[i]);
+              if (el && el.getBoundingClientRect().top <= trigger) activeIdx = i;
+            }
+          }
+
+          slideDots.forEach((d, i) => {
+            if (i === activeIdx) d.classList.add('active');
+            else d.classList.remove('active');
+          });
+        }
+
+        window.addEventListener('scroll', () => {
+          requestAnimationFrame(updateSlideNav);
+        }, { passive: true });
+        updateSlideNav();
+      }
+
+      // ================================================================
+      // 🎬 CINEMA AMBIENT GLOW (video play/pause)
+      // ================================================================
+      const cinemaFrame = document.getElementById('cinema-frame');
+      const heroVideo = document.getElementById('hero-video');
+      if (cinemaFrame && heroVideo) {
+        heroVideo.addEventListener('play', () => cinemaFrame.classList.add('playing'));
+        heroVideo.addEventListener('pause', () => cinemaFrame.classList.remove('playing'));
+        heroVideo.addEventListener('ended', () => cinemaFrame.classList.remove('playing'));
+      }
+
+      // ================================================================
+      // ⏩ VIDEO SCENE SEEK
+      // ================================================================
+      window.seekVideo = function(seconds) {
+        const vid = document.getElementById('hero-video');
+        if (vid) {
+          vid.currentTime = seconds;
+          vid.play().catch(() => {});
+        }
+      };
+
+      // ================================================================
+      // 🃏 3D TILT CARDS
+      // ================================================================
+      document.querySelectorAll('.tilt-card').forEach(card => {
+        card.addEventListener('mousemove', (e) => {
+          const rect = card.getBoundingClientRect();
+          const x = (e.clientX - rect.left) / rect.width - 0.5;
+          const y = (e.clientY - rect.top) / rect.height - 0.5;
+          card.style.transform = `perspective(800px) rotateY(${x * 12}deg) rotateX(${-y * 12}deg) scale(1.02)`;
+        });
+        card.addEventListener('mouseleave', () => {
+          card.style.transform = 'perspective(800px) rotateY(0deg) rotateX(0deg) scale(1)';
+        });
+      });
+
+      // ================================================================
+      // 🎊 CONFETTI EFFECT
+      // ================================================================
+      window.fireConfetti = function() {
+        const canvas = document.getElementById('confetti-canvas');
+        if (!canvas) return;
+        const ctx = canvas.getContext('2d');
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+
+        const particles = [];
+        const colors = ['#FF6B6B','#1DD1A1','#FFA502','#3B82F6','#F59E0B','#EC4899'];
+        for (let i = 0; i < 150; i++) {
+          particles.push({
+            x: canvas.width * 0.5 + (Math.random() - 0.5) * 200,
+            y: canvas.height * 0.4,
+            vx: (Math.random() - 0.5) * 12,
+            vy: -Math.random() * 14 - 4,
+            w: Math.random() * 8 + 4,
+            h: Math.random() * 6 + 3,
+            color: colors[Math.floor(Math.random() * colors.length)],
+            rotation: Math.random() * 360,
+            rotSpeed: (Math.random() - 0.5) * 10,
+            gravity: 0.25 + Math.random() * 0.15,
+            life: 1
+          });
+        }
+
+        let frame = 0;
+        function animateConfetti() {
+          ctx.clearRect(0, 0, canvas.width, canvas.height);
+          let alive = false;
+          particles.forEach(p => {
+            if (p.life <= 0) return;
+            alive = true;
+            p.vy += p.gravity;
+            p.x += p.vx;
+            p.y += p.vy;
+            p.rotation += p.rotSpeed;
+            p.vx *= 0.99;
+            if (p.y > canvas.height + 20) { p.life = 0; return; }
+            p.life -= 0.003;
+            ctx.save();
+            ctx.translate(p.x, p.y);
+            ctx.rotate(p.rotation * Math.PI / 180);
+            ctx.globalAlpha = Math.max(0, p.life);
+            ctx.fillStyle = p.color;
+            ctx.fillRect(-p.w / 2, -p.h / 2, p.w, p.h);
+            ctx.restore();
+          });
+          frame++;
+          if (alive && frame < 300) requestAnimationFrame(animateConfetti);
+          else ctx.clearRect(0, 0, canvas.width, canvas.height);
+        }
+        animateConfetti();
+      };
+
+      // ================================================================
+      // 🎯 GSAP SCROLL REVEAL ANIMATIONS
+      // ================================================================
+      if (window.gsap && window.ScrollTrigger) {
+        // Reveal sections on scroll
+        document.querySelectorAll('section').forEach(sec => {
+          const elements = sec.querySelectorAll('h2, h3, .glass-card, .grid > div, p, button, .inline-flex');
+          elements.forEach((el, i) => {
+            gsap.fromTo(el,
+              { opacity: 0, y: 30 },
+              {
+                opacity: 1, y: 0,
+                duration: 0.6,
+                delay: i * 0.05,
+                ease: 'power2.out',
+                scrollTrigger: {
+                  trigger: el,
+                  start: 'top 88%',
+                  toggleActions: 'play none none none',
+                  once: true
+                }
+              }
+            );
+          });
+        });
+      }
+
       setLiquidActive(0);
     });
   </script>
