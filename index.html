@@ -546,7 +546,34 @@
       opacity: 1;
     }
     @media (max-width: 1279px) {
-      #slide-navigator { display: none; }
+      #slide-navigator { display: none !important; }
+    }
+
+    /* ===== FULLSCREEN PRESENTATION SUITE (DESKTOP) ===== */
+    body.presentation-mode {
+      overflow-x: hidden;
+      scroll-behavior: smooth;
+    }
+    body.presentation-mode header#main-nav {
+      opacity: 0.15;
+      transition: opacity 0.3s ease;
+    }
+    body.presentation-mode header#main-nav:hover {
+      opacity: 1;
+    }
+    body.presentation-mode #sticky-audio-bar {
+      opacity: 0.25;
+      transition: opacity 0.3s ease;
+    }
+    body.presentation-mode #sticky-audio-bar:hover {
+      opacity: 1;
+    }
+    body.presentation-mode #slide-navigator {
+      z-index: 99;
+      transform: translateY(-50%) scale(1.1);
+    }
+    body.presentation-mode #presentation-toolbar {
+      display: flex !important;
     }
 
     /* ===== HERO VOWEL INTERACTION ===== */
@@ -792,17 +819,17 @@
           <span class="hidden xl:inline" data-i18n="watch_video_btn">Xem Video 1080p</span>
         </a>
 
-        <!-- FULLSCREEN PRESENTATION MODE BUTTON -->
-        <button id="btn-fullscreen-toggle" onclick="togglePresentationMode()" class="flex items-center gap-1.5 px-2.5 sm:px-3 py-2 rounded-xl bg-slate-100 hover:bg-slate-200 border border-slate-200 text-slate-700 font-bold text-xs shadow-sm transition-all active:scale-95 whitespace-nowrap" title="Chế độ Trình Chiếu Toàn Màn Hình">
+        <!-- FULLSCREEN PRESENTATION MODE BUTTON (DESKTOP ONLY) -->
+        <button id="btn-fullscreen-toggle" onclick="togglePresentationMode()" class="hidden lg:inline-flex items-center gap-1.5 px-2.5 sm:px-3 py-2 rounded-xl bg-slate-100 hover:bg-slate-200 border border-slate-200 text-slate-700 font-bold text-xs shadow-sm transition-all active:scale-95 whitespace-nowrap" title="Chế độ Trình Chiếu Toàn Màn Hình">
           <svg class="w-4 h-4 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 8V4m0 0h4M4 4l5 5m11-5h-4m4 0v4m0 0l-5-5M4 16v4m0 0h4m-4 0l5-5m11 5l-5-5m5 5v-4m0 4h-4"/></svg>
-          <span class="hidden xl:inline">Trình Chiếu</span>
+          <span class="fs-label hidden xl:inline">Trình Chiếu</span>
         </button>
       </div>
     </div>
   </header>
 
   <!-- FLOATING SLIDE NAVIGATOR (DESKTOP ONLY) -->
-  <nav id="slide-navigator" aria-label="Presentation Progress">
+  <nav id="slide-navigator" class="hidden xl:flex" aria-label="Presentation Progress">
     <div class="slide-dot active" data-target="#hero" onclick="smoothNavTo('#hero', 0)">
       <span class="slide-label">01. Khởi Động</span>
     </div>
@@ -825,6 +852,27 @@
       <span class="slide-label">07. Nghiệm Thu</span>
     </div>
   </nav>
+
+  <!-- FLOATING PRESENTATION TOOLBAR (DESKTOP PRESENTATION MODE ONLY) -->
+  <div id="presentation-toolbar" class="hidden fixed bottom-6 left-1/2 -translate-x-1/2 z-[100] bg-slate-900/90 backdrop-blur-md text-white px-4 py-2.5 rounded-2xl shadow-2xl border border-slate-700/80 items-center gap-4 transition-all duration-300 select-none">
+    <button onclick="navigateSlide(-1)" class="p-2 rounded-xl hover:bg-slate-800 text-slate-300 hover:text-white transition-colors active:scale-95 cursor-pointer" title="Trang trước (← / PageUp)">
+      <svg class="w-5 h-5 fill-none stroke-current" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/></svg>
+    </button>
+    <div class="flex items-center gap-1.5 font-mono text-xs font-bold text-sky-400">
+      <span class="text-slate-400 font-sans text-[11px]">Chương</span>
+      <span id="pres-current-slide" class="text-white text-sm">01</span>
+      <span class="text-slate-600">/</span>
+      <span class="text-slate-400">07</span>
+    </div>
+    <button onclick="navigateSlide(1)" class="p-2 rounded-xl hover:bg-slate-800 text-slate-300 hover:text-white transition-colors active:scale-95 cursor-pointer" title="Trang sau (→ / Space / PageDown)">
+      <svg class="w-5 h-5 fill-none stroke-current" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+    </button>
+    <div class="w-px h-5 bg-slate-700"></div>
+    <button onclick="togglePresentationMode()" class="px-3 py-1.5 rounded-xl bg-rose-600/80 hover:bg-rose-600 text-white text-xs font-bold transition-colors active:scale-95 flex items-center gap-1.5 cursor-pointer" title="Thoát trình chiếu (Esc / F)">
+      <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+      <span>Thoát</span>
+    </button>
+  </div>
 
   <!-- HERO SECTION -->
   <section id="hero" class="relative pt-12 sm:pt-16 pb-20 sm:pb-28 px-4 sm:px-8 overflow-hidden sun-glow">
@@ -2812,8 +2860,10 @@
     };
 
     let isAudioBarCollapsed = false;
+    window.hasUserToggledAudioBar = false;
     window.toggleAudioBarCollapse = function(e) {
       if (e && e.stopPropagation) e.stopPropagation();
+      window.hasUserToggledAudioBar = true;
       const bar = document.getElementById('sticky-audio-bar');
       const arrow = document.getElementById('collapse-arrow');
       const label = document.getElementById('collapse-label');
@@ -3801,6 +3851,35 @@
       };
 
       // ================================================================
+      // 📱 SMART DEVICE DETECTION (MOBILE vs DESKTOP)
+      // ================================================================
+      window.isMobileViewport = function() {
+        return window.innerWidth < 1024 || /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+      };
+
+      function syncDeviceMode() {
+        const isMobile = window.isMobileViewport();
+        if (isMobile) {
+          document.body.classList.add('is-mobile');
+          document.body.classList.remove('is-desktop');
+          // On mobile, auto collapse the sticky audio bar if user hasn't toggled it
+          const bar = document.getElementById('sticky-audio-bar');
+          if (bar && !window.hasUserToggledAudioBar && !bar.classList.contains('audio-bar-collapsed')) {
+            bar.classList.add('audio-bar-collapsed');
+            const label = document.getElementById('collapse-label');
+            const arrow = document.getElementById('collapse-arrow');
+            if (label) label.innerText = (typeof currentLanguage !== 'undefined' && currentLanguage === 'en') ? "Expand" : "Mở rộng";
+            if (arrow) arrow.style.transform = 'rotate(180deg)';
+          }
+        } else {
+          document.body.classList.add('is-desktop');
+          document.body.classList.remove('is-mobile');
+        }
+      }
+      syncDeviceMode();
+      window.addEventListener('resize', syncDeviceMode);
+
+      // ================================================================
       // 📍 FLOATING SLIDE NAVIGATOR SCROLLSPY & KEYBOARD SHORTCUTS
       // ================================================================
       const slideNav = document.getElementById('slide-navigator');
@@ -3811,7 +3890,11 @@
       let currentSlideIdx = 0;
 
       window.smoothNavTo = function(target, idx) {
-        if (idx !== undefined) currentSlideIdx = idx;
+        if (idx !== undefined) {
+          currentSlideIdx = idx;
+          const curSlideEl = document.getElementById('pres-current-slide');
+          if (curSlideEl) curSlideEl.textContent = String(idx + 1).padStart(2, '0');
+        }
         const el = document.querySelector(target);
         if (el) el.scrollIntoView({ behavior: 'smooth' });
         if (window.playUiSfx) window.playUiSfx('slide');
@@ -3824,8 +3907,10 @@
         }
       };
 
-      // Keyboard Shortcut Listener for Presentation (Clicker / Arrows / Space / F)
+      // Keyboard Shortcut Listener for Presentation (Desktop / Clicker / Arrows / Space / F)
       window.addEventListener('keydown', (e) => {
+        if (window.isMobileViewport && window.isMobileViewport()) return;
+
         const tag = (e.target && e.target.tagName) ? e.target.tagName.toLowerCase() : '';
         if (tag === 'input' || tag === 'textarea' || (e.target && e.target.isContentEditable)) return;
 
@@ -3866,6 +3951,8 @@
             if (i === activeIdx) d.classList.add('active');
             else d.classList.remove('active');
           });
+          const curSlideEl = document.getElementById('pres-current-slide');
+          if (curSlideEl) curSlideEl.textContent = String(activeIdx + 1).padStart(2, '0');
         }
 
         window.addEventListener('scroll', () => {
@@ -3905,19 +3992,38 @@
       };
 
       // ================================================================
-      // 📺 FULLSCREEN PRESENTATION MODE
+      // 📺 FULLSCREEN PRESENTATION MODE (DESKTOP ONLY)
       // ================================================================
       window.togglePresentationMode = function() {
+        if (window.isMobileViewport && window.isMobileViewport()) return;
+
         if (!document.fullscreenElement) {
           document.documentElement.requestFullscreen().catch(err => {
             console.warn('Fullscreen error:', err);
           });
+          document.body.classList.add('presentation-mode');
         } else {
           if (document.exitFullscreen) {
             document.exitFullscreen();
           }
+          document.body.classList.remove('presentation-mode');
         }
       };
+
+      document.addEventListener('fullscreenchange', () => {
+        const isFs = !!document.fullscreenElement;
+        const toolbar = document.getElementById('presentation-toolbar');
+        const fsBtnText = document.querySelector('#btn-fullscreen-toggle .fs-label');
+        if (isFs) {
+          document.body.classList.add('presentation-mode');
+          if (toolbar) toolbar.classList.remove('hidden');
+          if (fsBtnText) fsBtnText.textContent = (typeof currentLanguage !== 'undefined' && currentLanguage === 'en') ? 'Exit' : 'Thoát';
+        } else {
+          document.body.classList.remove('presentation-mode');
+          if (toolbar) toolbar.classList.add('hidden');
+          if (fsBtnText) fsBtnText.textContent = (typeof currentLanguage !== 'undefined' && currentLanguage === 'en') ? 'Trình Chiếu' : 'Trình Chiếu';
+        }
+      });
 
       // ================================================================
       // 📱 TOUCH & GESTURE SWIPE ENGINE (AWWWARDS GRADE)
