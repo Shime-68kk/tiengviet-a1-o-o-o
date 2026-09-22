@@ -3174,9 +3174,11 @@
       window.activeLiquidIndex = 0;
       let isClickNavigating = false;
       let navLockTimer = null;
+      let clickNavTimestamp = 0;
 
       window.setLiquidActive = function(index) {
         if (index < 0 || index > 4) return;
+        if (window.activeLiquidIndex === index && document.querySelector('#desktop-liquid-nav ul li.active')) return;
         window.activeLiquidIndex = index;
 
         // Desktop Liquid Nav
@@ -3207,12 +3209,13 @@
 
         // 1. Lock scroll observer so intermediate sections scrolled past do NOT hijack the indicator
         isClickNavigating = true;
+        clickNavTimestamp = Date.now();
         setLiquidActive(index);
 
         if (navLockTimer) clearTimeout(navLockTimer);
         navLockTimer = setTimeout(() => {
           isClickNavigating = false;
-        }, 1100); // 1.1s safety fallback for longest smooth scroll
+        }, 900); // 900ms safety lock during smooth scroll
 
         // 2. Programmatic smooth scroll to target section
         if (targetId) {
@@ -3233,17 +3236,27 @@
           if (navLockTimer) clearTimeout(navLockTimer);
           setTimeout(() => {
             isClickNavigating = false;
-          }, 100);
+          }, 80);
         }
       });
 
-      // Release lock early if user manually intervenes with wheel or touch
-      window.addEventListener('wheel', () => { isClickNavigating = false; }, { passive: true });
-      window.addEventListener('touchstart', () => { isClickNavigating = false; }, { passive: true });
+      // Release lock only on genuine intentional user scroll (not accidental tap/jitter)
+      window.addEventListener('wheel', () => {
+        if (Date.now() - clickNavTimestamp > 300) {
+          isClickNavigating = false;
+        }
+      }, { passive: true });
 
-      // Auto-sync active tab when user manually scrolls
+      window.addEventListener('touchmove', () => {
+        if (Date.now() - clickNavTimestamp > 300) {
+          isClickNavigating = false;
+        }
+      }, { passive: true });
+
+      // Robust, deterministic Scrollspy: eliminates all height-dependent ratio conflicts
       function initLiquidScrollSync() {
         const sections = [
+          { id: 'hero', index: 0 },
           { id: 'three-section', index: 0 },
           { id: 'scene-ipa', index: 1 },
           { id: 'scene-nhung', index: 2 },
@@ -3251,43 +3264,56 @@
           { id: 'scene-team', index: 4 }
         ];
 
-        const visibleSections = new Map();
+        let ticking = false;
 
-        const observer = new IntersectionObserver((entries) => {
-          // If user clicked a tab and the page is auto-scrolling to it, DO NOT INTERRUPT
+        function updateScrollspy() {
           if (isClickNavigating) return;
 
-          entries.forEach(entry => {
-            const match = sections.find(s => s.id === entry.target.id);
-            if (match !== undefined) {
-              if (entry.isIntersecting) {
-                visibleSections.set(match.index, entry.intersectionRatio);
-              } else {
-                visibleSections.delete(match.index);
-              }
-            }
-          });
+          const scrollPos = window.scrollY || document.documentElement.scrollTop;
+          const winHeight = window.innerHeight;
+          const docHeight = document.documentElement.scrollHeight;
 
-          if (visibleSections.size > 0) {
-            // Find section with highest visibility in viewport
-            let bestIndex = -1;
-            let maxRatio = -1;
-            visibleSections.forEach((ratio, idx) => {
-              if (ratio > maxRatio) {
-                maxRatio = ratio;
-                bestIndex = idx;
-              }
-            });
-            if (bestIndex !== -1 && bestIndex !== window.activeLiquidIndex) {
-              setLiquidActive(bestIndex);
+          // 1. Bottom of page lock (footer / team section)
+          if (scrollPos + winHeight >= docHeight - 60) {
+            setLiquidActive(4);
+            return;
+          }
+
+          // 2. Top of page lock (hero)
+          if (scrollPos < 250) {
+            setLiquidActive(0);
+            return;
+          }
+
+          // 3. Trigger line: 30% from viewport top (comfortably below sticky header)
+          const triggerLine = winHeight * 0.30;
+          let activeIdx = 0;
+
+          for (let i = 0; i < sections.length; i++) {
+            const el = document.getElementById(sections[i].id);
+            if (!el) continue;
+            const rect = el.getBoundingClientRect();
+            // If section top has passed the trigger line, it is the candidate active section
+            if (rect.top <= triggerLine) {
+              activeIdx = sections[i].index;
             }
           }
-        }, { root: null, rootMargin: '-20% 0px -50% 0px', threshold: [0.1, 0.25, 0.5, 0.75] });
 
-        sections.forEach(s => {
-          const el = document.getElementById(s.id);
-          if (el) observer.observe(el);
-        });
+          setLiquidActive(activeIdx);
+        }
+
+        window.addEventListener('scroll', () => {
+          if (!ticking) {
+            window.requestAnimationFrame(() => {
+              updateScrollspy();
+              ticking = false;
+            });
+            ticking = true;
+          }
+        }, { passive: true });
+
+        // Initial check on load
+        updateScrollspy();
       }
 
       initLiquidScrollSync();
