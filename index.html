@@ -697,6 +697,12 @@
           <svg class="w-4 h-4 fill-current" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
           <span data-i18n="watch_video_btn">Xem Video 1080p</span>
         </a>
+
+        <!-- FULLSCREEN PRESENTATION MODE BUTTON -->
+        <button id="btn-fullscreen-toggle" onclick="togglePresentationMode()" class="flex items-center gap-1.5 px-3 py-2 rounded-xl bg-slate-100 hover:bg-slate-200 border border-slate-200 text-slate-700 font-bold text-xs shadow-sm transition-all active:scale-95" title="Chế độ Trình Chiếu Toàn Màn Hình">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 8V4m0 0h4M4 4l5 5m11-5h-4m4 0v4m0 0l-5-5M4 16v4m0 0h4m-4 0l5-5m11 5l-5-5m5 5v-4m0 4h-4"/></svg>
+          <span class="hidden md:inline">Trình Chiếu</span>
+        </button>
       </div>
     </div>
   </header>
@@ -1161,7 +1167,7 @@
       <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
         
         <!-- Card 1: BÒ (O) -->
-        <div id="card-drill-o" class="p-6 rounded-3xl glass-card glass-card-hover border-2 border-rose-200 relative flex flex-col items-center text-center transition-all duration-300">
+        <div id="card-drill-o" class="p-6 rounded-3xl glass-card glass-card-hover border-2 border-rose-200 relative flex flex-col items-center text-center transition-all duration-300 tilt-card">
           <div class="w-24 h-24 rounded-full overflow-hidden mb-4 border-2 border-rose-300 shadow-sm">
             <img src="./char_o.png" alt="Bò" class="w-full h-full object-cover" />
           </div>
@@ -1178,7 +1184,7 @@
         </div>
 
         <!-- Card 2: CÔ (Ô) -->
-        <div id="card-drill-oe" class="p-6 rounded-3xl glass-card glass-card-hover border-2 border-emerald-200 relative flex flex-col items-center text-center transition-all duration-300">
+        <div id="card-drill-oe" class="p-6 rounded-3xl glass-card glass-card-hover border-2 border-emerald-200 relative flex flex-col items-center text-center transition-all duration-300 tilt-card">
           <div class="w-24 h-24 rounded-full overflow-hidden mb-4 border-2 border-emerald-300 shadow-sm">
             <img src="./char_oe.png" alt="Cô" class="w-full h-full object-cover" />
           </div>
@@ -1195,7 +1201,7 @@
         </div>
 
         <!-- Card 3: BƠ (Ơ) -->
-        <div id="card-drill-ow" class="p-6 rounded-3xl glass-card glass-card-hover border-2 border-amber-200 relative flex flex-col items-center text-center transition-all duration-300">
+        <div id="card-drill-ow" class="p-6 rounded-3xl glass-card glass-card-hover border-2 border-amber-200 relative flex flex-col items-center text-center transition-all duration-300 tilt-card">
           <div class="w-24 h-24 rounded-full overflow-hidden mb-4 border-2 border-amber-300 shadow-sm">
             <img src="./char_ow.png" alt="Bơ" class="w-full h-full object-cover" />
           </div>
@@ -3573,6 +3579,21 @@
         if (vid) {
           vid.currentTime = seconds;
           vid.play().catch(() => {});
+        }
+      };
+
+      // ================================================================
+      // 📺 FULLSCREEN PRESENTATION MODE
+      // ================================================================
+      window.togglePresentationMode = function() {
+        if (!document.fullscreenElement) {
+          document.documentElement.requestFullscreen().catch(err => {
+            console.warn('Fullscreen error:', err);
+          });
+        } else {
+          if (document.exitFullscreen) {
+            document.exitFullscreen();
+          }
         }
       };
 
