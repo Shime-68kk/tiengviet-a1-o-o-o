@@ -1636,6 +1636,103 @@
     window.sfxDing = sfxDing;
     window.sfxTick = sfxTick;
 
+    // ================================================================
+    // 🎼 CENTRAL AUDIO ORCHESTRATOR (SINGLETON DISPATCHER)
+    // ================================================================
+    window.AudioManager = {
+      activeMedia: null, // Currently playing HTMLAudioElement or HTMLVideoElement
+      currentSFXVolume: 0.08,
+
+      // Stop all playing media (audio, video, speech, sfx)
+      stopAll({ keepVideo = false, keepSFX = false } = {}) {
+        // 1. Cancel SpeechSynthesis if speaking
+        if ('speechSynthesis' in window && window.speechSynthesis.speaking) {
+          try { window.speechSynthesis.cancel(); } catch(e) {}
+        }
+
+        // 2. Pause Master Lecture Audio Bar
+        if (window.globalAudio && !window.globalAudio.paused) {
+          try { window.globalAudio.pause(); } catch(e) {}
+        }
+        isPlayingGlobal = false;
+        const playIcon = document.getElementById('play-icon');
+        const pauseIcon = document.getElementById('pause-icon');
+        if (playIcon) playIcon.classList.remove('hidden');
+        if (pauseIcon) pauseIcon.classList.add('hidden');
+
+        // 3. Pause Master Video if !keepVideo
+        const heroVid = document.getElementById('hero-video');
+        if (heroVid && !heroVid.paused && !keepVideo) {
+          try { heroVid.pause(); } catch(e) {}
+        }
+
+        // 4. Pause activeMedia if it's not the kept video
+        if (this.activeMedia && this.activeMedia !== heroVid) {
+          try {
+            this.activeMedia.pause();
+            this.activeMedia.currentTime = 0;
+          } catch(e) {}
+        }
+        if (!keepVideo) {
+          this.activeMedia = null;
+        }
+
+        // 5. Pause user recorded audio player
+        if (typeof userAudioPlayer !== 'undefined' && userAudioPlayer && !userAudioPlayer.paused) {
+          try {
+            userAudioPlayer.pause();
+            userAudioPlayer.currentTime = 0;
+          } catch(e) {}
+        }
+
+        // 6. Pause any active sound effects if !keepSFX
+        if (!keepSFX) {
+          if (typeof sfxTick !== 'undefined' && sfxTick && !sfxTick.paused) {
+            try { sfxTick.pause(); sfxTick.currentTime = 0; } catch(e) {}
+          }
+          if (typeof sfxDing !== 'undefined' && sfxDing && !sfxDing.paused) {
+            try { sfxDing.pause(); sfxDing.currentTime = 0; } catch(e) {}
+          }
+        }
+      },
+
+      // Single source of truth playback dispatcher
+      playSafe(mediaElement, { isVideo = false } = {}) {
+        if (!mediaElement) return Promise.resolve();
+
+        // Enforce strict mutual exclusivity
+        this.stopAll({ keepVideo: isVideo });
+
+        this.activeMedia = mediaElement;
+
+        // Auto clean up reference on end or pause
+        const cleanup = () => {
+          if (this.activeMedia === mediaElement) {
+            this.activeMedia = null;
+          }
+        };
+        mediaElement.addEventListener('ended', cleanup, { once: true });
+        mediaElement.addEventListener('pause', cleanup, { once: true });
+
+        const playPromise = mediaElement.play();
+        if (playPromise !== undefined) {
+          return playPromise.catch(err => {
+            console.debug('Audio playback handled safely:', err);
+          });
+        }
+        return Promise.resolve();
+      },
+
+      // Check if primary audio or video is actively playing (used to duck UI SFX)
+      isMediaActive() {
+        if (this.activeMedia && !this.activeMedia.paused) return true;
+        const heroVid = document.getElementById('hero-video');
+        if (heroVid && !heroVid.paused) return true;
+        if (window.globalAudio && !window.globalAudio.paused) return true;
+        return false;
+      }
+    };
+
     // Centralized Drill Session Management (100% Race-Condition Free)
     let drillSessionCounter = 0;
     let activeDrillInterval = null;
@@ -2338,9 +2435,13 @@
     window.playUserRecordingAudio = function() {
       if (userRecordedAudioUrl) {
         try {
-          globalAudio.pause();
           userAudioPlayer.currentTime = 0;
-          userAudioPlayer.play().catch(e => console.log('User audio play error:', e));
+          if (window.AudioManager) {
+            window.AudioManager.playSafe(userAudioPlayer);
+          } else {
+            globalAudio.pause();
+            userAudioPlayer.play().catch(e => console.log('User audio play error:', e));
+          }
         } catch (e) {}
       } else {
         const promptText = document.getElementById('drill-prompt-text');
@@ -2442,17 +2543,11 @@
       }
     };
 
-    // Global audio playing function with strict drill isolation
+    // Global audio playing function with strict drill isolation & Central AudioManager Orchestration
     window.playAudio = function(trackId, isPartOfDrill = false) {
       // If user triggers ANY track outside the active drill, cancel and reset the drill immediately!
       if (!isPartOfDrill) {
         stopAndResetDrill(false);
-      }
-
-      // Pause master video if it is currently playing to prevent dual sound conflict
-      const heroVid = document.getElementById('hero-video');
-      if (heroVid && !heroVid.paused) {
-        try { heroVid.pause(); } catch(e) {}
       }
 
       const idx = PLAYLIST.findIndex(p => p.id === trackId);
@@ -2460,34 +2555,37 @@
       currentTrackIdx = idx;
       const found = PLAYLIST[idx];
 
-      try {
-        globalAudio.pause();
-      } catch (e) {}
-
       globalAudio.src = found.file;
-      globalAudio.play().catch(e => console.log('Audio play error:', e));
+      if (window.AudioManager) {
+        window.AudioManager.playSafe(globalAudio);
+      } else {
+        try { globalAudio.pause(); } catch(e) {}
+        globalAudio.play().catch(e => console.log('Audio play error:', e));
+      }
       isPlayingGlobal = true;
       updateAudioBarUI(found);
     };
 
     window.toggleGlobalAudio = function() {
       if (isPlayingGlobal) {
-        globalAudio.pause();
+        if (window.AudioManager) {
+          window.AudioManager.stopAll();
+        } else {
+          globalAudio.pause();
+        }
         isPlayingGlobal = false;
         document.getElementById('play-icon').classList.remove('hidden');
         document.getElementById('pause-icon').classList.add('hidden');
       } else {
-        // Pause master video if playing
-        const heroVid = document.getElementById('hero-video');
-        if (heroVid && !heroVid.paused) {
-          try { heroVid.pause(); } catch(e) {}
-        }
-
         if (!globalAudio.src || globalAudio.src.endsWith('/')) {
           globalAudio.src = PLAYLIST[currentTrackIdx].file;
           updateAudioBarUI(PLAYLIST[currentTrackIdx]);
         }
-        globalAudio.play().catch(e => console.log('Audio play error:', e));
+        if (window.AudioManager) {
+          window.AudioManager.playSafe(globalAudio);
+        } else {
+          globalAudio.play().catch(e => console.log('Audio play error:', e));
+        }
         isPlayingGlobal = true;
         document.getElementById('play-icon').classList.add('hidden');
         document.getElementById('pause-icon').classList.remove('hidden');
@@ -2525,13 +2623,28 @@
       const heroVid = document.getElementById('hero-video');
       if (heroVid) {
         heroVid.addEventListener('play', () => {
-          if (isPlayingGlobal) {
-            globalAudio.pause();
-            isPlayingGlobal = false;
-            document.getElementById('play-icon').classList.remove('hidden');
-            document.getElementById('pause-icon').classList.add('hidden');
+          if (window.AudioManager) {
+            window.AudioManager.stopAll({ keepVideo: true });
+            window.AudioManager.activeMedia = heroVid;
+          } else {
+            if (isPlayingGlobal) {
+              globalAudio.pause();
+              isPlayingGlobal = false;
+              document.getElementById('play-icon').classList.remove('hidden');
+              document.getElementById('pause-icon').classList.add('hidden');
+            }
           }
           stopAndResetDrill(false);
+        });
+        heroVid.addEventListener('pause', () => {
+          if (window.AudioManager && window.AudioManager.activeMedia === heroVid) {
+            window.AudioManager.activeMedia = null;
+          }
+        });
+        heroVid.addEventListener('ended', () => {
+          if (window.AudioManager && window.AudioManager.activeMedia === heroVid) {
+            window.AudioManager.activeMedia = null;
+          }
         });
       }
     });
@@ -2814,12 +2927,8 @@
       if (isCorrect) {
         // 1. Play HTML5 Audio Ding Chime
         try {
-          const ding = new Audio('./audio/sfx_ding.mp3');
-          ding.volume = 0.9;
-          ding.play().catch(() => {});
-        } catch(e) {}
-        try {
           sfxDing.currentTime = 0;
+          sfxDing.volume = 0.6;
           sfxDing.play().catch(() => {});
         } catch(e) {}
 
@@ -2836,7 +2945,7 @@
             const gain1 = ctx.createGain();
             osc1.type = 'sine';
             osc1.frequency.setValueAtTime(659.25, now);
-            gain1.gain.setValueAtTime(0.3, now);
+            gain1.gain.setValueAtTime(0.2, now);
             gain1.gain.exponentialRampToValueAtTime(0.001, now + 0.45);
             osc1.connect(gain1);
             gain1.connect(ctx.destination);
@@ -2848,7 +2957,7 @@
             const gain2 = ctx.createGain();
             osc2.type = 'triangle';
             osc2.frequency.setValueAtTime(880.00, now + 0.12);
-            gain2.gain.setValueAtTime(0.4, now + 0.12);
+            gain2.gain.setValueAtTime(0.25, now + 0.12);
             gain2.gain.exponentialRampToValueAtTime(0.001, now + 0.85);
             osc2.connect(gain2);
             gain2.connect(ctx.destination);
@@ -2859,12 +2968,8 @@
       } else {
         // Soft wrong feedback
         try {
-          const tick = new Audio('./audio/sfx_tick.mp3');
-          tick.volume = 0.7;
-          tick.play().catch(() => {});
-        } catch(e) {}
-        try {
           sfxTick.currentTime = 0;
+          sfxTick.volume = 0.5;
           sfxTick.play().catch(() => {});
         } catch(e) {}
 
@@ -3532,12 +3637,16 @@
           gain.connect(uiAudioCtx.destination);
           
           const now = uiAudioCtx.currentTime;
+          // Auto-duck SFX by 50% if lecture audio or video is actively playing
+          const isDucked = window.AudioManager && window.AudioManager.isMediaActive();
+          const duckMultiplier = isDucked ? 0.5 : 1.0;
+
           if (type === 'click') {
             // Crisp, subtle modern UI tick (750Hz -> 300Hz in 35ms)
             osc.type = 'sine';
             osc.frequency.setValueAtTime(750, now);
             osc.frequency.exponentialRampToValueAtTime(300, now + 0.035);
-            gain.gain.setValueAtTime(0.06, now);
+            gain.gain.setValueAtTime(0.05 * duckMultiplier, now);
             gain.gain.exponentialRampToValueAtTime(0.001, now + 0.035);
             osc.start(now);
             osc.stop(now + 0.035);
@@ -3546,7 +3655,7 @@
             osc.type = 'triangle';
             osc.frequency.setValueAtTime(520, now);
             osc.frequency.exponentialRampToValueAtTime(780, now + 0.07);
-            gain.gain.setValueAtTime(0.07, now);
+            gain.gain.setValueAtTime(0.06 * duckMultiplier, now);
             gain.gain.exponentialRampToValueAtTime(0.001, now + 0.07);
             osc.start(now);
             osc.stop(now + 0.07);
@@ -3555,7 +3664,7 @@
             osc.type = 'sine';
             osc.frequency.setValueAtTime(440, now);
             osc.frequency.exponentialRampToValueAtTime(660, now + 0.09);
-            gain.gain.setValueAtTime(0.09, now);
+            gain.gain.setValueAtTime(0.07 * duckMultiplier, now);
             gain.gain.exponentialRampToValueAtTime(0.001, now + 0.1);
             osc.start(now);
             osc.stop(now + 0.1);
@@ -3657,8 +3766,15 @@
         if (window.playUiSfx) window.playUiSfx('click');
         const vid = document.getElementById('hero-video');
         if (vid) {
+          if (window.AudioManager) {
+            window.AudioManager.stopAll({ keepVideo: true });
+          }
           vid.currentTime = seconds;
-          vid.play().catch(() => {});
+          if (window.AudioManager) {
+            window.AudioManager.playSafe(vid, { isVideo: true });
+          } else {
+            vid.play().catch(() => {});
+          }
         }
       };
 
